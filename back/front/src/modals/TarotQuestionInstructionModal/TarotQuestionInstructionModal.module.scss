@@ -1,0 +1,280 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+//~ 공통 스타일 믹스인
+@mixin modal-responsive-size(
+  $width,
+  $height: null,
+  $max-height: null,
+  $min-width: null
+) {
+  width: $width;
+  @if $height {
+    height: $height;
+  }
+  @if $max-height {
+    max-height: $max-height;
+  }
+  @if $min-width {
+    min-width: $min-width;
+  }
+}
+
+@mixin mobile-button-style {
+  margin: 0px;
+  min-width: 80px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+@mixin landscape-modal-layout($modal-height, $modal-max-height: null) {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: $modal-height;
+    @if $modal-max-height {
+      max-height: $modal-max-height;
+    } @else {
+      max-height: 100%;
+    }
+  }
+  .modal-content,
+  .modal-content-japanese {
+    width: 63%;
+    height: 70%;
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .modal-content {
+    @include App.dongle-font(1.7rem);
+  }
+  .modal-content-japanese {
+    @include App.potta-font(1.2rem);
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    @include mobile-button-style;
+  }
+}
+
+%durumagi-container {
+  width: 40%;
+  min-width: 550px; // & 크기 이상해지면 없애거나 수정
+  height: 80%;
+  //   /* 그림자 효과 */
+  //   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  background-image: url('/assets/images/durumagi2.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  @include App.position-absolute-right-half();
+  @include App.flex-box-center(column);
+  position: relative;
+}
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100001;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 80%;
+  z-index: 100001;
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  border: none;
+  background-color: transparent;
+  @extend %durumagi-container;
+}
+.title {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  p {
+    @include App.dongle-font(1.8rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content {
+  width: 70%;
+  height: 70%;
+  @include App.dongle-font(1.7rem);
+  @include App.flex-box-center(column);
+  justify-content: space-between;
+  line-height: 1.7;
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    & > h3,
+    & > p {
+      @include App.flex-box-center(row);
+      color: black;
+      max-width: 100%;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+.button-box {
+  width: 100%;
+  height: 15%;
+  @include App.flex-box-center(row);
+  justify-content: end;
+  padding-top: 20px;
+  margin-top: 10px;
+  box-sizing: border-box;
+
+  @media (orientation: landscape) and (max-height: 600px) {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+.button {
+  margin: 10px;
+  margin-left: 0px;
+  min-width: 90px;
+}
+
+.title-japanese {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  margin-bottom: 10px;
+  p {
+    @include App.potta-font(1.4rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content-japanese {
+  width: 70%;
+  height: 70%;
+  @include App.potta-font(1.2rem);
+  line-height: 2.3;
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    & > h3,
+    & > p {
+      @include App.flex-box-center(row);
+      color: black;
+      max-width: 100%;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+  }
+}
+
+/* answerModal 스타일 스크롤바가 믹스인에서 자동 적용됨 */
+
+//~ 디바이스 & 반응형 웹브라우저용 통합 (중복 제거)
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .modal {
+    @include modal-responsive-size(70%, 70%, 400px);
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .modal {
+    @include modal-responsive-size(70%, 70%, 500px);
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .modal {
+    @include modal-responsive-size(90%, null, 500px, unset);
+    max-width: 100%;
+  }
+}
+
+//~ 모바일 환경 통합
+@media (max-width: 480px) {
+  .modal {
+    @include modal-responsive-size(100%, 70%, null, 100px);
+  }
+  .button {
+    @include mobile-button-style;
+  }
+}
+
+/* 세로 모드에서 잘림 방지 — 550px 이하 화면에 맞춤 */
+@media (orientation: portrait) and (max-width: 550px) {
+  .modal {
+    width: 100%;
+    min-width: unset;
+    max-width: 500px;
+  }
+}
+//* 가로모드 통합 처리
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  @media (min-width: 1025px) and (max-width: 1366px) {
+    @include landscape-modal-layout(95%, 100%);
+  }
+  @media (min-width: 897px) and (max-width: 1024px) {
+    @include landscape-modal-layout(95%, 95vh);
+  }
+  @media (min-width: 654px) and (max-width: 896px) {
+    @include landscape-modal-layout(95%, 100%);
+  }
+  @media (max-width: 653px) {
+    @include landscape-modal-layout(100%, 500px);
+    div.modal {
+      width: 70%;
+      max-width: 500px;
+    }
+  }
+}

@@ -1,0 +1,1 @@
+exports.Tarot = require("./tarot");

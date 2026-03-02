@@ -1,0 +1,990 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/UserInfoForm.module.scss';
+@use '../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+
+.chart-info {
+  width: 100%;
+  height: auto;
+  min-height: calc(100vh - 130px);
+  @include App.flex-box-center(row);
+  align-items: start;
+  overflow: auto;
+}
+
+.chart {
+  min-width: 850px;
+  height: calc(100vh - 130px);
+  position: relative;
+
+  // 차트 고르는 옵션 영역
+  & > div:nth-child(1) {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+  }
+
+  // 차트 영역
+  & > div:nth-child(2) {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.chart-option {
+  width: 130px;
+  z-index: 100;
+
+  div > select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.chart-analyze {
+  width: 100%;
+  min-width: 100px;
+  height: calc(100vh - 130px);
+  min-height: 500px;
+  position: relative;
+}
+.chart-select {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.top-subjects {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.questions-of-subject {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.questions-of-subject-total {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.questions-of-subject-option {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.top-question-topics {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+.dates-of-topic {
+  width: 130px;
+  z-index: 10;
+
+  select {
+    @include Cosmic.cosmic-select;
+
+    option {
+      @include Cosmic.cosmic-option;
+    }
+  }
+}
+
+//~ 디바이스
+@media (min-width: 1024px) and (max-width: 1366px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@media (min-width: 768px) and (max-width: 1024px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ 481px ~ 768px 및 태블릿
+@media (min-width: 480px) and (max-width: 768px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: flex-start; // Changed to flex-start for compatibility
+    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ IPhone 14 Pro Max(430px)
+@media only screen and (min-width: 414px) and (max-width: 480px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ 아이폰XR
+@media (min-width: 375px) and (max-width: 414px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ 아이폰 SE
+@media (min-width: 280px) and (max-width: 375px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ 갤럭시 폴드
+@media (max-width: 280px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-bottom: 5rem;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+// !
+
+//~ 디바이스
+@media (min-width: 1024px) and (max-width: 1366px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@media (min-width: 768px) and (max-width: 1024px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+//~ 481px ~ 768px 및 태블릿
+@media (min-width: 480px) and (max-width: 768px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ IPhone 14 Pro Max(430px)
+@media only screen and (min-width: 414px) and (max-width: 480px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ 아이폰XR
+@media (min-width: 375px) and (max-width: 414px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ 아이폰 SE
+@media (min-width: 280px) and (max-width: 375px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}
+
+//~ 갤럭시 폴드
+@media (max-width: 280px) {
+  // 통계 페이지
+  .chart-info {
+    width: 100%;
+    height: auto;
+    min-height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    overflow: hidden;
+    overflow-y: auto;
+  }
+
+  // 차트들만 보이도록 하는 영역
+  .chart {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 100px;
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: start;
+
+    // 차트 고르는 옵션 영역
+    & > div:nth-child(1) {
+      width: 100%;
+      height: auto;
+      min-height: 10%;
+      position: relative;
+    }
+
+    // 차트 영역
+    & > div:nth-child(2) {
+      height: auto;
+      min-height: 90%;
+      position: relative;
+      margin-top: 80px;
+    }
+  }
+
+  // 차트 고르는 option 태그 영역
+  .chart-option {
+    div > select {
+      background-color: none;
+      border: transparent;
+      option {
+        background-color: none;
+      }
+    }
+  }
+
+  // 차트 두루마기 영역
+  .chart-analyze {
+    width: 100%;
+    min-width: 100px;
+    height: auto;
+    min-height: 500px;
+    position: relative;
+  }
+}

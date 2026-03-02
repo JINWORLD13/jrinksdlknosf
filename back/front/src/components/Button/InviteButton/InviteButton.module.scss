@@ -1,0 +1,386 @@
+@use '../../../styles/scss/App.module.scss';
+
+.invite {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  right: 10px; /* 화면 가장자리로부터 margin 추가 */
+  bottom: 10px; /* 화면 가장자리로부터 margin 추가 */
+  @include App.flex-box-center(column);
+  border: 2px solid rgba(139, 92, 246, 0.8);
+  border-radius: 50%;
+  z-index: 20;
+
+  background: radial-gradient(
+      circle at 20% 20%,
+      rgba(255, 255, 255, 0.3) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 80% 80%,
+      rgba(255, 255, 255, 0.3) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 40% 60%,
+      rgba(255, 255, 255, 0.2) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 90% 30%,
+      rgba(255, 255, 255, 0.3) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 10% 70%,
+      rgba(255, 255, 255, 0.2) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 60% 10%,
+      rgba(255, 255, 255, 0.3) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 30% 90%,
+      rgba(255, 255, 255, 0.2) 0.5px,
+      transparent 0.5px
+    ),
+    radial-gradient(
+      circle at 70% 50%,
+      rgba(255, 255, 255, 0.3) 0.5px,
+      transparent 0.5px
+    ),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+  background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+    16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  @include App.dongle-font(1.5rem);
+  line-height: 0.7;
+  color: #ff8ba7;
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399;
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  padding: 0; /* 텍스트 제거로 padding 제거 */
+
+  &::before {
+    position: absolute;
+    top: 58%; /* 정가운데보다 조금 더 아래 */
+    left: 50%;
+    transform: translate(-50%, -50%); /* 정가운데 정렬 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* 아이콘 영역 */
+    height: 30px; /* 아이콘 영역 */
+    content: '🔗';
+    color: #e0e0ff;
+    @include App.dongle-font(1.8rem); /* 아이콘 크기 조정 (2.2rem -> 1.8rem) */
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+    animation: starTwinkle 1.5s ease-in-out infinite;
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4),
+      0 0 30px rgba(139, 92, 246, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(139, 92, 246, 1);
+    color: #ff8ba7;
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 10px rgba(255, 139, 167, 1), 0 0 20px rgba(255, 139, 167, 1),
+      0 0 30px rgba(255, 139, 167, 0.9), 0 0 40px rgba(255, 139, 167, 0.7),
+      0 0 50px rgba(255, 139, 167, 0.5);
+
+    &::before {
+      background: radial-gradient(
+          circle at 20% 20%,
+          #ff8ba7 0.5px,
+          transparent 0.5px
+        ),
+        radial-gradient(circle at 80% 30%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 40% 50%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 65% 70%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 15% 80%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 90% 60%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 50% 25%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 30% 65%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 75% 85%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 10% 40%, #ff8ba7 0.4px, transparent 0.4px),
+        linear-gradient(135deg, rgba(12, 12, 152, 0.9), rgba(0, 0, 100, 0.8));
+      border-color: #f0f0f0;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5),
+        inset 0 0 5px rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  &:active {
+    transform: translateY(0px) scale(0.98);
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.8),
+      rgba(79, 70, 229, 0.7)
+    );
+    color: #ff6b9d;
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 15px rgba(255, 107, 157, 0.8);
+
+    &::before {
+      background: radial-gradient(
+          circle at 20% 20%,
+          #ff8ba7 0.5px,
+          transparent 0.5px
+        ),
+        radial-gradient(circle at 80% 30%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 40% 50%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 65% 70%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 15% 80%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 90% 60%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 50% 25%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 30% 65%, #ff8ba7 0.4px, transparent 0.4px),
+        radial-gradient(circle at 75% 85%, #ff8ba7 0.5px, transparent 0.5px),
+        radial-gradient(circle at 10% 40%, #ff8ba7 0.4px, transparent 0.4px),
+        linear-gradient(135deg, rgba(0, 0, 255, 0.8), rgba(12, 12, 152, 0.7));
+    }
+  }
+}
+
+/* Share(Invite) 모달 — 코스모스 글래스모피즘 */
+.inviteModalOverlay {
+  position: fixed;
+  inset: 0;
+  @include App.cosmic-glass-backdrop(16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100001; // Navbar(100000)보다 위에 표시
+}
+
+.inviteModal {
+  position: relative;
+  width: 92vw;
+  max-width: 380px;
+  max-height: 100vh;
+  max-height: 100dvh; // 동적 뷰포트 높이 (모바일 가로모드 지원)
+  padding: 16px 16px 56px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 0, 40, 0.88),
+    rgba(25, 0, 50, 0.85)
+  );
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4),
+    0 0 24px rgba(139, 92, 246, 0.25),
+    inset 0 0 24px rgba(139, 92, 246, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+
+  // 가로모드 지원
+  @media screen and (orientation: landscape) and (max-height: 600px) {
+    max-height: 100vh;
+    max-height: 100dvh;
+  }
+}
+
+// 일본어 전용: 컨테이너에서 폰트 강제 적용 (숫자/영문 포함)
+.inviteModalJa {
+  @include App.potta-font(0.95rem); // base size; children override
+}
+
+.inviteTitle {
+  text-align: center;
+  margin-bottom: 12px;
+  @include App.dongle-font(2.1rem);
+  color: rgba(255, 215, 0, 0.95);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+}
+
+.inviteTitleJa {
+  @include App.potta-font(1.5rem);
+  letter-spacing: 0.5px;
+}
+
+.inviteDesc {
+  text-align: justify;
+  text-align-last: left; // 마지막 줄도 왼쪽 정렬
+  text-justify: inter-word; // 한글/영문은 단어 단위 정렬
+  word-break: keep-all; // 한글 단어 단위 유지
+  margin-bottom: 16px;
+  padding: 0 8px; // 좌우 여백 추가
+  line-height: 1.45; // 한/영은 조금 더 타이트하게
+  @include App.dongle-font(1.5rem);
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.95;
+}
+
+// 영어 전용: 더 타이트한 줄간격
+.inviteDescEn {
+  line-height: 1.28;
+}
+
+.inviteDescJa {
+  @include App.potta-font(1rem);
+  line-height: 1.6; // 일본어는 여백을 더 넉넉하게
+  text-align: justify;
+  text-align-last: left; // 마지막 줄도 왼쪽 정렬
+  text-justify: inter-character; // 일본어는 문자 단위 정렬
+  word-break: normal;
+  margin-bottom: 18px; // 하단 여백 확대
+  padding: 0 12px; // 좌우 여백 확대
+}
+
+.inviteButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+
+  button {
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    @include App.dongle-font(1.5rem);
+    transition: transform 0.12s ease, background 0.12s ease;
+    &:active {
+      transform: scale(0.98);
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+}
+
+.inviteButtonsJa {
+  button {
+    @include App.potta-font(1.05rem);
+    letter-spacing: 0.3px;
+  }
+}
+
+.inviteClose {
+  position: absolute;
+  right: 15px; // 여유를 위해 12px에서 15px로 증가
+  top: 15px;
+  width: 36px; // 터치 여유를 위해 약간 확대
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2); // 약간 더 선명하게
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 10;
+  padding: 0;
+  backdrop-filter: blur(4px);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    transform: scale(1.1);
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+
+  // 아주 작은 화면 대응
+  @media screen and (max-width: 320px) {
+    right: 10px;
+    top: 10px;
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* 별 반짝임 애니메이션 */
+@keyframes starTwinkle {
+  0%,
+  100% {
+    background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+  50% {
+    background: radial-gradient(
+        circle at 20% 20%,
+        rgba(255, 255, 255, 0.6) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 80% 80%,
+        rgba(255, 255, 255, 0.6) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 40% 60%,
+        rgba(255, 255, 255, 0.4) 0.5px,
+        transparent 0.5px
+      ),
+      radial-gradient(
+        circle at 90% 30%,
+        rgba(255, 255, 255, 0.6) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 10% 70%,
+        rgba(255, 255, 255, 0.4) 0.5px,
+        transparent 0.5px
+      ),
+      radial-gradient(
+        circle at 60% 10%,
+        rgba(255, 255, 255, 0.6) 1px,
+        transparent 1px
+      ),
+      radial-gradient(
+        circle at 30% 90%,
+        rgba(255, 255, 255, 0.4) 0.5px,
+        transparent 0.5px
+      ),
+      radial-gradient(
+        circle at 70% 50%,
+        rgba(255, 255, 255, 0.6) 1px,
+        transparent 1px
+      ),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+}

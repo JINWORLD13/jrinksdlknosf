@@ -1,0 +1,1 @@
+exports.adminService = require("./adminService");

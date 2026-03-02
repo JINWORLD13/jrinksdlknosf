@@ -1,0 +1,268 @@
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { VitePWA } from 'vite-plugin-pwa';
+import viteImagemin from 'vite-plugin-imagemin';
+// import { compression } from "vite-plugin-compression2";
+// import path from 'path';
+// import { fileURLToPath } from 'url';
+// import { dirname, join } from 'path';
+
+// // 현재 파일 경로에서 디렉토리 추출
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = dirname(__filename);
+
+export default defineConfig(({ mode }) => ({
+  // base: './', // 이것만 추가
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern', // 또는 "modern-compiler"
+      },
+    },
+  },
+  plugins: [
+    react(),          
+    VitePWA({
+      registerType: 'autoUpdate',
+      // includeAssets: ['**/*'], // 모든 파일을 캐싱 대상으로 포함(없으면, workbox.globPatterns에서 결정)
+      devOptions: {
+        enabled: false,
+        type: 'module', // 개발 환경에서도 모듈로 처리
+      },
+      manifest: {
+        name: 'Cosmos Tarot',
+        short_name: 'Cosmos Tarot',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        lang: 'en',
+        scope: '/',
+        description:
+          'Read the hearts of the person you would like to know about',
+        theme_color: '#000000',
+        icons: [
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-36x36.png',
+            sizes: '36x36',
+            type: 'image/png',
+            density: '0.75',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-48x48.png',
+            sizes: '48x48',
+            type: 'image/png',
+            density: '1.0',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-72x72.png',
+            sizes: '72x72',
+            type: 'image/png',
+            density: '1.5',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-96x96.png',
+            sizes: '96x96',
+            type: 'image/png',
+            density: '2.0',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-144x144.png',
+            sizes: '144x144',
+            type: 'image/png',
+            density: '3.0',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/android-icon-192x192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            density: '4.0',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/cosmos_tarot-512x512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: 'assets/cosmos_tarot_favicon/cosmos_tarot-512x512-maskable.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable',
+          },
+        ],
+        id: 'com.cosmostarot.cosmostarot',
+      },
+      //? injecdtManifest 사용시 활성
+      /**
+       * injectManifest'로 설정하면 사용자가 직접 작성한 Service Worker 파일을 사용
+       * injectManifest 전략을 사용하면 개발자가 직접 작성한 서비스 워커 파일을 기반으로 Workbox가 필요한 매니페스트(캐싱할 파일 목록)를 주입합니다.
+       * Workbox는 swSrc에 지정된 파일을 읽고, 내부에 self.__WB_MANIFEST 자리 표시자를 찾아 실제 캐싱할 파일 목록으로 대체한 후, swDest에 지정된 경로에 새로운 서비스 워커 파일을 생성합니다.
+       */
+      strategies: 'injectManifest',
+      // 소스 코드의 루트 디렉토리를 지정합니다.
+      //! 브라우저가 Service Worker를 등록하려면 sw.js가 웹 서버에서 접근 가능한 경로(예: /sw.js)에 있어야 합니다. Vite에서는 정적 자산을 public 폴더에 배치하는 것이 일반적
+      srcDir: 'public',
+      // srcDir: './',
+      // 빌드 후 생성할 서비스 워커 파일명을 지정합니다.
+      filename: 'sw.js',
+      // injectManifest 전략을 사용할 때 swSrc와 swDest는 injectManifest 옵션 내부에 설정하는 것이 맞습니다.
+      injectManifest: {
+        // 서비스 워커 소스 파일의 경로를 지정합니다.
+        swSrc: 'public/sw.js',
+        // swSrc: './sw.js',
+        // 빌드 후 생성될 서비스 워커 파일의 경로를 지정합니다.
+        swDest: 'dist/sw.js',
+        // Workbox에서 사용하는 모듈 로더 설정
+        injectionPoint: 'self.__WB_MANIFEST',
+        // Workbox 모듈을 번들링에 포함
+        additionalManifestEntries: [],
+        globPatterns: [
+          '**/*.{webmanifest,html,js,css,png,jpg,jpeg,svg,ttf,gltf,glb,bin}',
+        ],
+        maximumFileSizeToCacheInBytes: 9 * 1024 * 1024,
+      },
+      workbox: {
+        // Workbox 모듈 경로를 명시적으로 지정
+        importScripts: [],
+        globPatterns: [
+          '**/*.{webmanifest,html,js,css,png,jpg,jpeg,svg,ttf,gltf,glb,bin}',
+        ],
+        runtimeCaching: [
+          {
+            urlPattern: /\/draco\/versioned\/decoders\/.*\.js/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'draco-cache',
+              expiration: {
+                maxEntries: 10,
+                maxAgeSeconds: 30 * 24 * 60 * 60, // 30일
+              },
+            },
+          },
+        ],
+        maximumFileSizeToCacheInBytes: 9 * 1024 * 1024,
+      },
+      /**
+       * injectManifest 전략을 사용하면 개발자가 서비스 워커 파일을 직접 제어할 수 있으므로 더 세밀한 제어가 가능하지만, 서비스 워커 코드를 직접 작성해야 합니다. 반면 다른 전략(예: GenerateSW)을 사용하면 Workbox가 서비스 워커 파일을 자동으로 생성해주므로 간편하게 사용할 수 있습니다.
+       */
+      /**
+       * Workbox는 Google에서 개발한 JavaScript 라이브러리로, 서비스 워커 생성, 캐싱 전략 구현, 백그라운드 동기화 등 PWA 개발에 필요한 기능을 제공합니다.
+       * Workbox를 사용하면 서비스 워커 코드를 쉽게 작성하고 관리할 수 있으며, 효율적인 캐싱 전략을 적용할 수 있습니다.
+       * Workbox는 다양한 캐싱 전략(예: StaleWhileRevalidate, NetworkFirst 등)을 제공하여 네트워크 요청을 최적화하고 오프라인 경험을 향상시킵니다. workbox 옵션은 Workbox 관련 설정을 지정하는 데 사용됩니다.
+       */
+      /**
+       * skipWaiting: true를 추가하여 새로운 서비스 워커가 즉시 활성화되도록 설정합니다. 이렇게 하면 이전 캐시 스토리지가 제거되고 새로운 캐시 스토리지로 대체됩니다.
+       * clientsClaim: true를 추가하여 새로운 서비스 워커가 기존 클라이언트를 제어하도록 설정합니다. 이렇게 하면 새로운 서비스 워커가 기존 클라이언트에 적용되어 일관된 캐시 관리가 가능해집니다.
+       * cleanupOutdatedCaches과 skipWaiting 두 옵션 모두 이전 캐시를 제거하고 새로운 캐시를 구축하는 효과가 있지만, cleanupOutdatedCaches는 배포 버전이 변경될 때 작동하며, skipWaiting은 새로운 서비스 워커가 활성화될 때 작동합니다.
+       */
+      //& maximumFileSizeToCacheInBytes : sw.js에 precache 관련해서 설정돼 있으니 여기서 굳이 안해도 됨.
+      maximumFileSizeToCacheInBytes: 9 * 1024 * 1024, // 9MB
+      skipWaiting: true, // 새로운 서비스 워커 활성화시
+      clientsClaim: true, // 기존 클라이언트 제어
+      cleanupOutdatedCaches: true, // 캐시 배포 버전 다를 시
+    }),
+    // vitePrerenderPlugin({
+    //   // ⭐ prerender 스크립트 직접 지정
+    //   prerenderScript: path.resolve(__dirname, './prerender.jsx'),
+    //   renderTarget: '#root', // React 앱이 렌더링될 위치
+    // }),
+    // compression(), // 기본값 gzip
+    // compression({ algorithm: 'brotliCompress', exclude: [/\.(br)$/, /\.(gz)$/] }), // exclude로 중복 압축을 방지
+    viteImagemin({
+      gifsicle: {
+        optimizationLevel: 7,
+        interlaced: false,
+      },
+      optipng: {
+        optimizationLevel: 7,
+      },
+      mozjpeg: {
+        quality: 60,
+      },
+      pngquant: {
+        quality: [0.8, 0.9],
+        speed: 4,
+      },
+      svgo: {
+        plugins: [
+          {
+            name: 'removeViewBox',
+          },
+          {
+            name: 'removeEmptyAttrs',
+            active: false,
+          },
+        ],
+      },
+    }),
+  ],
+  build: {
+    minify: 'esbuild', // 코드 압축 활성화
+    // sourcemap: false, // 프로덕션에서 소스 맵 비활성화
+    // outDir: 'dist', // 명시적으로 빌드 결과물의 위치를 변경하는 옵션
+    rollupOptions: {
+      output: {
+        entryFileNames: 'assets/index-[hash].js', // 엔트리 JS에 해시, // 자바스크립트 엔트리 파일명 패턴(index.js)
+        chunkFileNames: 'assets/chunk-[hash].js', // 청크 JS에도 해시, // 코드 분할 시 청크 파일명 패턴
+        assetFileNames: assetInfo => {
+          if (
+            assetInfo?.names?.[0] === 'PottaOne-Regular.ttf' ||
+            assetInfo?.name === 'PottaOne-Regular.ttf'
+          ) {
+            return 'assets/font/Potta_One/[name].[ext]';
+          }
+          if (
+            assetInfo?.names?.[0] === 'KosugiMaru-Regular.ttf' ||
+            assetInfo?.name === 'KosugiMaru-Regular.ttf'
+          ) {
+            return 'assets/font/Kosugi_Maru/[name].[ext]';
+          }
+          if (
+            assetInfo?.names?.[0] === 'Dongle-Regular.ttf' ||
+            assetInfo?.name === 'Dongle-Regular.ttf'
+          ) {
+            return 'assets/font/Dongle/[name].[ext]';
+          }
+          const fileNameArr =
+            assetInfo?.names?.[0]?.split('.') || assetInfo?.name.split('.');
+          const extenstion =
+            assetInfo?.names?.[0]?.split('.')?.[fileNameArr?.length - 1] ||
+            assetInfo?.name?.split('.')[fileNameArr?.length - 1];
+          const prefix =
+            assetInfo?.names?.[0]?.split('_')[0] ||
+            assetInfo?.name.split('_')[0];
+          const num_prefix = Number(prefix);
+
+          if (fileNameArr?.[0] === 'tarot_card_back') {
+            return 'assets/images/[name].[ext]';
+          }
+
+          if (
+            typeof num_prefix === 'number' &&
+            extenstion === 'jpg' &&
+            (assetInfo?.names?.[0] !== 'universe.jpg' ||
+              assetInfo?.name !== 'universe.jpg')
+          ) {
+            return 'assets/images/deck/[name].[ext]';
+          }
+
+          if (fileNameArr?.[0]?.slice(0, 8) === 'durumagi') {
+            return 'assets/images/[name].[ext]';
+          }
+
+          if (fileNameArr?.[0] === 'universe') {
+            return 'assets/images/[name].[ext]';
+          }
+
+          return 'assets/[name]-[hash].[ext]'; // assets/[name]-[hash].[ext] 하니까 index-해쉬값.js가 항상 엉뚱하게 캐시에 들어왔음...(index.css 및 59_Ten_of_Swords.js 같은거)
+        },
+      },
+    },
+  },
+}));

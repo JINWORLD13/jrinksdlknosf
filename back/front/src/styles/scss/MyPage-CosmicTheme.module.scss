@@ -1,0 +1,407 @@
+// 🌌 MyPage Cosmic Theme Mixins
+// ChargeModal 스타일 기반 우주적 테마
+
+//! ============================================
+//! Cosmic Keyframes
+//! ============================================
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes cosmicPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+  }
+}
+
+//! ============================================
+//! Color Variables
+//! ============================================
+
+$cosmic-purple: #8b5cf6;
+$cosmic-purple-dark: #2d1554;
+$cosmic-purple-darker: #4c1d95;
+$cosmic-purple-light: #a78bfa;
+$cosmic-gold: #ffd700;
+$cosmic-text-light: #e9d5ff;
+$cosmic-text: #c9a0ff;
+
+//! ============================================
+//! Background Mixins
+//! ============================================
+
+// 우주 그라데이션 배경
+@mixin cosmic-gradient-background {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 0, 40, 0.9) 0%,
+    rgba(0, 0, 0, 0.95) 100%
+  );
+}
+
+// 우주 그라데이션 (카드용)
+@mixin cosmic-card-background {
+  background: linear-gradient(
+    135deg,
+    #0a0a1a 0%,
+    #1a0a2e 25%,
+    #0f0520 50%,
+    #1a0a2e 75%,
+    #0a0a1a 100%
+  );
+}
+
+// 별 효과 (::before 요소용)
+@mixin cosmic-stars {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 60%, white, transparent),
+    radial-gradient(2px 2px at 45% 20%, white, transparent);
+  background-size: 200% 200%;
+  animation: twinkle 4s ease-in-out infinite;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+//! ============================================
+//! Box/Container Mixins
+//! ============================================
+
+// 우주 테마 박스 (강화 버전)
+@mixin cosmic-box($width, $height) {
+  width: $width;
+  height: $height;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, 0.85) 0%,
+    rgba(76, 29, 149, 0.75) 50%,
+    rgba(45, 21, 84, 0.85) 100%
+  );
+  border: 2px solid rgba(139, 92, 246, 0.8);
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 40px rgba(139, 92, 246, 0.15);
+  position: relative;
+  overflow: hidden;
+
+  // 별 효과 추가 (더 밝게)
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(
+        2px 2px at 15% 25%,
+        rgba(255, 255, 255, 0.9),
+        transparent
+      ),
+      radial-gradient(1px 1px at 80% 70%, rgba(255, 255, 255, 0.8), transparent),
+      radial-gradient(1px 1px at 50% 50%, rgba(255, 215, 0, 0.7), transparent),
+      radial-gradient(2px 2px at 90% 20%, rgba(255, 255, 255, 0.9), transparent),
+      radial-gradient(1px 1px at 25% 80%, rgba(255, 215, 0, 0.6), transparent),
+      radial-gradient(1px 1px at 70% 40%, rgba(255, 255, 255, 0.7), transparent);
+    animation: twinkle 3s ease-in-out infinite;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  // 모든 자식 요소를 별 위에 표시
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+// 반투명 우주 박스 (강화 버전)
+@mixin cosmic-box-transparent($opacity: 0.3) {
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, $opacity + 0.5),
+    rgba(76, 29, 149, $opacity + 0.4),
+    rgba(45, 21, 84, $opacity + 0.5)
+  );
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 15px;
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4),
+    inset 0 0 30px rgba(139, 92, 246, 0.1);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+      circle at 20% 30%,
+      rgba(139, 92, 246, 0.1) 0%,
+      transparent 50%
+    );
+    pointer-events: none;
+  }
+}
+
+//! ============================================
+//! Button Mixins
+//! ============================================
+
+// 우주 테마 버튼
+@mixin cosmic-button {
+  background: linear-gradient(135deg, #2d1554 0%, #4c1d95 100%);
+  border: 2px solid $cosmic-purple;
+  color: $cosmic-text-light;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 50px;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      $cosmic-purple 0%,
+      $cosmic-purple-light 100%
+    );
+    border-color: $cosmic-purple-light;
+    color: white;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+// 삭제 버튼 (빨간색 계열)
+@mixin cosmic-button-danger {
+  background: linear-gradient(135deg, #5a1a1a 0%, #8b1f1f 100%);
+  border: 2px solid #c53030;
+  color: #ffc9c9;
+  box-shadow: 0 0 15px rgba(197, 48, 48, 0.4);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-radius: 50px;
+
+  &:hover:not(:disabled) {
+    background: linear-gradient(135deg, #c53030 0%, #e55353 100%);
+    border-color: #e55353;
+    color: white;
+    box-shadow: 0 0 25px rgba(197, 48, 48, 0.7);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+//! ============================================
+//! Text Color Mixins
+//! ============================================
+
+@mixin cosmic-text-color {
+  color: $cosmic-text-light;
+}
+
+@mixin cosmic-heading-color {
+  color: $cosmic-gold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+@mixin cosmic-label-color {
+  color: $cosmic-text;
+}
+
+//! ============================================
+//! Menu Mixins
+//! ============================================
+
+@mixin cosmic-menu {
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, 0.9) 0%,
+    rgba(76, 29, 149, 0.85) 50%,
+    rgba(45, 21, 84, 0.9) 100%
+  );
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-right: 3px solid rgba(139, 92, 246, 0.8);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.4),
+    inset 0 0 30px rgba(139, 92, 246, 0.1);
+  position: relative;
+
+  // 별 효과
+  &::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(
+        1px 1px at 20% 30%,
+        rgba(255, 255, 255, 0.6),
+        transparent
+      ),
+      radial-gradient(1px 1px at 80% 60%, rgba(255, 215, 0, 0.5), transparent),
+      radial-gradient(1px 1px at 40% 80%, rgba(255, 255, 255, 0.4), transparent);
+    animation: twinkle 4s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // 자식 요소를 위로
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(76, 29, 149, 0.95) 0%,
+      rgba(139, 92, 246, 0.9) 50%,
+      rgba(76, 29, 149, 0.95) 100%
+    );
+    border-color: rgba(139, 92, 246, 0.9);
+    box-shadow: 0 0 35px rgba(139, 92, 246, 0.6),
+      inset 0 0 40px rgba(139, 92, 246, 0.15);
+  }
+}
+
+//! ============================================
+//! Select/Option Mixins (Statistics용)
+//! ============================================
+
+@mixin cosmic-select {
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, 0.95) 0%,
+    rgba(76, 29, 149, 0.9) 100%
+  );
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 10px;
+  color: $cosmic-text-light;
+  padding: 8px 12px;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
+    inset 0 0 20px rgba(139, 92, 246, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(76, 29, 149, 0.95) 0%,
+      rgba(139, 92, 246, 0.9) 100%
+    );
+    border-color: rgba(139, 92, 246, 0.9);
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5),
+      inset 0 0 25px rgba(139, 92, 246, 0.15);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $cosmic-gold;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4),
+      inset 0 0 25px rgba(139, 92, 246, 0.2);
+  }
+}
+
+@mixin cosmic-option {
+  background-color: rgba(45, 21, 84, 0.98);
+  color: gold;
+  padding: 8px 12px;
+  border-radius: 8px;
+  margin: 2px 0;
+
+  &:hover,
+  &:checked {
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.8) 0%,
+      rgba(167, 139, 250, 0.7) 100%
+    );
+    color: gold;
+  }
+
+  &:focus {
+    background-color: black;
+    color: gold;
+  }
+}
+
+//! ============================================
+//! Card Spread Color Mixins (우주 버전)
+//! ============================================
+
+@mixin cosmic-one-card-color {
+  color: #c9a0ff;
+  text-shadow: 0 0 8px rgba(201, 160, 255, 0.6);
+}
+
+@mixin cosmic-two-cards-color {
+  color: #a78bfa;
+  text-shadow: 0 0 8px rgba(167, 139, 250, 0.6);
+}
+
+@mixin cosmic-three-cards-color {
+  color: #8b5cf6;
+  text-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+}
+
+@mixin cosmic-four-cards-color {
+  color: #7c3aed;
+  text-shadow: 0 0 8px rgba(124, 58, 237, 0.6);
+}
+
+@mixin cosmic-five-cards-color {
+  color: #6d28d9;
+  text-shadow: 0 0 8px rgba(109, 40, 217, 0.6);
+}
+
+@mixin cosmic-six-cards-color {
+  color: #5b21b6;
+  text-shadow: 0 0 8px rgba(91, 33, 182, 0.6);
+}
+
+@mixin cosmic-ten-cards-color {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}

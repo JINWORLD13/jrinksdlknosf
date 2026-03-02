@@ -1,0 +1,209 @@
+@use 'sass:map';
+@use 'App.module.scss';
+
+//=============================================================================
+// 🎨 EXACT FONT SIZE SYSTEM (크기 변화 없이 중앙 관리)
+//=============================================================================
+// 모든 실제 사용 중인 font-size를 정확히 일치하는 크기로 정의
+// 1rem = 1.0rem 형식으로 명확하게 표기
+//=============================================================================
+
+//-----------------------------------------------------------------------------
+// 📏 Exact Size Scale (정확한 크기)
+//-----------------------------------------------------------------------------
+
+// Korean/English - 모든 사용 중인 크기 정확히 정의
+$font-exact-korean: (
+  // 3.x rem
+  'size-325': 3.25rem,
+  'size-300': 3rem,
+
+  // 2.x rem
+  'size-250': 2.5rem,
+  'size-220': 2.2rem,
+  'size-200': 2rem,
+
+  // 1.x rem (높은 빈도)
+  'size-190': 1.9rem,
+  'size-180': 1.8rem,
+  'size-175': 1.75rem,
+  'size-170': 1.7rem,
+  'size-160': 1.6rem,
+  'size-150': 1.5rem,
+  'size-145': 1.45rem,
+  'size-140': 1.4rem,
+  'size-135': 1.35rem,
+  'size-130': 1.3rem,
+  'size-125': 1.25rem,
+  'size-120': 1.2rem,
+  'size-115': 1.15rem,
+  'size-1125': 1.125rem,
+  'size-111': 1.11rem,
+  'size-110': 1.1rem,
+  'size-105': 1.05rem,
+
+  // 1.0 rem - base (직접 사용, 변환 안 함)
+  // 'base': 1rem,
+  // 0.x rem
+  'size-098': 0.98rem,
+  'size-095': 0.95rem,
+  'size-090': 0.9rem,
+  'size-0875': 0.875rem,
+  'size-085': 0.85rem,
+  'size-080': 0.8rem,
+  'size-075': 0.75rem,
+  'size-070': 0.7rem,
+  'size-065': 0.65rem,
+  'size-060': 0.6rem,
+  'size-055': 0.55rem,
+  'size-050': 0.5rem
+) !default;
+
+// Japanese - 실제 사용 크기
+$font-exact-japanese: (
+  'ja-150': 1.5rem,
+  'ja-140': 1.4rem,
+  'ja-130': 1.3rem,
+  'ja-120': 1.2rem,
+  'ja-110': 1.1rem,
+  'ja-100': 1rem,
+  'ja-095': 0.95rem,
+  'ja-090': 0.9rem,
+  'ja-0875': 0.875rem,
+  'ja-080': 0.8rem,
+) !default;
+
+//-----------------------------------------------------------------------------
+// 🔧 Utility Functions
+//-----------------------------------------------------------------------------
+
+@function get-exact-size($scale, $key) {
+  @if map.has-key($scale, $key) {
+    @return map.get($scale, $key);
+  }
+  @return null;
+}
+
+//-----------------------------------------------------------------------------
+// 🎨 Exact Font Mixins
+//-----------------------------------------------------------------------------
+
+// Korean/English 정확한 크기
+@mixin exact-korean-font($size-key, $custom-line-height: null) {
+  $font-size: get-exact-size($font-exact-korean, $size-key);
+
+  @if $font-size {
+    @include App.dongle-font($font-size);
+
+    @if $custom-line-height {
+      line-height: $custom-line-height;
+    }
+  }
+}
+
+// Japanese 정확한 크기
+@mixin exact-japanese-font($size-key, $custom-line-height: null) {
+  $font-size: get-exact-size($font-exact-japanese, $size-key);
+
+  @if $font-size {
+    @include App.potta-font($font-size);
+    
+    // 숫자, 영어, 특수문자 개선
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum", "kern";
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+
+    @if $custom-line-height {
+      line-height: $custom-line-height;
+    }
+  }
+}
+
+//-----------------------------------------------------------------------------
+// 📦 기존 호환 클래스들 (변경 안 함)
+//-----------------------------------------------------------------------------
+
+// 기존 korean-font-* 클래스들은 그대로 유지
+.korean-font-title {
+  @include App.dongle-font(3rem);
+}
+
+.korean-font-small-title {
+  @include App.dongle-font(2.3rem);
+  line-height: 0.9;
+}
+
+.korean-font-smaller-title {
+  @include App.dongle-font(3.2rem);
+  line-height: 0.9;
+}
+
+.korean-font-content {
+  @include App.dongle-font(2.2rem);
+}
+
+.korean-font-content-iap {
+  @include App.dongle-font(2.2rem);
+  line-height: 1.2;
+}
+
+.korean-font-label {
+  @include App.dongle-font(1.7rem);
+  font-size: 1.7rem;
+  line-height: 1;
+}
+
+.japanese-font-title {
+  @include App.potta-font(1.5rem);
+  line-height: 2.5;
+}
+
+.japanese-font-small-title {
+  @include App.potta-font(1.5rem);
+  line-height: 1.6;
+}
+
+.japanese-font-smaller-title {
+  @include App.potta-font(2rem);
+  line-height: 1.6;
+}
+
+.japanese-font-label {
+  @include App.potta-font(1rem);
+  font-size: 1.1rem;
+  line-height: 1.3;
+}
+
+.japanese-font-content {
+  @include App.potta-font(1.2rem);
+  line-height: 2.7;
+}
+
+.normal-font {
+  font-size: 0.98rem;
+}
+
+//=============================================================================
+// 📚 사용 가이드
+//=============================================================================
+//
+// ## 정확한 크기로 변환
+// ```scss
+// @use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+//
+// .my-text {
+//   @include FontExact.exact-korean-font('size-120');  // 정확히 1.2rem
+// }
+//
+// .my-text-ja {
+//   @include FontExact.exact-japanese-font('ja-110');  // 정확히 1.1rem
+// }
+// ```
+//
+// ## 크기 이름 규칙
+// - size-XXX: Korean/English용 (XXX = rem 값 * 100)
+// - ja-XXX: Japanese용
+// - 예: 1.2rem → size-120, 0.875rem → size-0875
+//
+//=============================================================================

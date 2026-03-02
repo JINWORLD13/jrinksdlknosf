@@ -1,0 +1,379 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+@use './_VoucherCommon.module.scss' as Common;
+
+// 공통 스타일
+%user-info-box-part {
+  @include App.flex-box-center(column);
+  align-items: start;
+}
+
+/* 이용권 구매·환불 버튼 세로 배치 — 가로 겹침 방지, 이용권 구매 위 / 환불 아래 */
+%user-info-button-box {
+  @include App.flex-box-center(column);
+  justify-content: start;
+  align-items: end;
+  position: absolute;
+  top: 0%;
+}
+
+@mixin user-button-shape($width, $height) {
+  width: $width;
+  height: $height;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: none;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  border-radius: 50px;
+  color: white;
+  background-color: rgb(177, 40, 40);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(177, 40, 40, 0.3);
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    background-color: gold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+// 유틸리티 클래스
+.flex-grow {
+  flex-grow: 1;
+}
+.flex-grow2 {
+  flex-grow: 2;
+}
+
+h2 {
+  @include Cosmic.cosmic-heading-color;
+  margin-bottom: 7px;
+}
+
+// 유저 정보
+.user-info1-body {
+  width: 100%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+  line-height: 1.2;
+  @include App.no-select;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+
+  .user-info1-body-left {
+    width: auto;
+    @extend %user-info-box-part;
+    white-space: nowrap;
+  }
+
+  .user-info1-body-right {
+    width: auto;
+    @extend %user-info-box-part;
+
+    & > div {
+      width: auto;
+
+      & > div {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+// 유저정보 버튼
+.user-info1-bottom {
+  width: 100%;
+  height: auto;
+  @extend %user-info-button-box;
+}
+
+.user-info1-bottom > button {
+  @include user-button-shape(auto, auto);
+  min-width: 85px; /* 이용권 구매·환불 버튼 폭 동일 */
+}
+
+// 일본어 버전
+.h2-japanese {
+  @include Cosmic.cosmic-heading-color;
+  margin-bottom: 2%;
+  line-height: 2;
+}
+
+.user-info1-body-japanese {
+  width: 100%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+
+  .user-info1-body-left-japanese {
+    width: auto;
+    height: 100%;
+    @extend %user-info-box-part;
+    white-space: nowrap;
+  }
+
+  .user-info1-body-right-japanese {
+    width: auto;
+    height: 100%;
+    @extend %user-info-box-part;
+
+    & > div {
+      width: auto;
+
+      & > div {
+        white-space: nowrap;
+      }
+    }
+  }
+}
+
+.user-info1-bottom-japanese {
+  width: 100%;
+  height: auto;
+  @extend %user-info-button-box;
+}
+
+.user-info1-bottom-japanese > button {
+  @include user-button-shape(auto, auto);
+  @include App.potta-font(1.1rem);
+  min-width: 85px; /* 이용권 구매·환불 버튼 폭 동일 */
+}
+
+// 카드 클래스
+.one-card {
+  @include App.one-card;
+}
+.two-cards {
+  @include App.two-cards;
+}
+.three-cards {
+  @include App.three-cards;
+}
+.four-cards {
+  @include App.four-cards;
+}
+.five-cards {
+  @include App.five-cards;
+}
+.six-cards {
+  @include App.six-cards;
+}
+.seven-cards {
+  @include App.seven-cards;
+}
+.eight-cards {
+  @include App.eight-cards;
+}
+.nine-cards {
+  @include App.nine-cards;
+}
+.ten-cards {
+  @include App.ten-cards;
+}
+.eleven-cards {
+  @include App.eleven-cards;
+}
+.thirteen-cards {
+  @include App.thirteen-cards;
+}
+
+.one-card-japanese {
+  @include App.one-card;
+}
+.two-cards-japanese {
+  @include App.two-cards;
+}
+.three-cards-japanese {
+  @include App.three-cards;
+}
+.four-cards-japanese {
+  @include App.four-cards;
+}
+.five-cards-japanese {
+  @include App.five-cards;
+}
+.six-cards-japanese {
+  @include App.six-cards;
+}
+.seven-cards-japanese {
+  @include App.seven-cards;
+}
+.eight-cards-japanese {
+  @include App.eight-cards;
+}
+.nine-cards-japanese {
+  @include App.nine-cards;
+}
+.ten-cards-japanese {
+  @include App.ten-cards;
+}
+.eleven-cards-japanese {
+  @include App.eleven-cards;
+}
+.thirteen-cards-japanese {
+  @include App.thirteen-cards;
+}
+
+// 기본 폰트 클래스
+@include Common.font-classes;
+
+// 반응형 믹스인
+@mixin responsive-user-info(
+  $button-font,
+  $button-flex-direction: column,
+  $button-justify: start,
+  $min-width: null
+) {
+  h2 {
+    color: gold;
+  }
+
+  .user-info1-body {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(row);
+
+    .user-info1-body-left {
+      width: auto;
+    }
+
+    .user-info1-body-right {
+      width: auto;
+    }
+  }
+
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: $button-flex-direction;
+    justify-content: $button-justify;
+  }
+
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    @include App.dongle-font($button-font);
+    @if $min-width {
+      min-width: $min-width;
+    }
+  }
+
+  .user-info1-bottom > button:hover {
+    color: white;
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(row);
+
+    .user-info1-body-left-japanese {
+      width: auto;
+    }
+
+    .user-info1-body-right-japanese {
+      width: auto;
+    }
+  }
+
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: $button-flex-direction;
+    justify-content: $button-justify;
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: white;
+    background-color: gold;
+  }
+}
+
+@mixin responsive-japanese-button($font-size, $min-width: null) {
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    @include App.potta-font($font-size);
+    @if $min-width {
+      min-width: $min-width;
+    }
+  }
+}
+
+// 반응형 미디어쿼리
+@media (min-width: 1025px) and (max-width: 1366px) {
+  @include responsive-user-info(1.5rem);
+  @include responsive-japanese-button(1.15rem);
+  @include Common.font-classes;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  @include responsive-user-info(1.5rem);
+  @include responsive-japanese-button(1.15rem);
+  @include Common.font-classes;
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  @include responsive-user-info(1.25rem, column, start);
+  @include responsive-japanese-button(1.2rem);
+  @include Common.responsive-fonts(2.4rem, 1.3rem, 1.7rem, 1rem);
+}
+
+@media only screen and (min-width: 415px) and (max-width: 480px) {
+  @include responsive-user-info(1.3rem, column, start);
+  @include responsive-japanese-button(0.75rem);
+  @include Common.responsive-fonts(2.2rem, 1.2rem, 1.5rem, 0.9rem);
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  @include responsive-user-info(1.2rem, column, start);
+  @include responsive-japanese-button(0.8rem);
+  @include Common.responsive-fonts(2.2rem, 1.2rem, 1.5rem, 0.9rem);
+}
+
+@media (min-width: 281px) and (max-width: 375px) {
+  @include responsive-user-info(1.2rem, column, start);
+  @include responsive-japanese-button(0.75rem);
+  @include Common.responsive-fonts(1.8rem, 1.1rem, 1.3rem, 0.7rem);
+}
+
+@media (max-width: 280px) {
+  @include responsive-user-info(1rem, column, start);
+  @include responsive-japanese-button(0.7rem);
+  @include Common.responsive-fonts(1.8rem, 1rem, 1.2rem, 0.6rem);
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    min-width: 85px; /* 이용권 구매·환불 버튼 폭 동일 */
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    @include App.potta-font(1.1rem);
+    min-width: 85px; /* 이용권 구매·환불 버튼 폭 동일 */
+  }}

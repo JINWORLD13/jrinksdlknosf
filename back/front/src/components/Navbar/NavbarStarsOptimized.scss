@@ -1,0 +1,215 @@
+// ==================== Navbar 별 효과 최적화 (50px 높이에 맞춤) ====================
+
+// 📝 사용 가이드:
+// Navbar 높이가 50px이므로 별들을 실제 보이는 영역에 배치
+// - top: 10px (상단)
+// - top: 25px (중앙)
+// - top: 40px (하단)
+// 또는 % 사용 시:
+// - 20%, 50%, 80% (navbar 내부에서만)
+
+// ⭐ navbar-background mixin에 추가할 최적화된 별 배경
+@mixin optimized-star-background {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      /* 큰 별들 - navbar 중앙 라인에 배치 */ radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 30%,
+          rgba(255, 255, 255, 0.5) 50%,
+          transparent 70%
+        )
+        10% 50% / 12px 12px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.9) 30%,
+          rgba(255, 215, 0, 0.5) 50%,
+          transparent 70%
+        )
+        30% 50% / 14px 14px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 30%,
+          rgba(255, 255, 255, 0.5) 50%,
+          transparent 70%
+        )
+        50% 50% / 13px 13px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.9) 30%,
+          rgba(255, 215, 0, 0.5) 50%,
+          transparent 70%
+        )
+        70% 50% / 14px 14px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 30%,
+          rgba(255, 255, 255, 0.5) 50%,
+          transparent 70%
+        )
+        90% 50% / 12px 12px no-repeat,
+      /* 중간 별들 - 상단/하단 라인 */
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.7) 40%,
+          transparent 70%
+        )
+        15% 30% / 6px 6px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.95) 0%,
+          rgba(255, 215, 0, 0.7) 40%,
+          transparent 70%
+        )
+        25% 70% / 6px 6px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.7) 40%,
+          transparent 70%
+        )
+        40% 20% / 5px 5px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.95) 0%,
+          rgba(255, 215, 0, 0.7) 40%,
+          transparent 70%
+        )
+        55% 80% / 6px 6px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.7) 40%,
+          transparent 70%
+        )
+        65% 30% / 5px 5px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 0.95) 0%,
+          rgba(255, 215, 0, 0.7) 40%,
+          transparent 70%
+        )
+        80% 70% / 6px 6px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.7) 40%,
+          transparent 70%
+        )
+        95% 40% / 5px 5px no-repeat,
+      /* 작은 별들 - 전체적으로 분산 */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 60%) 8%
+        50% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 60%) 18%
+        35% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 60%) 35%
+        60% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 60%) 45%
+        25% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 60%) 60%
+        65% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 60%) 75%
+        40% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 60%) 85%
+        55% / 3px 3px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 60%) 92%
+        30% / 3px 3px no-repeat,
+      /* 아주 작은 별들 - 배경 채우기 */
+        radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 50%) 5%
+        45% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 50%) 22%
+        55% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 50%) 33%
+        38% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 50%) 48%
+        62% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 50%) 58%
+        42% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 50%) 68%
+        58% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 50%) 78%
+        48% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.6) 0%, transparent 50%) 88%
+        62% / 2px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, transparent 50%) 97%
+        52% / 2px 2px no-repeat;
+
+    animation: twinkleStars 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// 🌟 특수 효과 레이어 (다이아몬드 별, 십자 별)
+@mixin special-star-effects {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+      /* 💎 다이아몬드 타원형 별 - 중앙에 배치 */ radial-gradient(
+          ellipse,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 15%,
+          rgba(255, 255, 255, 0.6) 35%,
+          transparent 65%
+        )
+        20% 50% / 16px 10px no-repeat,
+      radial-gradient(
+          ellipse,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.95) 15%,
+          rgba(255, 215, 0, 0.6) 35%,
+          transparent 65%
+        )
+        50% 50% / 18px 11px no-repeat,
+      radial-gradient(
+          ellipse,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 15%,
+          rgba(255, 255, 255, 0.6) 35%,
+          transparent 65%
+        )
+        80% 50% / 16px 10px no-repeat,
+      /* ⭐ 십자 별 모양 - 중앙 기준 */
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0) 40%
+        )
+        35% 50% / 2px 12px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0) 40%
+        )
+        35% 50% / 12px 2px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 215, 0, 0) 40%)
+        65% 50% / 2px 12px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 215, 0, 0) 40%)
+        65% 50% / 12px 2px no-repeat;
+
+    animation: strongTwinkle 6s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+

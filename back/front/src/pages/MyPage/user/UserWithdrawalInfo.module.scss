@@ -1,0 +1,225 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+
+// --- Mixins & Placeholders ---
+
+// Common H2 Styles
+@mixin h2-base {
+  color: #dc2626; 
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.8), 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+// Warning Box Styles
+@mixin warning-box-base($is-japanese: false) {
+  width: 100%;
+  text-align: justify;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  background-color: rgba(220, 38, 38, 0.4);
+  border: 2px solid rgba(220, 38, 38, 0.7);
+  border-radius: 15px;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+
+  @if $is-japanese {
+    max-width: 100%;
+    box-sizing: border-box;
+    @include App.potta-font(1.2rem);
+    line-height: 2;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  } @else {
+    @include App.dongle-font(1.6rem);
+    line-height: 1.6;
+    word-break: keep-all;
+  }
+}
+
+// User Info Body Base
+@mixin info-body-structure {
+  width: 100%;
+  font-weight: 900;
+  @include App.flex-box-center(column);
+  padding: 2rem;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  @include App.no-select;
+}
+
+// --- Base Styles ---
+
+.h2 {
+  @include h2-base;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.h2-japanese {
+  @include h2-base;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.user-info1-body {
+  @include info-body-structure;
+  @include Cosmic.cosmic-text-color;
+  line-height: 1.4;
+}
+
+.user-info1-body-japanese {
+  @include info-body-structure;
+  color: white;
+
+  button,
+  button.btn-japanese {
+    @include App.potta-font(1.1rem);
+    min-width: 70px;
+  }
+}
+
+.withdraw-warning {
+  @include warning-box-base(false);
+}
+
+.withdraw-warning-japanese {
+  @include warning-box-base(true);
+}
+
+// Base Fonts (Fallback/Common)
+.korean-dongle-font { @include App.dongle-font(2.55rem); }
+.japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+.korean-dongle-font2 { @include App.dongle-font(1.7rem); }
+.japanese-potta-font2 { @include App.potta-font(1.1rem); line-height: 2; }
+
+
+// --- Media Queries ---
+
+@include App.desktop {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+  
+  .user-info1-body-japanese {
+    button, button.btn-japanese {
+      @include App.potta-font(1.1rem);
+      min-width: 70px;
+    }
+  }
+
+  // Fonts
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.7rem); }
+  .japanese-potta-font2 { @include App.potta-font(1.1rem); line-height: 2; }
+}
+
+@include App.tablet {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.7rem); }
+  .japanese-potta-font2 { @include App.potta-font(1.1rem); line-height: 2; }
+}
+
+@include App.mobile-lg {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.7rem); }
+  .japanese-potta-font2 { @include App.potta-font(1.1rem); line-height: 2; }
+}
+
+@include App.mobile-md {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.5rem); }
+  .japanese-potta-font2 { @include App.potta-font(1rem); line-height: 2; }
+}
+
+@include App.mobile-sm {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.5rem); }
+  .japanese-potta-font2 { @include App.potta-font(1rem); line-height: 2; }
+}
+
+@include App.mobile-xs {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.4rem); }
+  .japanese-potta-font2 { @include App.potta-font(0.9rem); line-height: 2; }
+}
+
+@include App.mobile-fold {
+  .h2 { @include h2-base; }
+  .h2-japanese { @include h2-base; margin-bottom: 2%; }
+
+  .user-info1-body, .user-info1-body-japanese {
+    width: 100%;
+    color: white;
+    font-weight: 900;
+    @include App.flex-box-center(column);
+  }
+
+  .korean-dongle-font { @include App.dongle-font(2.55rem); }
+  .japanese-potta-font { @include App.potta-font(1.5rem); line-height: 2; }
+  .korean-dongle-font2 { @include App.dongle-font(1.3rem); }
+  .japanese-potta-font2 { @include App.potta-font(0.8rem); line-height: 2; }
+}

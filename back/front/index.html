@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Cache Control: 항상 서버에서 최신 버전 확인 -->
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+      name="viewport"
+    />
+    <meta
+      name="naver-site-verification"
+      content="40aec52bf62b75751d37692f6c9b7943986188d1"
+    />
+    <meta
+      name="google-site-verification"
+      content="uspItw3KcK7dKIUOsO66r2JkHK7AAY4aeoh3fPxNi7U"
+    />
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-H2JFL8YLB1"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+      gtag('config', 'G-H2JFL8YLB1');
+      gtag('config', 'AW-17110359745');
+    </script>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      href="/assets/cosmos_tarot_favicon/apple-icon-180x180.png"
+    />
+    <!-- 폰트: 한/영 Dongle, 일 Potta(Kosugi Maru) — 확실한 로딩 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dongle:wght@300;400;700&family=Kosugi+Maru&display=swap"
+      rel="stylesheet"
+    />
+    <!-- 3D 모델 Preload: 브라우저가 JS 파싱 전에 미리 다운로드 시작 -->
+    <link
+      rel="preload"
+      href="/assets/model/character-fbx/model.gltf"
+      as="fetch"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      href="/assets/model/character-fbx/model.bin"
+      as="fetch"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script src="./src/index.jsx" type="module"></script>
+  </body>
+</html>

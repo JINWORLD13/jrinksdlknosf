@@ -1,0 +1,2554 @@
+/**
+ * 스프레드 레이아웃 정의 통합 파일
+ * 
+ * 모든 스프레드 관련 mixin, 클래스, 변수를 통합 관리합니다.
+ * spread-modal, answer-modal, speed-tarot 모든 모드의 스타일을 여기서 관리합니다.
+ * 
+ * 이 파일은 SpreadLayoutSystem, TarotCardTableForm, TarotCardSpreadForm, SpreadCommonMixins의
+ * 모든 내용을 통합하여 렌더 결과를 유지하면서 중앙 집중화했습니다.
+ */
+
+@use './App.module.scss' as App;
+@use './CardDeckMixins.module.scss' as CardDeck;
+@use './CardFlipInteraction.module.scss' as Flip;
+@use './SpreadLayoutConfig.module.scss' as Config;
+@forward './CardFlipInteraction.module.scss'; // Expose flip interactions
+@use 'sass:map';
+@use 'sass:list';
+@use 'sass:math';
+
+// ============================================
+// Celtic Cross 중앙 통제 CSS 변수
+// Answer Modal, Speed Tarot, Spread Modal 모두에서 참조
+//
+// ⚠️ 주의: :root 변수는 CelticCrossVariables.module.scss로 분리되었습니다.
+// 전역 변수가 필요한 경우 해당 파일을 import하세요.
+// ============================================
+
+// ============================================
+// 반응형 Mixin
+// Used by: All spread layout configurations
+// ============================================
+@mixin responsive-spread($map) {
+  @if map.has-key($map, 'base') {
+    $vals: map.get($map, 'base');
+    // base 값은 여전히 블록으로 출력 (초기화용)
+    @content ($vals);
+  }
+
+  @each $name, $query in Config.$breakpoints {
+    @if map.has-key($map, $name) {
+      @media #{$query} {
+        $vals: map.get($map, $name);
+        // 미디어 쿼리 내에서는 CSS 변수만 업데이트하도록 유도
+        // @content에 넘어가는 값들이 변수 값으로 매핑됨
+        @content ($vals);
+      }
+    }
+  }
+}
+
+// ============================================
+// CSS 변수 정의 (브레이크포인트 레벨) - 최적화
+// 모든 카드 스케일 변수를 한 번만 정의하여 중복 제거
+// Base values는 Config의 'base' 값에서 동적으로 가져옴
+// ============================================
+:global {
+  :root {
+    // Base values from Config maps
+    --spread-card-scale-single: #{list.nth(
+        map.get(Config.$card-single-map, 'base'),
+        1
+      )};
+    --spread-card-scale-today: #{list.nth(
+        map.get(Config.$card-single-map, 'base'),
+        1
+      )};
+    --spread-card-scale-two: #{list.nth(
+        map.get(Config.$card-two-map, 'base'),
+        1
+      )};
+    --spread-card-scale-three: #{list.nth(
+        map.get(Config.$card-three-map, 'base'),
+        1
+      )};
+    --spread-card-scale-four: #{list.nth(
+        map.get(Config.$card-four-map, 'base'),
+        1
+      )};
+    --spread-card-scale-five: #{list.nth(
+        map.get(Config.$card-five-map, 'base'),
+        1
+      )};
+    --spread-card-scale-six: #{list.nth(
+        map.get(Config.$card-six-map, 'base'),
+        1
+      )};
+    --spread-card-scale-celtic-cross: #{list.nth(
+        map.get(Config.$card-celtic-cross-map, 'base'),
+        1
+      )};
+    --spread-gap-linear: #{map.get(Config.$linear-gap-map, 'base')};
+
+    // Spread Modal scales from Config
+    --spread-modal-scale-single: #{list.nth(
+        map.get(Config.$card-single-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-two: #{list.nth(
+        map.get(Config.$card-two-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-three: #{list.nth(
+        map.get(Config.$card-three-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-four: #{list.nth(
+        map.get(Config.$card-four-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-five: #{list.nth(
+        map.get(Config.$card-five-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-six: #{list.nth(
+        map.get(Config.$card-six-map, 'base'),
+        2
+      )};
+    --spread-modal-scale-celtic-cross: #{list.nth(
+        map.get(Config.$card-celtic-cross-map, 'base'),
+        2
+      )};
+
+    // Answer Modal scales from Config
+    --answer-modal-scale-single: #{list.nth(
+        map.get(Config.$card-single-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-two: #{list.nth(
+        map.get(Config.$card-two-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-three: #{list.nth(
+        map.get(Config.$card-three-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-four: #{list.nth(
+        map.get(Config.$card-four-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-five: #{list.nth(
+        map.get(Config.$card-five-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-six: #{list.nth(
+        map.get(Config.$card-six-map, 'base'),
+        3
+      )};
+    --answer-modal-scale-celtic-cross: #{list.nth(
+        map.get(Config.$card-celtic-cross-map, 'base'),
+        3
+      )};
+
+    // 6-Card Spread gaps from Config base
+    --six-gap-row-speed: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        1
+      )};
+    --six-gap-col-speed: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        2
+      )};
+    --six-gap-row-spread: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        3
+      )};
+    --six-gap-col-spread: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        4
+      )};
+    --six-gap-row-answer: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        5
+      )};
+    --six-gap-col-answer: #{list.nth(
+        map.get(Config.$card-six-gap-map, 'base'),
+        6
+      )};
+
+    // Celtic Cross gaps from Config base (12 values)
+    // Speed
+    --celtic-cross-gap-left-row-speed: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        1
+      )};
+    --celtic-cross-gap-left-col-speed: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        2
+      )};
+    --celtic-cross-gap-right-row-speed: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        3
+      )};
+    --celtic-cross-gap-block-speed: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        4
+      )};
+
+    // Spread
+    --celtic-cross-gap-left-row-spread: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        5
+      )};
+    --celtic-cross-gap-left-col-spread: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        6
+      )};
+    --celtic-cross-gap-right-row-spread: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        7
+      )};
+    --celtic-cross-gap-block-spread: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        8
+      )};
+
+    // Answer
+    --celtic-cross-gap-left-row-answer: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        9
+      )};
+    --celtic-cross-gap-left-col-answer: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        10
+      )};
+    --celtic-cross-gap-right-row-answer: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        11
+      )};
+    --celtic-cross-gap-block-answer: #{list.nth(
+        map.get(Config.$celtic-cross-gap-map, 'base'),
+        12
+      )};
+
+    // Five-card vertical spread gaps - configurable via Config
+    --five-vertical-gap-wide: 120px;
+    --five-vertical-gap-narrow: 20px;
+
+    // Celtic Cross container flex gap - configurable via Config
+    --celtic-cross-flex-gap-base: 50px;
+
+    // Breakpoint-specific overrides
+    @each $name, $query in Config.$breakpoints {
+      @media #{$query} {
+        // Single card
+        @if map.has-key(Config.$card-single-map, $name) {
+          $vals: map.get(Config.$card-single-map, $name);
+          --spread-card-scale-single: #{list.nth($vals, 1)};
+          --spread-modal-scale-single: #{list.nth($vals, 2)};
+          --answer-modal-scale-single: #{list.nth($vals, 3)};
+          --spread-card-scale-today: #{list.nth($vals, 1)};
+        } // Today's Luck uses the same scale as single card by default, but can be overridden
+
+        // Two cards
+        @if map.has-key(Config.$card-two-map, $name) {
+          $vals: map.get(Config.$card-two-map, $name);
+          --spread-card-scale-two: #{list.nth($vals, 1)};
+          --spread-modal-scale-two: #{list.nth($vals, 2)};
+          --answer-modal-scale-two: #{list.nth($vals, 3)};
+        }
+
+        // Three cards
+        @if map.has-key(Config.$card-three-map, $name) {
+          $vals: map.get(Config.$card-three-map, $name);
+          --spread-card-scale-three: #{list.nth($vals, 1)};
+          --spread-modal-scale-three: #{list.nth($vals, 2)};
+          --answer-modal-scale-three: #{list.nth($vals, 3)};
+        }
+
+        // Four cards
+        @if map.has-key(Config.$card-four-map, $name) {
+          $vals: map.get(Config.$card-four-map, $name);
+          --spread-card-scale-four: #{list.nth($vals, 1)};
+          --spread-modal-scale-four: #{list.nth($vals, 2)};
+          --answer-modal-scale-four: #{list.nth($vals, 3)};
+        }
+
+        // Five cards
+        @if map.has-key(Config.$card-five-map, $name) {
+          $vals: map.get(Config.$card-five-map, $name);
+          --spread-card-scale-five: #{list.nth($vals, 1)};
+          --spread-modal-scale-five: #{list.nth($vals, 2)};
+          --answer-modal-scale-five: #{list.nth($vals, 3)};
+        }
+
+        // Six cards
+        @if map.has-key(Config.$card-six-map, $name) {
+          $vals: map.get(Config.$card-six-map, $name);
+          --spread-card-scale-six: #{list.nth($vals, 1)};
+          --spread-modal-scale-six: #{list.nth($vals, 2)};
+          --answer-modal-scale-six: #{list.nth($vals, 3)};
+        }
+
+        // Celtic Cross
+        @if map.has-key(Config.$card-celtic-cross-map, $name) {
+          $vals: map.get(Config.$card-celtic-cross-map, $name);
+          --spread-card-scale-celtic-cross: #{list.nth($vals, 1)};
+          --spread-modal-scale-celtic-cross: #{list.nth($vals, 2)};
+          --answer-modal-scale-celtic-cross: #{list.nth($vals, 3)};
+        }
+
+        // Linear gap
+        @if map.has-key(Config.$linear-gap-map, $name) {
+          --spread-gap-linear: #{map.get(Config.$linear-gap-map, $name)};
+        }
+
+        // Celtic Cross gaps
+        @if map.has-key(Config.$celtic-cross-gap-map, $name) {
+          $gap-vals: map.get(Config.$celtic-cross-gap-map, $name);
+          // Speed
+          --celtic-cross-gap-left-row-speed: #{list.nth($gap-vals, 1)};
+          --celtic-cross-gap-left-col-speed: #{list.nth($gap-vals, 2)};
+          --celtic-cross-gap-right-row-speed: #{list.nth($gap-vals, 3)};
+          --celtic-cross-gap-block-speed: #{list.nth($gap-vals, 4)};
+          // Spread
+          --celtic-cross-gap-left-row-spread: #{list.nth($gap-vals, 5)};
+          --celtic-cross-gap-left-col-spread: #{list.nth($gap-vals, 6)};
+          --celtic-cross-gap-right-row-spread: #{list.nth($gap-vals, 7)};
+          --celtic-cross-gap-block-spread: #{list.nth($gap-vals, 8)};
+          // Answer
+          --celtic-cross-gap-left-row-answer: #{list.nth($gap-vals, 9)};
+          --celtic-cross-gap-left-col-answer: #{list.nth($gap-vals, 10)};
+          --celtic-cross-gap-right-row-answer: #{list.nth($gap-vals, 11)};
+          --celtic-cross-gap-block-answer: #{list.nth($gap-vals, 12)};
+        }
+
+        // 6-Card Spread gaps
+        @if map.has-key(Config.$card-six-gap-map, $name) {
+          $gap-vals: map.get(Config.$card-six-gap-map, $name);
+          --six-gap-row-speed: #{list.nth($gap-vals, 1)};
+          --six-gap-col-speed: #{list.nth($gap-vals, 2)};
+          --six-gap-row-spread: #{list.nth($gap-vals, 3)};
+          --six-gap-col-spread: #{list.nth($gap-vals, 4)};
+          --six-gap-row-answer: #{list.nth($gap-vals, 5)};
+          --six-gap-col-answer: #{list.nth($gap-vals, 6)};
+        }
+      }
+    }
+  }
+}
+
+// Helper mixin for combining two maps at same breakpoints
+// Used by: Celtic Cross (combining card sizes and gaps)
+@mixin responsive-spread-combined($map1, $map2) {
+  @if map.has-key($map1, 'base') and map.has-key($map2, 'base') {
+    @content (map.get($map1, 'base'), map.get($map2, 'base'));
+  }
+  @each $name, $query in Config.$breakpoints {
+    @if map.has-key($map1, $name) and map.has-key($map2, $name) {
+      @media #{$query} {
+        @content (map.get($map1, $name), map.get($map2, $name));
+      }
+    }
+  }
+}
+
+// ============================================
+// Layout Mixins
+// Used by: TarotCardTableForm & Spread Form Components
+// ============================================
+
+// Used by: TarotCardTableForm (Single, Two, Three, Four Cards)
+@mixin linear-spread-container($size, $gap: null) {
+  --spread-card-scale: #{$size};
+  --spread-gap: #{$gap or (10px * $size)};
+
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    width: calc(170px * var(--spread-card-scale)) !important;
+    height: calc(270px * var(--spread-card-scale)) !important;
+    min-width: calc(170px * var(--spread-card-scale)) !important;
+    min-height: calc(270px * var(--spread-card-scale)) !important;
+    margin: 0 !important;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// Used by: TarotCardTableForm (Five Cards - Relationship)
+@mixin linear-spread-vertical-container($size) {
+  --spread-card-scale: #{$size};
+
+  @include App.flex-box-center(column);
+  @include App.no-select;
+  @include App.no-drag;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(var(--five-vertical-gap-wide) * var(--spread-card-scale));
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(var(--five-vertical-gap-narrow) * var(--spread-card-scale));
+  }
+
+  & > div > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+  }
+  & > div > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// Used by: TarotCardTableForm (Six Cards)
+@mixin grid-spread-container($size) {
+  --spread-card-scale: #{$size};
+
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  @include App.grid-gap(0.01);
+  width: 100%;
+  height: 100%;
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// Used by: Spread Form Components (Linear)
+@mixin card-linear-spread(
+  $normal-size,
+  $spread-modal-size,
+  $answer-modal-size
+) {
+  --card-scale: #{$normal-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// Used by: Spread Form Components (Vertical)
+@mixin card-linear-vertical-spread(
+  $normal-size,
+  $spread-modal-size,
+  $answer-modal-size,
+  $gap: null
+) {
+  --card-scale: #{$normal-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+  --vertical-gap: #{$gap or 15px};
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    @include App.flex-box-center(row);
+    justify-content: space-between;
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: var(--vertical-gap);
+  }
+
+  & > div > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+@mixin card-grid-spread(
+  $normal-size,
+  $spread-modal-size,
+  $answer-modal-size,
+  $gap: null
+) {
+  --card-scale: #{$normal-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+  --grid-gap-val: #{$gap or 0.1};
+
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  box-sizing: border-box;
+  @include App.grid-gap(var(--grid-gap-val));
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// Used by: Spread Form Components (Celtic Cross Container)
+@mixin card-celtic-cross-container($flex-gap) {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(row);
+  @include App.flex-gap(calc(var(--celtic-cross-flex-gap-base) * $flex-gap));
+}
+
+// Used by: Spread Form Components (Celtic Cross Main Grid)
+@mixin card-celtic-cross-left-main(
+  $normal-size,
+  $spread-modal-size,
+  $answer-modal-size,
+  $grid-gap
+) {
+  --card-scale: #{$normal-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+  --grid-gap-val: #{$grid-gap};
+
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  @include App.grid-gap(var(--grid-gap-val));
+  @include App.flex-grow(4);
+
+  & > div:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > :global(.empty-cell) {
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+// Used by: Spread Form Components (Celtic Cross Center)
+@mixin card-celtic-cross-left-center(
+  $speed-tarot-size,
+  $spread-modal-size,
+  $answer-modal-size,
+  $answer-modal-reversed-top,
+  $answer-modal-reversed-left,
+  $speed-tarot-top,
+  $speed-tarot-left
+) {
+  --speed-scale: #{$speed-tarot-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+
+  @include CardDeck.card(var(--speed-scale));
+  position: relative;
+
+  & > div:first-child {
+    @include CardDeck.card(var(--speed-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:last-child {
+    @include CardDeck.card(var(--speed-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:first-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--speed-scale));
+    @include App.position-absolute-center();
+    top: 0%;
+    left: 0%;
+    @include Flip.front-for-answer-modal-reversed();
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:last-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--speed-scale));
+    @include App.position-absolute-center();
+    @include Flip.front-for-answer-modal-reversed();
+    transform: rotateZ(180deg) translate(-50%, -50%) rotate(90deg);
+    z-index: 2;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  // Override for children with .spread-modal class (regardless of parent)
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+  }
+
+  // Specific override for when .card-back is present (High Specificity)
+  & > div.spread-modal.card-back {
+    @include CardDeck.card(var(--spread-modal-scale));
+  }
+
+  & > div.spread-modal:first-child {
+    @include CardDeck.card(var(--spread-modal-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal:last-child {
+    @include CardDeck.card(var(--spread-modal-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  // Keep existing parent-based selectors for backward compatibility or if parent has class
+  &.spread-modal > div:first-child {
+    @include CardDeck.card(var(--spread-modal-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.spread-modal > div:last-child {
+    @include CardDeck.card(var(--spread-modal-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  &.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    position: relative;
+  }
+  &.answer-modal > div:first-child {
+    @include CardDeck.card(var(--answer-modal-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.answer-modal > div:last-child {
+    @include CardDeck.card(var(--answer-modal-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  &.answer-modal
+    > div:first-child.answer-modal.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--answer-modal-scale));
+    @include App.position-absolute-center();
+    top: 0%;
+    left: 0%;
+    @include Flip.front-for-answer-modal-reversed();
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.answer-modal > div:last-child.answer-modal.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--answer-modal-scale));
+    @include App.position-absolute-center();
+    @include Flip.front-for-answer-modal-reversed();
+    transform: rotateZ(180deg) translate(-50%, -50%) rotate(90deg);
+    z-index: 2;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// Used by: Spread Form Components (Celtic Cross Side)
+@mixin card-celtic-cross-right-side(
+  $normal-size,
+  $spread-modal-size,
+  $answer-modal-size,
+  $grid-gap
+) {
+  --card-scale: #{$normal-size};
+  --spread-modal-scale: #{$spread-modal-size};
+  --answer-modal-scale: #{$answer-modal-size};
+  --grid-gap-val: #{$grid-gap};
+
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr;
+  @include App.grid-gap(var(--grid-gap-val));
+  @include App.flex-grow(1);
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// ============================================
+// 외부에서 사용 가능한 Mixin들 (호환성 유지)
+// ============================================
+@mixin flip() {
+  @include Flip.flip();
+}
+
+@mixin flip-click() {
+  @include Flip.flip-click();
+}
+
+@mixin front() {
+  @include Flip.front();
+}
+
+@mixin front-reversed() {
+  @include Flip.front-reversed();
+}
+
+@mixin back() {
+  @include Flip.back();
+}
+
+// 최적화: CSS 변수 사용으로 변경
+@mixin card-three-spread-style() {
+  --spread-card-scale: var(--spread-card-scale-three);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    width: calc(170px * var(--spread-card-scale)) !important;
+    height: calc(270px * var(--spread-card-scale)) !important;
+    min-width: calc(170px * var(--spread-card-scale)) !important;
+    min-height: calc(270px * var(--spread-card-scale)) !important;
+    margin: 0 !important;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+@mixin card-four-spread-style() {
+  --spread-card-scale: var(--spread-card-scale-four);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    width: calc(170px * var(--spread-card-scale)) !important;
+    height: calc(270px * var(--spread-card-scale)) !important;
+    min-width: calc(170px * var(--spread-card-scale)) !important;
+    min-height: calc(270px * var(--spread-card-scale)) !important;
+    margin: 0 !important;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+@mixin speed-five-vertical-style() {
+  --spread-card-scale: var(--spread-card-scale-five);
+  @include App.flex-box-center(column);
+  @include App.no-select;
+  @include App.no-drag;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(var(--five-vertical-gap-wide) * var(--spread-card-scale));
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(var(--five-vertical-gap-narrow) * var(--spread-card-scale));
+  }
+
+  & > div > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+  }
+  & > div > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+@mixin card-six-speed-style() {
+  --spread-card-scale: var(--spread-card-scale-six);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    width: calc(170px * var(--spread-card-scale)) !important;
+    height: calc(270px * var(--spread-card-scale)) !important;
+    min-width: calc(170px * var(--spread-card-scale)) !important;
+    min-height: calc(270px * var(--spread-card-scale)) !important;
+    margin: 0 !important;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// ============================================
+// 공통 클래스들
+// ============================================
+
+.flip {
+  @include Flip.flip();
+}
+.flip-click {
+  @include Flip.flip-click();
+}
+.front {
+  @include Flip.front();
+}
+.front-reversed {
+  @include Flip.front-reversed();
+}
+.back {
+  @include Flip.back();
+}
+
+// ============================================
+// Linear Spread Container (가로 일렬 배치)
+// ============================================
+
+.linear-spread-container {
+  // 🎛️ 범용 클래스 - 각 스프레드별로 개별 클래스 사용 권장
+  // Gap은 CSS 변수 사용으로 최적화
+  gap: var(--spread-gap-linear);
+}
+
+// 1장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-single-speed {
+  --spread-card-scale: var(--spread-card-scale-two);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    margin: 0;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// Today's Luck - Separate class (Independent sizing)
+.card-single-today {
+  --spread-card-scale: var(--spread-card-scale-today);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    margin: 0;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// 2장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-two-speed {
+  --spread-card-scale: var(--spread-card-scale-two);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    margin: 0;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// 3장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-three-speed {
+  --spread-card-scale: var(--spread-card-scale-three);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    margin: 0;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// 4장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-four-speed {
+  --spread-card-scale: var(--spread-card-scale-four);
+  --spread-gap: var(--spread-gap-linear);
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include App.no-drag;
+  width: auto;
+  height: auto;
+  margin: auto;
+  gap: var(--spread-gap);
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+    width: calc(170px * var(--spread-card-scale)) !important;
+    height: calc(270px * var(--spread-card-scale)) !important;
+    min-width: calc(170px * var(--spread-card-scale)) !important;
+    min-height: calc(270px * var(--spread-card-scale)) !important;
+    margin: 0 !important;
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// ============================================
+// Linear Vertical Spread Container (세로 일렬 배치)
+// ============================================
+
+// 5장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-five-speed {
+  --spread-card-scale: var(--spread-card-scale-five);
+  @include App.flex-box-center(column);
+  @include App.no-select;
+  @include App.no-drag;
+  width: 100%;
+  height: auto;
+  flex-wrap: wrap;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(120px * var(--spread-card-scale));
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: calc(20px * var(--spread-card-scale));
+  }
+
+  & > div > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+  }
+  & > div > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// ============================================
+// Grid Spread Container (그리드 배치)
+// ============================================
+
+// 6장 스프레드 (Speed Tarot용) - CSS 변수 사용으로 최적화
+.card-six-speed {
+  --spread-card-scale: var(--spread-card-scale-six);
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  grid-template-columns: repeat(3, auto);
+  row-gap: var(--six-gap-row-speed);
+  column-gap: var(--six-gap-col-speed);
+  align-content: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+
+  & > div {
+    @include CardDeck.spread-card(var(--spread-card-scale));
+  }
+  & > div > div {
+    @include Flip.card-rim(var(--spread-card-scale));
+  }
+  & div > div > img {
+    @include App.no-select;
+    @include App.no-drag;
+    @include CardDeck.card-image(0);
+  }
+}
+
+// ============================================
+// 9. Page & Table Layout Styles
+// ============================================
+
+.table-form-container {
+  width: 100vw;
+  min-width: auto;
+  height: auto;
+  min-height: calc(100vh - 130px);
+  padding: 50px;
+  background-image: url('/assets/images/universe.jpg');
+  background-size: cover;
+  text-align: center;
+  @include App.flex-box-center(column);
+
+  // .layout-row 클래스가 있는 div에만 width: 100% 적용
+  & > .layout-row {
+    @include App.flex-box-center(row);
+    width: 100%;
+    height: auto;
+
+    & > h1 {
+      width: 15%;
+      min-width: 150px;
+      margin: 0;
+      padding: 0;
+      font-size: 2rem;
+      color: white;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+}
+.title {
+  display: inline-block;
+  width: auto;
+  height: auto;
+}
+
+.spread-container {
+  width: 400px;
+  height: 350px;
+  padding: 10px;
+  padding-bottom: 35px;
+  margin: 20px;
+  font-weight: 800;
+  font-size: 1.5rem;
+}
+.spread-box {
+  height: 100%;
+  width: 100%;
+  background-color: purple;
+  border-radius: 15px;
+}
+
+.card-back {
+  // Use context variable
+  @include CardDeck.card(var(--spread-card-scale));
+  & > img {
+    @include CardDeck.card-image(0);
+  }
+}
+
+// ... existing code ...
+
+.card-celtic-cross1-center {
+  // CSS 변수 사용으로 최적화
+  --speed-scale: var(--spread-card-scale-celtic-cross);
+  --spread-modal-scale: var(--spread-modal-scale-celtic-cross);
+  --answer-modal-scale: var(--answer-modal-scale-celtic-cross);
+
+  // Set context variable for children (like .card-back)
+  --spread-card-scale: var(--speed-scale);
+
+  @include CardDeck.card(var(--speed-scale));
+  position: relative;
+
+  & > div:first-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:last-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:first-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    top: 0%;
+    left: 0%;
+    @include Flip.front-for-answer-modal-reversed();
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div:last-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    @include Flip.front-for-answer-modal-reversed();
+    transform: rotateZ(180deg) translate(-50%, -50%) rotate(90deg);
+    z-index: 2;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  &.spread-modal {
+    --spread-card-scale: var(--spread-modal-scale);
+    @include CardDeck.card(var(--spread-modal-scale));
+    position: relative;
+  }
+  // Simplified children selectors - rely on --spread-card-scale context
+  &.spread-modal > div:first-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.spread-modal > div:last-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  &.answer-modal {
+    --spread-card-scale: var(--answer-modal-scale);
+    @include CardDeck.card(var(--answer-modal-scale));
+    position: relative;
+  }
+  &.answer-modal > div:first-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    z-index: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.answer-modal > div:last-child {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    transform: translate(-50%, -50%) rotate(90deg);
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  // Reverted reversed selectors to use new var
+  &.answer-modal > div:first-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    top: 0%;
+    left: 0%;
+    @include Flip.front-for-answer-modal-reversed();
+    z-index: 1;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  &.answer-modal > div:last-child.front-for-answer-modal-reversed {
+    @include CardDeck.card(var(--spread-card-scale));
+    @include App.position-absolute-center();
+    @include Flip.front-for-answer-modal-reversed();
+    transform: rotateZ(180deg) translate(-50%, -50%) rotate(90deg);
+    z-index: 2;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-container {
+  @include App.flex-box-center(row);
+  width: 1150px;
+  height: 650px;
+  margin: auto;
+}
+
+// ============================================
+// Spread Modal & Answer Modal 클래스들
+// ============================================
+// 이 클래스들은 TarotCardTableForm.jsx의 컴포넌트들에서 사용됩니다.
+// spread-modal과 answer-modal의 스타일을 여기서 통합 관리합니다.
+// 🎛️ 모든 설정값은 SpreadLayoutConfig.module.scss에서 중앙 관리됩니다.
+
+// 1. Single Card - CSS 변수 사용으로 최적화
+.card-single-answer {
+  --card-scale: var(--spread-card-scale-single);
+  --spread-modal-scale: var(--spread-modal-scale-single);
+  --answer-modal-scale: var(--answer-modal-scale-single);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-single-spread {
+  --card-scale: var(--spread-card-scale-single);
+  --spread-modal-scale: var(--spread-modal-scale-single);
+  --answer-modal-scale: var(--answer-modal-scale-single);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 2. Two Cards - CSS 변수 사용으로 최적화
+.card-two-answer {
+  --card-scale: var(--spread-card-scale-two);
+  --spread-modal-scale: var(--spread-modal-scale-two);
+  --answer-modal-scale: var(--answer-modal-scale-two);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-two-spread {
+  --card-scale: var(--spread-card-scale-two);
+  --spread-modal-scale: var(--spread-modal-scale-two);
+  --answer-modal-scale: var(--answer-modal-scale-two);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 3. Three Cards - CSS 변수 사용으로 최적화
+.card-three-answer {
+  --card-scale: var(--spread-card-scale-three);
+  --spread-modal-scale: var(--spread-modal-scale-three);
+  --answer-modal-scale: var(--answer-modal-scale-three);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-three-spread {
+  --card-scale: var(--spread-card-scale-three);
+  --spread-modal-scale: var(--spread-modal-scale-three);
+  --answer-modal-scale: var(--answer-modal-scale-three);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 4. Four Cards - CSS 변수 사용으로 최적화
+.card-four-answer {
+  --card-scale: var(--spread-card-scale-four);
+  --spread-modal-scale: var(--spread-modal-scale-four);
+  --answer-modal-scale: var(--answer-modal-scale-four);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-four-spread {
+  --card-scale: var(--spread-card-scale-four);
+  --spread-modal-scale: var(--spread-modal-scale-four);
+  --answer-modal-scale: var(--answer-modal-scale-four);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(row);
+  flex-wrap: nowrap;
+  box-sizing: border-box;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    flex-shrink: 0;
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 5. Five Cards (Vertical) - CSS 변수 사용으로 최적화
+.card-five-answer {
+  --card-scale: var(--spread-card-scale-five);
+  --spread-modal-scale: var(--spread-modal-scale-five);
+  --answer-modal-scale: var(--answer-modal-scale-five);
+  --vertical-gap: var(--spread-gap-linear);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    @include App.flex-box-center(row);
+    justify-content: space-between;
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: var(--vertical-gap);
+  }
+
+  & > div > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-five-spread {
+  --card-scale: var(--spread-card-scale-five);
+  --spread-modal-scale: var(--spread-modal-scale-five);
+  --answer-modal-scale: var(--answer-modal-scale-five);
+  --vertical-gap: var(--spread-gap-linear);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  flex-wrap: wrap;
+  box-sizing: border-box;
+
+  & > div {
+    width: 100%;
+    @include App.flex-box-center(row);
+  }
+  & > div:first-child {
+    @include App.flex-box-center(row);
+    justify-content: space-between;
+  }
+  & > div:nth-child(2) {
+    width: auto;
+    @include App.flex-box-center(row);
+    gap: var(--vertical-gap);
+  }
+
+  & > div > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 6. Six Cards (Grid)
+.card-six-spread-box {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(row);
+}
+
+// 6. Six Cards (Grid) - CSS 변수 사용으로 최적화
+.card-six-answer {
+  --card-scale: var(--spread-card-scale-six);
+  --spread-modal-scale: var(--spread-modal-scale-six);
+  --answer-modal-scale: var(--answer-modal-scale-six);
+  --grid-gap-val: var(--spread-gap-linear);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  grid-template-columns: repeat(3, auto);
+  box-sizing: border-box;
+  row-gap: var(--six-gap-row-answer);
+  column-gap: var(--six-gap-col-answer);
+  align-content: center;
+  justify-content: center;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+.card-six-spread {
+  --card-scale: var(--spread-card-scale-six);
+  --spread-modal-scale: var(--spread-modal-scale-six);
+  --answer-modal-scale: var(--answer-modal-scale-six);
+  --grid-gap-val: var(--spread-gap-linear);
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: repeat(2, auto);
+  grid-template-columns: repeat(3, auto);
+  box-sizing: border-box;
+  row-gap: var(--six-gap-row-spread);
+  column-gap: var(--six-gap-col-spread);
+  align-content: center;
+  justify-content: center;
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+}
+
+// 7. Celtic Cross Container
+// 🎛️ 모든 설정값은 SpreadLayoutConfig에서 중앙 관리됩니다.
+// Config.$card-celtic-cross-map: (Speed, Spread Modal, Answer Modal)
+// Config.$celtic-cross-gap-map: (Left(Speed), Right(Speed), Block(Speed), Left(Spread), Right(Spread), Block(Spread), Left(Answer), Right(Answer), Block(Answer))
+.card-celtic-cross-container {
+  // Container gap은 CSS 변수 사용으로 최적화
+  --celtic-cross-container-gap: var(--celtic-cross-gap-block-speed);
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(row);
+  gap: var(--celtic-cross-container-gap);
+
+  // Spread Modal Override
+  &.spread-modal {
+    --celtic-cross-container-gap: var(--celtic-cross-gap-block-spread);
+    gap: var(--celtic-cross-gap-block-spread);
+  }
+
+  // Breakpoint-specific layout adjustments
+  @media screen {
+    max-width: 95vw;
+    max-height: 85vh;
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // 세로모드 레이아웃 수정 - 모든 브레이크포인트별 설정
+  @media screen and (min-width: 1025px) and (max-width: 1366px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 769px) and (max-width: 1024px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 650px) and (max-width: 768px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 550px) and (max-width: 650px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 481px) and (max-width: 550px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 415px) and (max-width: 480px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 376px) and (max-width: 414px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 320px) and (max-width: 375px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (min-width: 281px) and (max-width: 320px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (max-width: 280px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // 가로모드 레이아웃 수정 - 모든 브레이크포인트별 설정
+  @media screen and (orientation: landscape) and (min-width: 1367px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 933px) and (max-width: 1024px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 897px) and (max-width: 932px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 668px) and (max-width: 896px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 654px) and (max-width: 667px) and (max-height: 600px),
+    screen and (orientation: landscape) and (max-height: 400px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+
+  @media screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px) {
+    margin: 0 auto;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+// 8. Celtic Cross 1 (Left Main)
+.card-celtic-cross1 {
+  // CSS 변수 사용으로 최적화
+  --card-scale: var(--spread-card-scale-celtic-cross);
+  --spread-modal-scale: var(--spread-modal-scale-celtic-cross);
+  --answer-modal-scale: var(--answer-modal-scale-celtic-cross);
+
+  // Default (Speed)
+  --row-gap-val: var(--celtic-cross-gap-left-row-speed);
+  --col-gap-val: var(--celtic-cross-gap-left-col-speed);
+
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr);
+  row-gap: var(--row-gap-val);
+  column-gap: var(--col-gap-val);
+  align-content: center;
+  justify-content: center;
+  @include App.flex-grow(4);
+
+  & > div:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal:not(:global(.empty-cell)) {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > :global(.empty-cell) {
+    background-color: transparent !important;
+    border: none;
+    box-shadow: none;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  // Answer modal uses different gap
+  &.answer-modal {
+    --row-gap-val: var(--celtic-cross-gap-left-row-answer);
+    --col-gap-val: var(--celtic-cross-gap-left-col-answer);
+  }
+
+  // Spread modal override (implicit via class usage, but good to be explicit if needed)
+  &.spread-modal {
+    --row-gap-val: var(--celtic-cross-gap-left-row-spread);
+    --col-gap-val: var(--celtic-cross-gap-left-col-spread);
+    // Force compact rows/cols for spread modal
+    grid-template-rows: repeat(3, auto);
+    grid-template-columns: repeat(3, auto);
+
+    // [New] Fix for excessive gap: Prevent growing and fit content
+    flex-grow: 0;
+    width: auto;
+    justify-content: flex-end; // Align towards the center gap
+  }
+
+  // 가로모드에서 flex-grow 비율 조정 - 모든 브레이크포인트별 (Disabled for portrait basis consistency)
+  /*
+  @media screen and (orientation: landscape) and (min-width: 1367px)  {
+    flex-grow: 3;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+  ...
+  */
+
+  // 세로모드에서도 정렬 개선
+  @media screen {
+    align-self: center;
+  }
+}
+
+// ... (Celtic Cross Center omitted for brevity) ...
+
+.card-celtic-cross2 {
+  // CSS 변수 사용으로 최적화
+  --card-scale: var(--spread-card-scale-celtic-cross);
+  --spread-modal-scale: var(--spread-modal-scale-celtic-cross);
+  --answer-modal-scale: var(--answer-modal-scale-celtic-cross);
+
+  // Default (Speed)
+  --row-gap-val: var(--celtic-cross-gap-right-row-speed);
+
+  height: 100%;
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  grid-template-columns: 1fr;
+  row-gap: var(--row-gap-val);
+  align-content: center;
+  justify-content: center;
+  @include App.flex-grow(1);
+
+  & > div {
+    @include CardDeck.card(var(--card-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.spread-modal {
+    @include CardDeck.card(var(--spread-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+  & > div.answer-modal {
+    @include CardDeck.card(var(--answer-modal-scale));
+    & > img {
+      @include CardDeck.card-image(0);
+    }
+  }
+
+  // Answer modal uses different gap
+  &.answer-modal {
+    --row-gap-val: var(--celtic-cross-gap-right-row-answer);
+  }
+
+  // Spread modal
+  &.spread-modal {
+    --row-gap-val: var(--celtic-cross-gap-right-row-spread);
+    // Force compact rows for spread modal
+    grid-template-rows: repeat(4, auto);
+
+    // [New] Fix for excessive gap: Prevent growing and fit content
+    flex-grow: 0;
+    width: auto;
+    justify-content: flex-start; // Align towards the center gap
+  }
+
+  // 가로모드에서 flex-grow 비율 조정 - 모든 브레이크포인트별 (Disabled)
+  /*
+  @media screen and (orientation: landscape) and (min-width: 1367px)  {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) and (max-height: 600px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 933px) and (max-width: 1024px) and (max-height: 600px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 897px) and (max-width: 932px) and (max-height: 600px),
+    screen and (orientation: landscape) and (min-width: 897px) and (max-width: 932px) and (max-height: 600px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 668px) and (max-width: 896px) and (max-height: 600px),
+    screen and (orientation: landscape) and (min-width: 668px) and (max-width: 896px) and (max-height: 600px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (min-width: 654px) and (max-width: 667px),
+    screen and (orientation: landscape) and (min-width: 654px) and (max-width: 667px),
+    screen and (orientation: landscape) and (max-height: 400px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  }
+
+  @media screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px),
+    screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px) {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    
+  */
+
+  // 세로모드에서도 정렬 개선
+  @media screen {
+    align-self: center;
+  }
+}
+
+// ============================================
+// AnswerCardImagesModal 반응형 Mixin
+// ============================================
+
+/// AnswerCardImagesModal 반응형 스타일 적용 mixin
+/// @param {String} $breakpoint - SpreadLayoutConfig의 브레이크포인트 키
+/// @param {Map} $styles - 적용할 스타일 맵 (width, height, position 등)
+@mixin answer-card-images-responsive($breakpoint, $styles) {
+  $media-query: map.get(Config.$breakpoints, $breakpoint);
+  @if $media-query {
+    @media #{$media-query} {
+      div.answer-card-images-container {
+        @each $property, $value in $styles {
+          #{$property}: $value;
+        }
+      }
+    }
+  }
+}
+
+// ============================================
+// AnswerCardImagesModal 반응형 스타일 정의
+// ============================================
+
+// 세로 모드 (Portrait) - 모바일
+@include answer-card-images-responsive(
+  'mobile-fold',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 100vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'mobile-xs',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 100vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'mobile-sm',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 100vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'mobile-md',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 100vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'mobile-lg',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 70vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'tablet',
+  (
+    width: 100%,
+    min-width: 100px,
+    height: 70vw,
+    position: relative,
+    top: 0,
+    left: 50%,
+    transform: translate(-50%, 0),
+    z-index: 1,
+  )
+);
+
+// 세로 모드 (Portrait) - 데스크탑
+@media screen and (min-width: 1025px) and (max-width: 1366px) {
+  div.answer-card-images-container {
+    width: 50%;
+    height: 50%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+// 기본 데스크탑 (세로/가로 모두) - width
+@media (min-width: 1025px) and (max-width: 1366px) {
+  div.answer-card-images-container {
+    width: 50%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+// 기본 데스크탑 (세로/가로 모두) - width (웹 브라우저)
+@media (min-width: 1025px) and (max-width: 1366px) {
+  div.answer-card-images-container {
+    width: 50%;
+    min-width: 100px;
+    height: 80%;
+    @include App.position-absolute-left-half();
+  }
+}
+
+// 가로 모드 (Landscape) - 모든 브레이크포인트
+@include answer-card-images-responsive(
+  'land-desktop',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'land-tablet',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'land-mobile-md',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'land-mobile-sm',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'land-mobile-xs',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+@include answer-card-images-responsive(
+  'land-mobile-fold',
+  (
+    width: 50%,
+    height: 100%,
+    position: absolute,
+    top: 0,
+    left: 0,
+    transform: translate(0, 0),
+    z-index: 1,
+  )
+);
+
+// 추가: 웹 브라우저 가로모드 (min-width 기준)
+@media screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) and (max-height: 600px) {
+  div.answer-card-images-container {
+    width: 50%;
+    min-width: 100px;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(0, 0);
+    z-index: 1;
+  }
+}
+
+// 추가: 태블릿/모바일 웹 브라우저 (width 기준) - 세로모드
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 70vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 70vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 415px) and (max-width: 480px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 100vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 376px) and (max-width: 414px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 100vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+@media screen and (min-width: 281px) and (max-width: 375px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 100vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+@media screen and (max-width: 280px) {
+  div.answer-card-images-container {
+    width: 100%;
+    min-width: 100px;
+    height: 100vw;
+    position: relative;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    z-index: 1;
+  }
+}
+
+// 추가: 태블릿/모바일 웹 브라우저 (width 기준) - 가로모드 없음 (landscape 브레이크포인트로 처리됨)
+
+// 추가: 낮은 높이 대응
+@media (max-height: 670px) {
+  div.answer-card-images-container {
+    min-height: 280px;
+  }
+}

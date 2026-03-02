@@ -1,0 +1,722 @@
+@use '../../styles/scss/App.module.scss';
+@use 'sass:map';
+
+// Variables
+$question-bg: rgb(46, 46, 195);
+$submitted-bg: rgb(15, 15, 79);
+$golden-text: gold;
+$theme-text: white;
+
+// ============================================
+// Responsive Map
+// ============================================
+$responsive-map: (
+  'mobile-portrait': (
+    'query': 'screen and (max-width: 480px)',
+    'modal-width': 95vw,
+    'modal-height': 100%,
+    'modal-top': 0,
+    'modal-justify': start,
+    'deck-margin-top': 20%,
+    'h2-margin': 10px 0,
+    'h2-padding': 0 1%,
+    'btn-box-margin': 0 0 10px 0,
+    'theme-example-display': none,
+    'container-width': 95%,
+    'container-direction': column,
+    'compartment-width': 100%,
+    'compartment-justify': start,
+    'box-margin-bottom': 3px,
+    'input-width': 50%,
+    'relationship-direction': column,
+    'relationship-input-width': 100%,
+    'textarea-height': auto,
+    'textarea-field-height': 150px,
+    'label-height': auto,
+    'first-box-display': block,
+    'korean-line-height': 1,
+    'japanese-line-height': 1.8,
+  ),
+  'mobile-landscape': (
+    'query':
+      'screen and (max-width: 900px) and (orientation: landscape) and (max-height: 600px)',
+    'modal-width': 100vw,
+    'modal-height': 100%,
+    'modal-top': 0,
+    'modal-justify': center,
+    'deck-margin-top': 0%,
+    'h2-margin': 0 10px,
+    'h2-padding': 5px,
+    'btn-box-margin': 0 0 10px 0,
+    'theme-example-display': none,
+    'container-width': 90%,
+    'container-direction': row,
+    'compartment-width': 50%,
+    'compartment-justify': center,
+    'box-margin-bottom': 0,
+    'input-width': 78%,
+    'relationship-direction': row,
+    'relationship-input-width': 50%,
+    'textarea-height': 100%,
+    'textarea-field-height': 100%,
+    'label-height': 30%,
+    'first-box-display': none,
+    'korean-line-height': 1,
+    'japanese-line-height': 1.3,
+  ),
+  'tablet': (
+    'query': 'screen and (min-width: 768px) and (max-width: 1024px)',
+    'modal-width': 100vw,
+    'modal-height': 100%,
+    'modal-top': 0,
+    'modal-justify': start,
+    'deck-margin-top': 20%,
+    'h2-margin': 10px 0,
+    'h2-padding': 0 1%,
+    'btn-box-margin': 0 0 10px 0,
+    'theme-example-display': none,
+    'container-width': 90%,
+    'container-direction': column,
+    'compartment-width': 100%,
+    'compartment-justify': start,
+    'box-margin-bottom': 3px,
+    'input-width': 50%,
+    'relationship-direction': column,
+    'relationship-input-width': 100%,
+    'textarea-height': auto,
+    'textarea-field-height': 150px,
+    'label-height': auto,
+    'first-box-display': block,
+    'korean-line-height': 1,
+    'japanese-line-height': 1.8,
+  ),
+  'desktop': (
+    'query': 'screen and (min-width: 1024px) and (max-width: 1366px)',
+    'modal-width': 100vw,
+    'modal-height': 100%,
+    'modal-top': 0,
+    'modal-justify': start,
+    'deck-margin-top': 20%,
+    'h2-margin': 0 10px,
+    // Adjusted for desktop
+    'h2-padding': 0 1%,
+    'btn-box-margin': 0 0 10px 0,
+    'theme-example-display': none,
+    'container-width': 90%,
+    'container-direction': column,
+    'compartment-width': 100%,
+    'compartment-justify': start,
+    'box-margin-bottom': 3px,
+    'input-width': 50%,
+    'relationship-direction': column,
+    'relationship-input-width': 100%,
+    'textarea-height': auto,
+    'textarea-field-height': 150px,
+    'label-height': auto,
+    'first-box-display': block,
+    'korean-line-height': 1,
+    'japanese-line-height': 1.8,
+  ),
+  'large-desktop': (
+    'query': 'screen and (min-width: 1366px)',
+    'modal-width': 80vw,
+    'modal-height': 100%,
+    'modal-top': 0,
+    'modal-justify': center,
+    'deck-margin-top': 0%,
+    'h2-margin': 0 10px,
+    'h2-padding': 5px,
+    'btn-box-margin': 0 0 10px 0,
+    'theme-example-display': block,
+    // Only visible on large screens? Original had it hidden for others
+    'container-width': 80%,
+    'container-direction': row,
+    'compartment-width': 50%,
+    'compartment-justify': center,
+    'box-margin-bottom': 0,
+    'input-width': 78%,
+    'relationship-direction': row,
+    'relationship-input-width': 50%,
+    'textarea-height': 100%,
+    'textarea-field-height': 100%,
+    'label-height': 30%,
+    'first-box-display': none,
+    'korean-line-height': 1,
+    'japanese-line-height': 1.3,
+  ),
+);
+
+// Card and Deck Mixins have been moved to CardDeckMixins.module.scss
+
+@mixin deck-margin($zero, $bottom) {
+  margin-right: $zero;
+  margin-bottom: $bottom;
+}
+@mixin shuffle-animation($shuffle-class) {
+  animation: $shuffle-class 0.3s ease-in-out;
+}
+@mixin invisible() {
+  opacity: 0;
+  z-index: -1;
+}
+
+@mixin base-container {
+  width: 80%;
+  min-width: auto;
+  height: 37%;
+  min-height: auto;
+  color: white;
+  margin-left: auto;
+  margin-right: auto;
+  @include App.flex-box-center(row);
+}
+
+@mixin label-box {
+  @include App.flex-box-center(row);
+  justify-content: start;
+  width: 100%;
+  height: auto;
+  font-weight: bold;
+  text-align: start;
+}
+
+@mixin input-field($bg-color) {
+  width: 78%;
+  background-color: $bg-color;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+@mixin textarea-field($bg-color) {
+  width: 100%;
+  height: 100%;
+  background-color: $bg-color;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  padding: 4px;
+}
+
+// Component placeholders
+%container-compartment {
+  width: 50%;
+  height: 100%;
+  @include App.flex-box-center(column);
+}
+
+%box-base {
+  width: 100%;
+  height: 100%;
+  @include App.flex-grow(1);
+}
+
+%input-container {
+  width: 100%;
+  height: 100%;
+}
+
+%relationship-box {
+  @include App.flex-box-center(row);
+  .input-box-subject,
+  .input-box-object {
+    width: 50%;
+    height: auto;
+    .input-relationship {
+      width: 50%;
+    }
+  }
+}
+
+%select-box-base {
+  width: 100%;
+  height: auto;
+  //~ 기본 font 색상을 white로 설정
+  & > div {
+    color: $theme-text;
+  }
+  select {
+    width: 180px;
+    height: auto;
+  }
+}
+
+%textarea-container {
+  width: 100%;
+  height: 100%;
+  .label-box {
+    @include label-box;
+    max-height: 30%;
+    margin-bottom: 3px;
+  }
+  .textarea-box {
+    width: 100%;
+    height: 70%;
+  }
+}
+
+// Font line-height classes
+.korean-font-label {
+  line-height: 1;
+}
+.japanese-font-label {
+  line-height: 1.3;
+}
+
+// Modal styles
+.tarot-modal {
+  width: 80vw;
+  max-width: 1290px;
+  min-width: 400px;
+  height: 100%;
+  min-height: calc(100vh - 130px);
+  max-height: 1300px;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 10;
+  @include App.position-absolute-center();
+  top: 0px;
+  transform: translate(-50%, 0%);
+  color: $golden-text;
+  @include App.flex-box-center(column);
+  overflow: auto;
+
+  // Standardized selectors
+  .choice-form,
+  .displacement-form {
+    width: 100%;
+    height: 100%;
+  }
+
+  .deck-form {
+    // Default styles
+  }
+
+  .h2 {
+    border: thick double goldenrod;
+    border-radius: 15px;
+    padding: 5px;
+    margin: 0;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .guidance-box {
+    border: thick double goldenrod;
+    width: 90%;
+    @include App.flex-box-center(row);
+    border-radius: 15px;
+    padding: 5px;
+    margin-left: 10px;
+    margin-right: 10px;
+    padding: 10px;
+    .h2 {
+      margin: 0;
+      border: none; // Reset border for nested h2
+      padding: 0;
+    }
+  }
+
+  &.question-tarot-modal-card {
+    .question-tarot-choice-form {
+      width: 100%;
+      height: 100%;
+    }
+    .question-tarot-deck-form {
+      height: auto;
+      margin-top: 0%;
+    }
+  }
+}
+
+// Label styles
+.question-topic-label,
+.subject-label,
+.question-label {
+  @include App.no-select;
+  @include App.no-drag;
+  color: $golden-text;
+}
+
+.object-label {
+  @include App.no-select;
+  @include App.no-drag;
+}
+
+// Button styles
+.btn-box {
+  @include App.no-select;
+  @include App.no-drag;
+  @include App.flex-box-center(row);
+  width: 100%;
+  height: auto;
+  justify-content: end;
+  margin: 0;
+  margin-bottom: 10px;
+
+  & > .theme-example {
+    color: $theme-text;
+  }
+
+  .btn {
+    @include App.no-select;
+    @include App.no-drag;
+    width: auto;
+    height: auto;
+    min-width: 70px;
+    color: $golden-text;
+    background-color: purple;
+    border: 3px purple solid;
+    margin-right: 10px;
+
+    &:hover {
+      width: auto;
+      height: auto;
+      color: purple;
+      border: 3px purple solid;
+      font-weight: 500;
+      background-color: $golden-text;
+    }
+  }
+
+  .btn-japanese {
+    @include App.no-select;
+    @include App.no-drag;
+    width: auto;
+    height: auto;
+    min-width: 70px;
+    border: 3px;
+    background-color: purple;
+    border: 3px purple solid;
+    margin-right: 10px;
+
+    &:hover {
+      width: auto;
+      height: auto;
+      border: 3px;
+      color: purple;
+      border: 3px purple solid;
+      background-color: $golden-text;
+    }
+  }
+}
+
+.input-mode-button-box {
+  @include App.no-select;
+  @include App.no-drag;
+  @include App.flex-box-center(row);
+  width: 100%;
+  height: auto;
+  margin: 0;
+  margin-bottom: 10px;
+
+  & > .theme-example {
+    color: $theme-text;
+  }
+
+  .selected-color {
+    background-color: rgb(15, 15, 79);
+    color: white;
+    transition: background-color 0.3s;
+  }
+
+  .normal-color {
+    background-color: rgb(46, 46, 195);
+    color: white;
+    transition: background-color 0.3s;
+  }
+
+  .input-mode-button {
+    @include App.no-select;
+    @include App.no-drag;
+    width: auto;
+    height: auto;
+    min-width: 70px;
+    color: white;
+    background-color: rgb(46, 46, 195);
+    border: 3px white solid;
+    margin-right: 10px;
+
+    &:hover {
+      width: auto;
+      height: auto;
+      font-weight: 500;
+      color: white;
+      border: 3px white solid;
+      background-color: rgb(15, 15, 79);
+    }
+  }
+
+  .input-mode-button-japanese {
+    @include App.no-select;
+    @include App.no-drag;
+    width: auto;
+    height: auto;
+    min-width: 70px;
+    color: white;
+    background-color: rgb(46, 46, 195);
+    border: 3px white solid;
+    margin-right: 10px;
+    @include App.potta-font(1rem);
+
+    &:hover {
+      width: auto;
+      height: auto;
+      color: white;
+      border: 3px white solid;
+      background-color: rgb(15, 15, 79);
+    }
+  }
+}
+
+// Main container styles
+.question-container {
+  @include base-container;
+
+  & > .question-container-compartment:first-child {
+    & > .question-box:first-child {
+      display: none;
+      color: $theme-text;
+    }
+  }
+
+  .question-container-compartment {
+    @extend %container-compartment;
+
+    .question-box {
+      @extend %box-base;
+
+      .input-container {
+        @extend %input-container;
+        .label-box {
+          @include label-box;
+        }
+        .input-box {
+          width: 100%;
+          height: auto;
+          input {
+            @include input-field($question-bg);
+          }
+          .input-box-relationship {
+            @extend %relationship-box;
+            .input-relationship {
+              @include input-field($question-bg);
+            }
+          }
+        }
+      }
+
+      .select-container {
+        @extend %select-box-base;
+        @include App.no-select;
+        @include App.no-drag;
+      }
+
+      .textarea-container {
+        @extend %textarea-container;
+        textarea {
+          resize: none;
+          @include textarea-field($question-bg);
+          @include App.flex-grow(1);
+        }
+      }
+    }
+  }
+}
+
+.submitted-container {
+  @include base-container;
+
+  & > .submitted-container-compartment:first-child {
+    & > .submitted-box:first-child {
+      display: none;
+    }
+  }
+
+  .submitted-container-compartment {
+    @extend %container-compartment;
+
+    .submitted-box {
+      @extend %box-base;
+
+      .input-container {
+        @extend %input-container;
+        .label-box {
+          @include label-box;
+        }
+        .input-box {
+          width: 100%;
+          height: auto;
+          input {
+            @include input-field($submitted-bg);
+          }
+          .input-box-relationship {
+            @extend %relationship-box;
+            @include App.no-select;
+            @include App.no-drag;
+            .input-relationship {
+              @include input-field($submitted-bg);
+            }
+          }
+        }
+      }
+
+      .select-container {
+        @extend %select-box-base;
+      }
+
+      .textarea-container {
+        @extend %textarea-container;
+        textarea {
+          resize: none;
+          @include textarea-field($submitted-bg);
+          @include App.flex-grow(1);
+        }
+      }
+    }
+  }
+}
+
+.displacement-box {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(column);
+  position: relative;
+  .btn-box {
+    @include App.no-select;
+    @include App.no-drag;
+    position: absolute;
+    bottom: 0;
+  }
+}
+
+.displacement {
+  width: auto;
+  height: auto;
+  @include App.flex-box-center(row);
+  @include App.position-absolute-center();
+}
+
+.width-for-five-cards-relationship-spread {
+  // width: 100%;
+}
+
+// Utility classes
+.flex-grow {
+  @include App.flex-grow(1);
+}
+.flex-grow2 {
+  @include App.flex-grow(2);
+}
+.flex-grow3 {
+  @include App.flex-grow(3);
+}
+.flex-grow4 {
+  @include App.flex-grow(4);
+}
+.invisible {
+  @include invisible;
+}
+.none {
+  display: none;
+}
+
+// ============================================
+// Responsive Mixin Application
+// ============================================
+@each $key, $vals in $responsive-map {
+  $query: map.get($vals, 'query');
+
+  @media #{$query} {
+    .korean-font-label {
+      line-height: map.get($vals, 'korean-line-height');
+    }
+    .japanese-font-label {
+      line-height: map.get($vals, 'japanese-line-height');
+    }
+
+    .tarot-modal {
+      width: map.get($vals, 'modal-width');
+      height: map.get($vals, 'modal-height');
+      top: map.get($vals, 'modal-top');
+      justify-content: map.get($vals, 'modal-justify');
+
+      .deck-form {
+        padding-top: map.get($vals, 'deck-margin-top');
+      }
+
+      .h2 {
+        margin: map.get($vals, 'h2-margin');
+        padding: map.get($vals, 'h2-padding');
+      }
+
+      &.question-tarot-modal-card {
+        width: map.get($vals, 'modal-width');
+        height: map.get($vals, 'modal-height');
+        top: map.get($vals, 'modal-top');
+        justify-content: map.get($vals, 'modal-justify');
+
+        .question-tarot-deck-form {
+          margin-top: map.get($vals, 'deck-margin-top');
+        }
+
+        .h2 {
+          margin: map.get($vals, 'h2-margin');
+          padding: map.get($vals, 'h2-padding');
+        }
+      }
+    }
+
+    .btn-box {
+      margin: map.get($vals, 'btn-box-margin');
+      & > .theme-example {
+        display: map.get($vals, 'theme-example-display');
+      }
+    }
+
+    .question-container,
+    .submitted-container {
+      width: map.get($vals, 'container-width');
+      flex-direction: map.get($vals, 'container-direction');
+
+      & > div:first-child > div:first-child {
+        display: map.get($vals, 'first-box-display');
+      }
+
+      div[class*='compartment'] {
+        width: map.get($vals, 'compartment-width');
+        justify-content: map.get($vals, 'compartment-justify');
+
+        div[class*='box'] {
+          margin-bottom: map.get($vals, 'box-margin-bottom');
+
+          .input-container .input-box {
+            input {
+              width: map.get($vals, 'input-width');
+            }
+            .input-box-relationship {
+              flex-direction: map.get($vals, 'relationship-direction');
+              .input-box-subject,
+              .input-box-object {
+                width: 100%;
+                .input-relationship {
+                  width: map.get($vals, 'relationship-input-width');
+                }
+              }
+            }
+          }
+
+          .textarea-container {
+            height: map.get($vals, 'textarea-height');
+            .label-box {
+              height: map.get($vals, 'label-height');
+            }
+            .textarea-box textarea {
+              height: map.get($vals, 'textarea-field-height');
+            }
+          }
+        }
+      }
+    }
+  }
+}

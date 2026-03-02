@@ -1,0 +1,14 @@
+// Tarot Card Dimension Centralization
+// Single source of truth for card widths.
+// Ratios are generally 17:27.
+
+$card-width-base: 170px; // Scale 1.0 (Standard) (17:27 Ratio)
+$card-height-base: 270px;
+
+$card-width-md: 136px;   // Scale 0.8
+$card-width-sm: 119px;   // Scale 0.7
+$card-width-xs: 102px;   // Scale 0.6
+$card-width-xxs: 85px;   // Scale 0.5
+
+$card-width-deck: 160px;
+$card-height-deck: 200px;

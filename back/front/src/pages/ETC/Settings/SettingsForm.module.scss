@@ -1,0 +1,287 @@
+@use '../../../styles/scss/App.module.scss';
+
+$card-bg: rgba(76, 29, 149, 0.5);
+$card-border: rgba(167, 139, 250, 0.8);
+$card-shadow: 0 0 24px rgba(139, 92, 246, 0.4), 0 0 48px rgba(139, 92, 246, 0.2),
+  inset 0 0 32px rgba(139, 92, 246, 0.08);
+
+.settings-container {
+  width: 100%;
+  min-height: 100%;
+  padding: 1.5rem 1rem;
+  color: gold;
+  @include App.flex-box-center(column);
+  align-items: center;
+  gap: 1.5rem;
+}
+
+// 한국어·영어: Dongle / 일본어: Potta (dongle to potta)
+.settings-container-japanese {
+  @include App.potta-font(1rem);
+}
+
+.settings-title {
+  margin: 0 0 0.25rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  text-align: center;
+  color: gold;
+  @include App.dongle-font(1.5rem);
+}
+
+.settings-container-japanese .settings-title {
+  @include App.potta-font(1.4rem);
+}
+
+.settings-section {
+  width: 100%;
+  max-width: 440px;
+  display: flex;
+  justify-content: center;
+}
+
+.settings-card {
+  width: 100%;
+  background: $card-bg;
+  border: 2px solid $card-border;
+  box-shadow: $card-shadow;
+  border-radius: 16px;
+  padding: 1.5rem 1.5rem;
+}
+
+.settings-card-web .notification-row {
+  justify-content: center;
+}
+
+.settings-card-web .notification-content {
+  text-align: center;
+}
+
+.notification-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+// 한/영: Dongle 더 크게 (일본어는 아래에서 유지)
+.notification-title {
+  margin: 0;
+  font-weight: 600;
+  line-height: 1.45;
+  color: gold;
+  @include App.dongle-font(1.6rem);
+}
+
+.notification-desc {
+  margin: 0;
+  opacity: 0.92;
+  line-height: 1.5;
+  color: rgba(255, 215, 0, 0.9);
+  @include App.dongle-font(1.35rem);
+}
+
+.settings-container-japanese .notification-title {
+  @include App.potta-font(1.25rem);
+}
+
+.settings-container-japanese .notification-desc {
+  @include App.potta-font(1.1rem);
+}
+
+.notification-web-hint {
+  margin: 0.75rem 0 0;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(167, 139, 250, 0.35);
+  opacity: 0.9;
+  line-height: 1.45;
+  color: rgba(255, 215, 0, 0.88);
+  @include App.dongle-font(1.25rem);
+}
+
+.settings-container-japanese .notification-web-hint {
+  @include App.potta-font(0.95rem);
+}
+
+.notification-switch-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.notification-switch {
+  width: 2.75rem;
+  height: 1.4rem;
+  accent-color: #a78bfa;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+}
+
+// ===== 반응형 =====
+@include App.tablet {
+  .settings-container {
+    padding: 1.25rem 0.875rem;
+    gap: 1.25rem;
+  }
+  .settings-title {
+    @include App.dongle-font(1.35rem);
+  }
+  .settings-container-japanese .settings-title {
+    @include App.potta-font(1.25rem);
+  }
+  .settings-card {
+    padding: 1rem 1rem;
+  }
+  .notification-title {
+    @include App.dongle-font(1.45rem);
+  }
+  .notification-desc {
+    @include App.dongle-font(1.3rem);
+  }
+  .settings-container-japanese .notification-title {
+    @include App.potta-font(1.1rem);
+  }
+  .settings-container-japanese .notification-desc {
+    @include App.potta-font(0.98rem);
+  }
+}
+
+@include App.mobile-lg {
+  .settings-container {
+    padding: 1rem 0.75rem;
+    gap: 1rem;
+  }
+  .settings-title {
+    @include App.dongle-font(1.25rem);
+  }
+  .settings-container-japanese .settings-title {
+    @include App.potta-font(1.15rem);
+  }
+  .settings-card {
+    padding: 0.875rem 0.875rem;
+    border-radius: 14px;
+  }
+  .notification-row {
+    gap: 0.75rem;
+  }
+  .notification-title {
+    @include App.dongle-font(1.4rem);
+  }
+  .notification-desc {
+    @include App.dongle-font(1.25rem);
+  }
+  .settings-container-japanese .notification-title {
+    @include App.potta-font(1rem);
+  }
+  .settings-container-japanese .notification-desc {
+    @include App.potta-font(0.9rem);
+  }
+  .notification-switch {
+    width: 2.5rem;
+    height: 1.25rem;
+  }
+}
+
+@include App.mobile-md {
+  .settings-container {
+    padding: 0.875rem 0.625rem;
+    gap: 0.875rem;
+  }
+  .settings-title {
+    @include App.dongle-font(1.2rem);
+  }
+  .settings-container-japanese .settings-title {
+    @include App.potta-font(1.1rem);
+  }
+  .settings-section {
+    max-width: 100%;
+  }
+  .settings-card {
+    padding: 0.75rem 0.75rem;
+    border-radius: 12px;
+  }
+  .notification-title {
+    @include App.dongle-font(1.35rem);
+  }
+  .notification-desc {
+    @include App.dongle-font(1.2rem);
+  }
+  .settings-container-japanese .notification-title {
+    @include App.potta-font(0.95rem);
+  }
+  .settings-container-japanese .notification-desc {
+    @include App.potta-font(0.85rem);
+  }
+}
+
+@include App.mobile-sm {
+  .settings-container {
+    padding: 0.75rem 0.5rem;
+    gap: 0.75rem;
+  }
+  .settings-title {
+    @include App.dongle-font(1.15rem);
+  }
+  .settings-container-japanese .settings-title {
+    @include App.potta-font(1.05rem);
+  }
+  .settings-card {
+    padding: 0.625rem 0.625rem;
+  }
+  .notification-title {
+    @include App.dongle-font(1.15rem);
+  }
+  .notification-desc {
+    @include App.dongle-font(1rem);
+  }
+  .settings-container-japanese .notification-title {
+    @include App.potta-font(0.9rem);
+  }
+  .settings-container-japanese .notification-desc {
+    @include App.potta-font(0.8rem);
+  }
+  .notification-switch {
+    width: 2.25rem;
+    height: 1.15rem;
+  }
+}
+
+@include App.mobile-xs {
+  .settings-container {
+    padding: 0.625rem 0.5rem;
+    gap: 0.625rem;
+  }
+  .settings-title {
+    @include App.dongle-font(1.1rem);
+  }
+  .settings-container-japanese .settings-title {
+    @include App.potta-font(1rem);
+  }
+  .notification-title {
+    @include App.dongle-font(1.3rem);
+  }
+  .notification-desc {
+    @include App.dongle-font(1.15rem);
+  }
+  .settings-container-japanese .notification-title {
+    @include App.potta-font(0.85rem);
+  }
+  .settings-container-japanese .notification-desc {
+    @include App.potta-font(0.75rem);
+  }
+}

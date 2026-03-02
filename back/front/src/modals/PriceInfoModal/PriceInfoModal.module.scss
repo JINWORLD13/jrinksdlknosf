@@ -1,0 +1,841 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+%durumagi-container {
+  width: 40%;
+  min-width: 550px; // & 크기 이상해지면 없애거나 수정
+  height: 80%;
+  //   /* 그림자 효과 */
+  //   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  background-image: url('/assets/images/durumagi.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  @include App.position-absolute-right-half();
+  @include App.flex-box-center(column);
+  position: relative;
+}
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100001;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 80%;
+  z-index: 200001; //! ChargeModal(200000) 때문
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  border: none;
+  background-color: transparent;
+  @extend %durumagi-container;
+}
+.title {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  p {
+    @include App.dongle-font(1.8rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content {
+  width: 70%;
+  height: 60%;
+  @include App.dongle-font(1.7rem);
+  @include App.flex-box-center(column);
+  justify-content: space-between;
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: black;
+  }
+}
+.price-list-item .voucher-main .voucher-logo span {
+  @include App.dongle-font(3rem);
+  line-height: 1;
+}
+.price-list-item-japanese .voucher-main .voucher-logo span {
+  @include App.potta-font(1.7rem);
+  line-height: 1.5; // line-height 줄임
+}
+
+.price-list-item {
+  @include App.flex-box-center(column);
+  justify-content: space-around;
+  & > div {
+    @include FontExact.exact-korean-font('size-180') /* was: 1.8rem */;
+  }
+  // 무료 이용권 타이틀은 제외
+  & > div .free-pass-title,
+  & > div .free-pass-title-japanese {
+    color: inherit; // 부모 색상 상속하지 않음
+  }
+  & > div:first-child {
+    width: 100%;
+  }
+  & > div > div:first-child > span > span {
+    @include FontExact.exact-korean-font('size-180') /* was: 1.8rem */;
+  }
+  & > div > div > span > span:nth-child(3) {
+    text-decoration: line-through;
+  }
+}
+.price-list-item-japanese {
+  @include App.flex-box-center(column);
+  justify-content: space-around;
+  line-height: 1;
+  margin-bottom: 8px; // 간격 줄임
+  padding-top: 5px; // 상단 여유 공간 줄임
+  padding-bottom: 5px; // 하단 여유 공간 줄임
+  & > div {
+    @include App.potta-font(1rem);
+    line-height: 1.3; // line-height 줄임
+    margin-bottom: 4px; // 각 div 사이 간격 줄임
+  }
+  & > div:first-child {
+    width: 100%;
+    margin-bottom: 6px; // 타이틀과 메인 사이 간격 줄임
+  }
+  & > div > div:first-child {
+    @include App.potta-font(1rem);
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div:first-child > span {
+    @include App.potta-font(1.7rem);
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div:first-child > span > span {
+    @include App.potta-font(1.7rem);
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div > span > span {
+    @include App.potta-font(1rem);
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div > span > span:nth-child(3) {
+    text-decoration: line-through;
+  }
+  // voucher-main 영역에 추가 여유 공간 줄임
+  & > .voucher-main {
+    margin-top: 4px;
+    padding-top: 2px;
+  }
+}
+.voucher-title {
+  @include App.flex-box-center(row);
+  font-weight: 800;
+  & > div:nth-child(1) {
+    width: 45%;
+    @include FontExact.exact-korean-font('size-180')
+      /* 낱개 이용권 타이틀 크기 */;
+  }
+  & > div:nth-child(2) {
+    width: 55%;
+    text-align: end;
+    color: white;
+  }
+}
+
+// 일본어 모드에서 타이틀과 할인 정보에 potta 폰트 적용
+.price-list-item-japanese .voucher-title > div:nth-child(1) {
+  @include App.potta-font(1rem); // 낱개 이용권 타이틀 크기
+}
+
+.price-list-item-japanese .voucher-title > div:nth-child(2),
+.price-list-item-japanese .sparkle {
+  @include App.potta-font(1rem); // 할인 정보도 potta 폰트
+}
+
+// 패키지 항목의 타이틀도 동일하게
+.package-item.price-list-item-japanese .voucher-title > div:nth-child(1) {
+  @include App.potta-font(1rem); // 패키지 타이틀도 낱개 이용권과 동일한 크기
+}
+
+.package-item.price-list-item-japanese .voucher-title > div:nth-child(2),
+.package-item.price-list-item-japanese .sparkle {
+  @include App.potta-font(1rem); // 패키지 할인 정보도 potta 폰트
+}
+
+// 무료 이용권 타이틀 스타일 - 낱개 이용권과 동일하게 potta 폰트 적용
+.package-item.price-list-item .voucher-title > div.free-pass-title,
+.package-item.price-list-item-japanese .voucher-title > div.free-pass-title {
+  width: 45%;
+  @include FontExact.exact-korean-font('size-180'); // 한국어 모드용
+  line-height: 1.2;
+  color: inherit; // 기본 검은색
+  font-weight: 800;
+}
+.package-item.price-list-item-japanese .voucher-title > div.free-pass-title {
+  @include App.potta-font(1rem); // 일본어 모드: 낱개 이용권과 동일한 크기
+}
+.package-item.price-list-item-japanese
+  .voucher-title
+  > div.free-pass-title-japanese {
+  width: 45%;
+  @include App.potta-font(1rem); // 낱개 이용권과 동일한 크기
+  line-height: 1.2;
+  color: inherit; // 기본 검은색
+  font-weight: 800;
+}
+
+// 무료 이용권의 가격과 할인 정보도 potta 폰트
+.package-item.price-list-item-japanese .voucher-title .sparkle {
+  @include App.potta-font(1rem);
+}
+
+// 무료 이용권의 "※返金不可" 텍스트도 potta 폰트 적용 (낱개 이용권과 동일한 크기)
+.package-item.price-list-item-japanese > div[style*='marginTop'] {
+  @include App.potta-font(1rem); // 낱개 이용권과 동일한 크기로 변경
+}
+.sparkle {
+  animation: rainbow 5s infinite, sparkle 2s infinite;
+}
+@keyframes sparkle {
+  0% {
+    text-shadow: 0 0 0 transparent;
+  }
+  50% {
+    text-shadow: 0 0 10px #fff;
+  }
+  100% {
+    text-shadow: 0 0 0 transparent;
+  }
+}
+@keyframes rainbow {
+  0% {
+    color: #ff0000;
+  } /* 빨강 */
+  14% {
+    color: #ff7f00;
+  } /* 주황 */
+  28% {
+    color: #ffff00;
+  } /* 노랑 */
+  42% {
+    color: #00ff00;
+  } /* 초록 */
+  57% {
+    color: #0000ff;
+  } /* 파랑 */
+  71% {
+    color: #4b0082;
+  } /* 진홍 */
+  85% {
+    color: #8b00ff;
+  } /* 보라 */
+  100% {
+    color: #ff0000;
+  } /* 빨강 */
+}
+.voucher-main {
+  width: 100%;
+  @include App.flex-box-center(row);
+  & > div:nth-child(1).voucher-logo {
+    width: 25%;
+    text-align: center;
+    @include App.flex-box-center(row);
+    justify-content: center;
+  }
+  & > div:nth-child(2).voucher-price {
+    width: 75%;
+    text-align: end;
+  }
+}
+
+// 일본어 모드에서 가격 정보에 potta 폰트 적용 (숫자, 영어 모두)
+.price-list-item-japanese .voucher-price,
+.price-list-item-japanese .voucher-price span,
+.price-list-item-japanese .voucher-price span span {
+  @include App.potta-font(1rem); // 낱개 이용권 가격 크기
+}
+
+// 패키지 항목의 가격도 동일하게
+.package-item.price-list-item-japanese .voucher-price,
+.package-item.price-list-item-japanese .voucher-price span,
+.package-item.price-list-item-japanese .voucher-price span span {
+  @include App.potta-font(1rem); // 패키지 가격도 낱개 이용권과 동일한 크기
+}
+
+// 패키지와 무료 이용권의 폰트 크기 줄이기
+.package-item .voucher-main .voucher-logo span {
+  @include FontExact.exact-korean-font('size-180') /* 패키지/무료 이용권 폰트 */;
+  line-height: 1;
+}
+.package-item.price-list-item-japanese .voucher-main .voucher-logo span {
+  @include App.potta-font(1.2rem) /* 일본어 패키지/무료 이용권 폰트 */;
+  line-height: 1.5; // line-height 줄임
+}
+.package-item.price-list-item-japanese {
+  margin-bottom: 8px; // 간격 줄임
+  padding-top: 5px; // 상단 여유 공간 줄임
+  padding-bottom: 5px; // 하단 여유 공간 줄임
+  & > div {
+    line-height: 1.3; // line-height 줄임
+    margin-bottom: 4px; // 각 div 사이 간격 줄임
+  }
+  & > div:first-child {
+    margin-bottom: 6px; // 타이틀과 메인 사이 간격 줄임
+  }
+  & > div > div:first-child {
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div:first-child > span {
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div:first-child > span > span {
+    line-height: 1.3; // line-height 줄임
+  }
+  & > div > div > span > span {
+    line-height: 1.3; // line-height 줄임
+  }
+  // voucher-main 영역에 추가 여유 공간 줄임
+  & > .voucher-main {
+    margin-top: 4px;
+    padding-top: 2px;
+  }
+}
+
+.button-box {
+  width: 100%;
+  height: 15%;
+  @include App.flex-box-center(row);
+  justify-content: end;
+  padding-top: 20px;
+  margin-top: 10px;
+  box-sizing: border-box;
+
+  @media (orientation: landscape) and (max-height: 600px) {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+.button {
+  margin: 10px;
+  margin-left: 0px;
+  min-width: 90px;
+}
+
+.title-japanese {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  margin-bottom: 10px;
+  p {
+    @include App.potta-font(1.4rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content-japanese {
+  width: 70%;
+  height: 60%;
+  @include App.potta-font(1.2rem);
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: black;
+  }
+}
+//~ 디바이스
+@include App.desktop {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 400px;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 500px;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+}
+//~ 481px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  .modal {
+    width: 90%;
+    max-width: 100%;
+    min-width: unset;
+    max-height: 500px;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+}
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+//~ 아이폰 SE
+@include App.mobile-xs {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .price-list-item .voucher-main .voucher-logo span {
+    @include App.dongle-font(3rem);
+  }
+  .price-list-item-japanese .voucher-main .voucher-logo span {
+    @include App.potta-font(1.7rem);
+    line-height: 2.5;
+  }
+
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+/* 세로 모드에서 잘림 방지 — 550px 이하 화면에 맞춤 */
+@media (orientation: portrait) and (max-width: 550px) {
+  .modal {
+    width: 100%;
+    min-width: unset;
+    max-width: 500px;
+  }
+}
+
+//* 아이패드 프로 가로
+@include App.landscape-desktop {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+}
+
+//* 태블릿 아이패드, 아이패드 프로 가로
+@include App.landscape-tablet {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 95vh;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+}
+//* IPhon 14 Pro Max 가로모드
+@include App.landscape-mobile-md {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 95vh;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+}
+
+//* 아이폰XR 가로모드
+@include App.landscape-mobile-sm {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+}
+//* 아이폰SE 가로모드
+@include App.landscape-mobile-xs {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+    }
+  }
+}
+
+//* 갤럭시 폴드 가로모드

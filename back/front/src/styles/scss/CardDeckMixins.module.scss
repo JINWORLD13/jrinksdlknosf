@@ -1,0 +1,95 @@
+@use 'CardSizeVariables.module.scss' as Vars;
+
+// 코스모스 타로 카드 감성: 테두리·글로우·입체감
+$cosmos-card-border: 2px solid rgba(139, 92, 246, 0.5);
+$cosmos-card-border-gold-tint: rgba(255, 215, 0, 0.12);
+$cosmos-card-glow: 0 4px 20px rgba(0, 0, 0, 0.22),
+  0 0 18px rgba(139, 92, 246, 0.22),
+  0 0 8px $cosmos-card-border-gold-tint,
+  inset 0 1px 0 rgba(255, 255, 255, 0.08),
+  inset 0 -1px 0 rgba(0, 0, 0, 0.06);
+$cosmos-card-radius-mult: 1.15;
+$cosmos-card-transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+@mixin card-size($ratio) {
+  width: calc(#{Vars.$card-width-base} * #{$ratio});
+  height: calc(#{Vars.$card-height-base} * #{$ratio});
+  min-width: calc(#{Vars.$card-width-base} * #{$ratio});
+  min-height: calc(#{Vars.$card-height-base} * #{$ratio});
+  flex-shrink: 0;
+}
+
+// 덱(Deck) 내 카드 크기 계산 (기준: 160px x 200px)
+@mixin deck-card-size($ratio) {
+  width: calc(#{Vars.$card-width-deck} * #{$ratio});
+  height: calc(#{Vars.$card-height-deck} * #{$ratio});
+}
+
+// 덱 컨테이너 스타일
+@mixin deck($ratio) {
+  position: relative;
+  @include deck-card-size($ratio);
+}
+
+// 덱 컨테이너 내부의 개별 카드 스타일
+// 사용: Deck 배치 시 개별 카드의 스타일링 (TarotCardDeck 등)
+@mixin deck-card($ratio) {
+  position: relative;
+  @include deck-card-size($ratio);
+  margin: auto;
+  padding: calc(10px * #{$ratio});
+  background-color: white;
+  border-radius: calc(6px * #{$ratio} * #{$cosmos-card-radius-mult});
+  border: $cosmos-card-border;
+  box-shadow: $cosmos-card-glow;
+  transition: $cosmos-card-transition;
+}
+
+// 일반 타로 카드 스타일 (기준: 170px x 270px)
+// 사용: TarotCardTableForm, Speed Tarot Result, Answer Card Image Modal 등 전반적인 카드 렌더링
+@mixin card($ratio) {
+  @include card-size($ratio);
+  margin: auto;
+  padding: calc(10px * #{$ratio});
+  background-color: white;
+  border-radius: calc(6px * #{$ratio} * #{$cosmos-card-radius-mult});
+  border: $cosmos-card-border;
+  box-shadow: $cosmos-card-glow;
+  transition: $cosmos-card-transition;
+  position: relative;
+  z-index: 0;
+}
+
+// 스프레드용 카드 스타일 (일반 카드와 달리 padding이 없음)
+// 사용: Spread Modal List (TarotManualModal 등에서 카드 배열 예시를 보여줄 때)
+@mixin spread-card($ratio) {
+  @include card-size($ratio);
+  margin: auto;
+  background-color: white;
+  border-radius: calc(6px * #{$ratio} * #{$cosmos-card-radius-mult});
+  border: $cosmos-card-border;
+  box-shadow: $cosmos-card-glow;
+  transition: $cosmos-card-transition;
+  position: relative;
+  z-index: 0;
+}
+
+// 선택/결과 화면용 카드 (애니메이션/transparency 포함)
+// 사용: TarotCardChoiceForm (Speed Tarot 등의 카드 선택 화면)
+@mixin choice-card($ratio) {
+  @include card($ratio);
+  z-index: 1;
+  opacity: 1;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.2s ease;
+}
+
+@mixin card-image($ratio) {
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  @if $ratio != 0 {
+    border-radius: calc(3px * #{$ratio});
+  } @else {
+    border-radius: 3px; // fallback or default
+  }
+}

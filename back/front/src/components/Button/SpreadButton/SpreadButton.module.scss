@@ -1,0 +1,183 @@
+@use '../../../styles/scss/App.module.scss';
+
+.spread {
+  width: 70px;
+  height: 70px;
+  position: absolute;
+  left: 10px; /* 화면 가장자리로부터 margin 추가 */
+  bottom: 90px; /* 버튼 간격 조정 (70px + 20px 여유) */
+  @include App.flex-box-center(column);
+  border: 2px solid rgba(139, 92, 246, 0.8);
+  border-radius: 50%;
+  z-index: 20;
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 90% 30%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 10% 70%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 10%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 30% 90%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+  background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+    16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+  @include App.dongle-font(1.5rem);
+  line-height: 0.7;
+  color: gold;
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399;
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  padding: 0; /* 텍스트 제거로 padding 제거 */
+
+  &::before {
+    content: '';
+    width: 22px;
+    height: 32px;
+    background: 
+      /* 작은 흰 점들(별들) */ radial-gradient(
+        circle at 20% 20%,
+        white 0.5px,
+        transparent 0.5px
+      ),
+      radial-gradient(circle at 80% 30%, white 0.4px, transparent 0.4px),
+      radial-gradient(circle at 40% 50%, white 0.5px, transparent 0.5px),
+      radial-gradient(circle at 65% 70%, white 0.4px, transparent 0.4px),
+      radial-gradient(circle at 15% 80%, white 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 60%, white 0.4px, transparent 0.4px),
+      radial-gradient(circle at 50% 25%, white 0.5px, transparent 0.5px),
+      radial-gradient(circle at 30% 65%, white 0.4px, transparent 0.4px),
+      radial-gradient(circle at 75% 85%, white 0.5px, transparent 0.5px),
+      radial-gradient(circle at 10% 40%, white 0.4px, transparent 0.4px),
+      /* 파란 배경 */
+        linear-gradient(135deg, rgba(0, 0, 255, 0.9), rgba(12, 12, 152, 0.8));
+    background-size: 100% 100%;
+    border: 2px solid white;
+    border-radius: 8px;
+    position: absolute;
+    top: 50%; /* 정가운데 배치 */
+    left: 50%;
+    transform: translate(-50%, -50%) perspective(200px) rotateY(5deg);
+    box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.4),
+      inset 0 0 4px rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
+  }
+
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+    animation: starTwinkle 1.5s ease-in-out infinite;
+    box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4),
+      0 0 30px rgba(139, 92, 246, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: rgba(139, 92, 246, 1);
+    color: gold;
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 10px rgba(255, 215, 0, 1), 0 0 20px rgba(255, 215, 0, 1),
+      0 0 30px rgba(255, 215, 0, 0.9), 0 0 40px rgba(255, 215, 0, 0.7),
+      0 0 50px rgba(255, 215, 0, 0.5);
+
+    &::before {
+      background: 
+        /* 호버 시 노란 점들(별들) */ radial-gradient(
+          circle at 20% 20%,
+          #ffd700 0.5px,
+          transparent 0.5px
+        ),
+        radial-gradient(circle at 80% 30%, #ffd700 0.4px, transparent 0.4px),
+        radial-gradient(circle at 40% 50%, #ffd700 0.5px, transparent 0.5px),
+        radial-gradient(circle at 65% 70%, #ffd700 0.4px, transparent 0.4px),
+        radial-gradient(circle at 15% 80%, #ffd700 0.5px, transparent 0.5px),
+        radial-gradient(circle at 90% 60%, #ffd700 0.4px, transparent 0.4px),
+        radial-gradient(circle at 50% 25%, #ffd700 0.5px, transparent 0.5px),
+        radial-gradient(circle at 30% 65%, #ffd700 0.4px, transparent 0.4px),
+        radial-gradient(circle at 75% 85%, #ffd700 0.5px, transparent 0.5px),
+        radial-gradient(circle at 10% 40%, #ffd700 0.4px, transparent 0.4px),
+        /* 파란 배경 */
+          linear-gradient(135deg, rgba(12, 12, 152, 0.9), rgba(0, 0, 100, 0.8));
+      border-color: #f0f0f0;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5),
+        inset 0 0 5px rgba(255, 255, 255, 0.4);
+    }
+  }
+
+  &:active {
+    transform: translateY(0px) scale(0.98);
+    background: linear-gradient(
+      135deg,
+      rgba(139, 92, 246, 0.8),
+      rgba(79, 70, 229, 0.7)
+    );
+    color: #ff6b9d;
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 15px rgba(255, 107, 157, 0.8);
+
+    &::before {
+      background: 
+        /* 클릭 시 핑크 점들(별들) */ radial-gradient(
+          circle at 20% 20%,
+          #ff69b4 0.5px,
+          transparent 0.5px
+        ),
+        radial-gradient(circle at 80% 30%, #ff69b4 0.4px, transparent 0.4px),
+        radial-gradient(circle at 40% 50%, #ff69b4 0.5px, transparent 0.5px),
+        radial-gradient(circle at 65% 70%, #ff69b4 0.4px, transparent 0.4px),
+        radial-gradient(circle at 15% 80%, #ff69b4 0.5px, transparent 0.5px),
+        radial-gradient(circle at 90% 60%, #ff69b4 0.4px, transparent 0.4px),
+        radial-gradient(circle at 50% 25%, #ff69b4 0.5px, transparent 0.5px),
+        radial-gradient(circle at 30% 65%, #ff69b4 0.4px, transparent 0.4px),
+        radial-gradient(circle at 75% 85%, #ff69b4 0.5px, transparent 0.5px),
+        radial-gradient(circle at 10% 40%, #ff69b4 0.4px, transparent 0.4px),
+        /* 파란 배경 */
+          linear-gradient(135deg, rgba(0, 0, 255, 0.8), rgba(12, 12, 152, 0.7));
+    }
+  }
+}
+
+/* 별 반짝임 애니메이션 */
+@keyframes starTwinkle {
+  0%, 100% {
+    background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+  50% {
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+}

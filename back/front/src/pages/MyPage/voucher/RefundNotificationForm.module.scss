@@ -1,0 +1,421 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use './_VoucherCommon.module.scss' as Common;
+
+// 메뉴 스타일
+.menu {
+  width: 100%;
+  min-height: 10px;
+  height: 100%;
+  @include Common.cosmic-box;
+  position: relative;
+  color: white;
+
+  & > div {
+    padding-left: 10px;
+    @include App.flex-box-center(column);
+    align-items: start;
+  }
+
+  & > li {
+    height: 90%;
+    list-style-type: none;
+  }
+
+  & > li > ul {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 10px;
+    font-weight: 500;
+  }
+
+  & > li > ul:hover {
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  & > li > ul:active {
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 800;
+  }
+}
+
+.menu-folded {
+  width: 100%;
+  height: 0px;
+  @include Common.cosmic-box;
+  position: relative;
+}
+
+// 폰트 클래스
+.korean-dongle-font {
+  @include App.dongle-font(3rem);
+}
+.korean-dongle-font2 {
+  @include App.dongle-font(2.2rem);
+}
+.japanese-potta-font {
+  @include App.potta-font(1.5rem);
+  line-height: 3;
+}
+.japanese-potta-font2 {
+  @include App.potta-font(1.2rem);
+  line-height: 2.5;
+}
+
+.link-style {
+  display: flex;
+  @include App.flex-box-center(row);
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+
+  p {
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+  }
+}
+
+// 반응형 믹스인
+@mixin responsive-menu {
+  .menu {
+    width: 100%;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+}
+
+// 반응형 미디어쿼리
+@media (min-width: 1025px) and (max-width: 1366px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.8rem, 1.45rem, 1.8rem, 1.15rem, 2.5, 2.2);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.7rem, 1.4rem, 1.7rem, 1.1rem, 2.3, 2);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.7rem, 1.35rem, 1.7rem, 1.05rem, 2.2, 1.9);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media only screen and (min-width: 415px) and (max-width: 480px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.4rem, 1.25rem, 1.3rem, 0.95rem, 2, 1.8);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 414px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.4rem, 1.2rem, 1.3rem, 0.9rem, 1.9, 1.7);
+
+  .menu > li > ul {
+    @include FontExact.exact-korean-font('size-135');
+  }
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 17px;
+  }
+}
+
+@media (min-width: 281px) and (max-width: 375px) {
+  @include responsive-menu;
+  @include Common.responsive-fonts(2.4rem, 1.15rem, 1.3rem, 0.85rem, 1.8, 1.6);
+
+  .menu > li > ul {
+    @include FontExact.exact-korean-font('size-135');
+  }
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 17px;
+  }
+}
+
+@media (max-width: 280px) {
+  .menu {
+    width: 100vw;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+      @include FontExact.exact-korean-font('size-135');
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.4rem, 1.1rem, 1.3rem, 0.8rem, 1.7, 1.5);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 3px;
+    margin-bottom: 10px;
+  }
+}
+
+// 가로모드 미디어쿼리
+@media screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) and (max-height: 600px) {
+  div.menu {
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.8rem, 1.45rem, 1.8rem, 1.15rem, 2.5, 2.2);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-width: 933px) and (max-width: 1024px) and (max-height: 600px) {
+  div.menu {
+    height: auto;
+    max-height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.7rem, 1.4rem, 1.7rem, 1.1rem, 2.3, 2);
+
+  .menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-width: 897px) and (max-width: 932px) and (max-height: 600px) {
+  div.menu {
+    padding-top: 50px;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.4rem, 1.25rem, 1.3rem, 0.95rem, 2, 1.8);
+
+  div.menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-width: 668px) and (max-width: 896px) and (max-height: 600px) {
+  div.menu {
+    padding-top: 50px;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.4rem, 1.2rem, 1.3rem, 0.9rem, 1.9, 1.7);
+
+  div.menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) and (min-width: 654px) and (max-width: 667px) and (max-height: 600px) {
+  div.menu {
+    padding-top: 50px;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.4rem, 1.15rem, 1.3rem, 0.85rem, 1.8, 1.6);
+
+  div.menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px) {
+  div.menu {
+    padding-top: 50px;
+    height: 100%;
+
+    & > div {
+      height: auto;
+      padding-left: 10px;
+      @include App.flex-box-center(column);
+      align-items: start;
+    }
+
+    & > li {
+      height: auto;
+      @include App.flex-box-center(row);
+      justify-content: start;
+    }
+
+    & > li > ul {
+      padding: 0px;
+      padding-left: 10px;
+    }
+
+    .link-style {
+    }
+  }
+
+  @include Common.responsive-fonts(2.4rem, 1.1rem, 1.3rem, 0.8rem, 1.7, 1.5);
+
+  div.menu > div > h2.japanese-potta-font {
+    margin-top: 10px;
+    margin-bottom: 20px;
+  }
+}

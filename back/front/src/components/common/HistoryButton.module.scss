@@ -1,0 +1,59 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+%btn {
+  width: 32px !important;
+  height: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+  padding: 0 !important;
+  border-radius: 50% !important; // 원형
+  border: 2px solid #8b5cf6;
+  color: #e9d5ff;
+  background: linear-gradient(135deg, #2d1554 0%, #4c1d95 100%);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  // 이모지 중앙 정렬을 위한 추가 설정
+  & > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0;
+    padding: 0;
+  }
+}
+%btn-hover {
+  border: 2px solid #a78bfa;
+  color: white;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+  transform: translateY(-1px);
+}
+.btn {
+  @include App.no-select;
+  @include App.no-drag;
+  @extend %btn;
+  @include App.dongle-font(1.2rem);
+}
+.btn:hover {
+  @extend %btn-hover;
+}
+.btn-japanese {
+  @include App.no-select;
+  @include App.no-drag;
+  @extend %btn;
+  @include App.potta-font(1rem);
+}
+.btn-japanese:hover {
+  @extend %btn-hover;
+}

@@ -1,0 +1,40 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+.one-card {
+  @include App.one-card-color;
+}
+.two-cards {
+  @include App.two-cards-color;
+}
+.three-cards {
+  @include App.three-cards-color;
+}
+.four-cards {
+  @include App.four-cards-color;
+}
+.five-cards {
+  @include App.five-cards-color;
+}
+.six-cards {
+  @include App.six-cards-color;
+}
+.seven-cards {
+  @include App.seven-cards-color;
+}
+.eight-cards {
+  @include App.eight-cards-color;
+}
+.nine-cards {
+  @include App.nine-cards-color;
+}
+.ten-cards {
+  @include App.ten-cards-color;
+}
+.eleven-cards {
+  @include App.eleven-cards-color;
+}
+.thirteen-cards {
+  @include App.thirteen-cards-color;
+}

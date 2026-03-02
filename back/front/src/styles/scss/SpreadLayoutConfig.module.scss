@@ -1,0 +1,1424 @@
+/**
+ * Spread Layout Central Configuration
+ * 
+ * 모든 스프레드의 세팅값(카드 크기, 간격, 브레이크포인트)을 중앙 관리하는 파일입니다.
+ * 이 파일의 값을 수정하면 모든 화면(스피드타로, 미리보기, 결과모달)에 즉시 반영됩니다.
+ * 
+ * [주요 원칙]
+ * - 설정값만 포함 (mixin, class 없음)
+ * - 다른 파일에서 @use로 참조
+ * - 중복 없음, override 없음
+ */
+
+@use 'sass:map';
+@use 'sass:list';
+
+// ============================================
+// 1. 반응형 브레이크포인트 정의 (단일 소스)
+// ============================================
+/**
+ * [Base / Default Setting]
+ * - base: 모든 브레이크포인트의 기본 설정값. 매칭되는 미디어 쿼리가 없거나 공통 설정을 정의할 때 사용.
+ * 
+ * [Breakpoint Ranges - Portrait]
+ * width와 height 모두 고려하여 가장 작은 화면 기준으로 설정
+ * - desktop: 1025px ~ 1366px (min-height: 600px)
+ * - tablet: 769px ~ 1024px (min-height: 600px)
+ *   - tablet-upper: 871px ~ 1024px (min-height: 600px)
+ *   - tablet-lower: 769px ~ 870px (min-height: 600px)
+ * - mobile-lg: 481px ~ 768px (min-height: 600px)
+ *   - mobile-lg-upper: 650px ~ 768px (min-height: 600px)
+ *   - mobile-lg-mid: 550px ~ 650px (min-height: 600px)
+ *   - mobile-lg-lower: 481px ~ 550px (min-height: 600px)
+ * - mobile-md: 415px ~ 480px (min-height: 600px, e.g. iPhone 14 Pro Max)
+ * - mobile-sm: 376px ~ 414px (min-height: 600px, e.g. iPhone XR)
+ * - mobile-xs: 281px ~ 375px (min-height: 600px, e.g. iPhone SE)
+ *   - mobile-xs-upper: 320px ~ 375px (min-height: 600px)
+ *   - mobile-xs-lower: 281px ~ 320px (min-height: 600px)
+ * - mobile-fold: ~ 280px (min-height: 600px, Galaxy Fold)
+ *
+ * [Landscape Ranges]
+ * - land-xl: 1367px ~ (max-height: 600px)
+ * - land-desktop: 1025px ~ 1366px (max-height: 600px)
+ * - land-tablet: 933px ~ 1024px (max-height: 600px)
+ * - land-mobile-md: 897px ~ 932px (max-height: 600px)
+ * - land-mobile-sm: 667px ~ 896px (max-height: 600px)
+ * - land-mobile-xs: 654px ~ 666px (max-height: 600px)
+ * - land-mobile-fold: ~ 653px (max-height: 600px)
+ */
+$breakpoints: (
+  // Portrait - Desktop/Large
+  'desktop':
+    'screen and (min-width: 1025px) and (max-width: 1366px) and (min-height: 600px)',
+
+  // Portrait - Tablet
+  'tablet':
+    'screen and (min-width: 769px) and (max-width: 1025px) and (min-height: 600px)',
+  'tablet-upper':
+    'screen and (min-width: 871px) and (max-width: 1025px) and (min-height: 600px)',
+  'tablet-lower':
+    'screen and (min-width: 769px) and (max-width: 871px) and (min-height: 600px)',
+
+  // Portrait - Mobile Large
+  'mobile-lg':
+    'screen and (min-width: 481px) and (max-width: 769px) and (min-height: 600px)',
+  'mobile-lg-upper':
+    'screen and (min-width: 650px) and (max-width: 769px) and (min-height: 600px)',
+  'mobile-lg-mid':
+    'screen and (min-width: 550px) and (max-width: 650px) and (min-height: 600px)',
+  'mobile-lg-lower':
+    'screen and (min-width: 481px) and (max-width: 550px) and (min-height: 600px)',
+
+  // Portrait - Mobile Medium (iPhone 14 Pro Max)
+  'mobile-md':
+    'screen and (min-width: 415px) and (max-width: 481px) and (min-height: 600px)',
+
+  // Portrait - Mobile Small (iPhone XR)
+  'mobile-sm':
+    'screen and (min-width: 376px) and (max-width: 415px) and (min-height: 600px)',
+
+  // Portrait - Mobile Extra Small (iPhone SE)
+  'mobile-xs':
+    'screen and (min-width: 281px) and (max-width: 376px)',
+  'mobile-xs-upper':
+    'screen and (min-width: 320px) and (max-width: 376px)',
+  'mobile-xs-lower':
+    'screen and (min-width: 281px) and (max-width: 320px)',
+
+  // Portrait - Mobile Fold (Galaxy Fold)
+  'mobile-fold': 'screen and (max-width: 281px)',
+
+  // Landscape
+  'land-xl':
+    'screen and (orientation: landscape) and (min-width: 1367px) and (max-height: 600px)',
+  'land-desktop':
+    'screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) and (max-height: 600px)',
+  'land-tablet':
+    'screen and (orientation: landscape) and (min-width: 933px) and (max-width: 1024px) and (max-height: 600px)',
+  'land-mobile-md':
+    'screen and (orientation: landscape) and (min-width: 897px) and (max-width: 932px) and (max-height: 600px)',
+  'land-mobile-sm':
+    'screen and (orientation: landscape) and (min-width: 667px) and (max-width: 896px) and (max-height: 600px)',
+  'land-mobile-xs':
+    'screen and (orientation: landscape) and (min-width: 654px) and (max-width: 666px) and (max-height: 600px)',
+  'land-mobile-fold':
+    'screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px)'
+);
+
+// ============================================
+// 2. 간격(Gap) 설정 - Linear Spread용
+// ============================================
+/**
+ * [용도] 1~4장 스프레드에서 카드 사이의 간격 (flex gap)
+ * [적용 스프레드] 1장, 2장, 3장, 4장 Linear Spread
+ * [사용 위치] SpreadLayoutDefinitions.module.scss → linear-spread-container mixin
+ */
+$linear-gap-map: (
+  'base': 15px,
+  'desktop': 15px,
+  'tablet': 15px,
+  'tablet-upper': 15px,
+  'tablet-lower': 15px,
+  'mobile-lg': 10px,
+  'mobile-lg-upper': 10px,
+  'mobile-lg-mid': 10px,
+  'mobile-lg-lower': 10px,
+  'mobile-md': 8px,
+  'mobile-sm': 6px,
+  'mobile-xs': 5px,
+  'mobile-xs-upper': 5px,
+  'mobile-xs-lower': 5px,
+  'mobile-fold': 4px,
+  'land-xl': 15px,
+  'land-desktop': 15px,
+  'land-tablet': 15px,
+  'land-mobile-md': 10px,
+  'land-mobile-sm': 10px,
+  'land-mobile-xs': 8px,
+  'land-mobile-fold': 8px,
+);
+
+// ============================================
+// 3. 카드 크기 맵 - (Speed Size, Spread Modal Size, Answer Modal Size)
+// ============================================
+/**
+ * [공통 구조]
+ * 각 맵의 값은 3개의 스케일 튜플: (Speed Tarot 크기, Spread Modal 미리보기 크기, Answer Modal 결과 크기)
+ * 값의 범위: 0.0 ~ 1.0 (1.0 = 원본 카드 크기 170x270px)
+ */
+
+/**
+ * [용도] 1장 스프레드 개별 카드 크기
+ * [적용 스프레드] 오늘의 타로 (Today's Card)
+ */
+$card-single-map: (
+  'base': (
+    0.85,
+    0.35,
+    0.9,
+  ),
+  'tablet': (
+    0.85,
+    0.35,
+    0.9,
+  ),
+  'tablet-upper': (
+    0.85,
+    0.35,
+    0.9,
+  ),
+  'tablet-lower': (
+    0.85,
+    0.35,
+    0.9,
+  ),
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      0.8,
+      0.33,
+      0.6,
+    ),
+  'mobile-lg-upper': (
+    0.8,
+    0.33,
+    0.6,
+  ),
+  'mobile-lg-mid': (
+    0.8,
+    0.3,
+    0.6,
+  ),
+  'mobile-lg-lower': (
+    0.8,
+    0.27,
+    0.6,
+  ),
+  'mobile-md': (
+    0.8,
+    0.28,
+    0.7,
+  ),
+  'mobile-sm': (
+    0.7,
+    0.28,
+    0.65,
+  ),
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      0.65,
+      0.25,
+      0.5,
+    ),
+  'mobile-xs-upper': (
+    0.65,
+    0.25,
+    0.5,
+  ),
+  'mobile-xs-lower': (
+    0.6,
+    0.23,
+    0.5,
+  ),
+  'mobile-fold': (
+    0.45,
+    0.22,
+    0.4,
+  ),
+  'land-tablet': (
+    0.9,
+    0.3,
+    0.9,
+  ),
+  'land-mobile-md': (
+    0.8,
+    0.3,
+    0.9,
+  ),
+  'land-mobile-sm': (
+    0.8,
+    0.3,
+    0.6,
+  ),
+  'land-mobile-xs': (
+    0.8,
+    0.3,
+    0.6,
+  ),
+  'land-mobile-fold': (
+    0.7,
+    0.3,
+    0.6,
+  ),
+  'land-desktop': (
+    0.9,
+    0.35,
+    0.9,
+  ),
+  'land-xl': (
+    0.9,
+    0.35,
+    0.9,
+  ),
+);
+
+// 2장 스프레드
+$card-two-map: (
+  'base': (
+    0.8,
+    0.3,
+    0.8,
+  ),
+  'tablet': (
+    0.8,
+    0.3,
+    0.8,
+  ),
+  'tablet-upper': (
+    0.8,
+    0.3,
+    0.8,
+  ),
+  'tablet-lower': (
+    0.8,
+    0.3,
+    0.9,
+  ),
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      0.8,
+      0.25,
+      0.6,
+    ),
+  'mobile-lg-upper': (
+    0.8,
+    0.25,
+    0.6,
+  ),
+  'mobile-lg-mid': (
+    0.8,
+    0.21,
+    0.6,
+  ),
+  'mobile-lg-lower': (
+    0.8,
+    0.17,
+    0.6,
+  ),
+  'mobile-md': (
+    0.9,
+    0.16,
+    0.55,
+  ),
+  'mobile-sm': (
+    0.85,
+    0.19,
+    0.5,
+  ),
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      0.75,
+      0.18,
+      0.45,
+    ),
+  'mobile-xs-upper': (
+    0.75,
+    0.18,
+    0.45,
+  ),
+  'mobile-xs-lower': (
+    0.65,
+    0.15,
+    0.4,
+  ),
+  'mobile-fold': (
+    0.6,
+    0.15,
+    0.35,
+  ),
+  'land-tablet': (
+    0.9,
+    0.3,
+    0.9,
+  ),
+  'land-mobile-md': (
+    0.8,
+    0.3,
+    0.9,
+  ),
+  'land-mobile-sm': (
+    0.8,
+    0.2,
+    0.6,
+  ),
+  'land-mobile-xs': (
+    0.8,
+    0.2,
+    0.6,
+  ),
+  'land-mobile-fold': (
+    0.7,
+    0.2,
+    0.6,
+  ),
+  'land-desktop': (
+    0.9,
+    0.3,
+    0.9,
+  ),
+  'land-xl': (
+    0.9,
+    0.3,
+    0.9,
+  ),
+);
+
+// 3장 스프레드
+$card-three-map: (
+  'base': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  'desktop': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  'tablet': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  'tablet-upper': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  'tablet-lower': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      0.8,
+      0.14,
+      0.5,
+    ),
+  'mobile-lg-upper': (
+    0.8,
+    0.14,
+    0.5,
+  ),
+  'mobile-lg-mid': (
+    0.8,
+    0.14,
+    0.5,
+  ),
+  'mobile-lg-lower': (
+    0.8,
+    0.14,
+    0.5,
+  ),
+  'mobile-md': (
+    0.7,
+    0.13,
+    0.5,
+  ),
+  'mobile-sm': (
+    0.62,
+    0.13,
+    0.5,
+  ),
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      0.52,
+      0.12,
+      0.45,
+    ),
+  'mobile-xs-upper': (
+    0.52,
+    0.12,
+    0.4,
+  ),
+  'mobile-xs-lower': (
+    0.45,
+    0.13,
+    0.4,
+  ),
+  'mobile-fold': (
+    0.4,
+    0.1,
+    0.35,
+  ),
+  'land-mobile-md': (
+    0.8,
+    0.2,
+    0.8,
+  ),
+  'land-mobile-sm': (
+    0.8,
+    0.17,
+    0.5,
+  ),
+  'land-mobile-xs': (
+    0.8,
+    0.16,
+    0.5,
+  ),
+  'land-mobile-fold': (
+    0.8,
+    0.15,
+    0.5,
+  ),
+  'land-desktop': (
+    0.9,
+    0.2,
+    0.8,
+  ),
+  'land-xl': (
+    0.9,
+    0.2,
+    0.8,
+  ),
+);
+
+// 4장 스프레드
+$card-four-map: (
+  'base': (
+    0.75,
+    0.15,
+    0.6,
+  ),
+  'desktop': (
+    0.75,
+    0.15,
+    0.65,
+  ),
+  'tablet': (
+    0.75,
+    0.15,
+    0.6,
+  ),
+  'tablet-upper': (
+    0.75,
+    0.15,
+    0.6,
+  ),
+  'tablet-lower': (
+    0.75,
+    0.15,
+    0.6,
+  ),
+  // Fallback for mobile-lg range
+  'mobile-lg':
+    (
+      0.75,
+      0.13,
+      0.4,
+    ),
+  'mobile-lg-upper': (
+    0.75,
+    0.13,
+    0.4,
+  ),
+  'mobile-lg-mid': (
+    0.65,
+    0.13,
+    0.4,
+  ),
+  'mobile-lg-lower': (
+    0.6,
+    0.13,
+    0.4,
+  ),
+  'mobile-md': (
+    0.52,
+    0.12,
+    0.4,
+  ),
+  'mobile-sm': (
+    0.46,
+    0.1,
+    0.4,
+  ),
+  // Fallback for mobile-xs range
+  'mobile-xs':
+    (
+      0.38,
+      0.095,
+      0.3,
+    ),
+  'mobile-xs-upper': (
+    0.38,
+    0.095,
+    0.3,
+  ),
+  'mobile-xs-lower': (
+    0.34,
+    0.08,
+    0.3,
+  ),
+  'mobile-fold': (
+    0.31,
+    0.08,
+    0.25,
+  ),
+  'land-tablet': (
+    0.92,
+    0.17,
+    0.7,
+  ),
+  'land-mobile-md': (
+    0.85,
+    0.17,
+    0.68,
+  ),
+  'land-mobile-sm': (
+    0.85,
+    0.14,
+    0.45,
+  ),
+  'land-mobile-xs': (
+    0.85,
+    0.14,
+    0.4,
+  ),
+  'land-mobile-fold': (
+    0.85,
+    0.14,
+    0.4,
+  ),
+  'land-desktop': (
+    0.92,
+    0.17,
+    0.72,
+  ),
+  'land-xl': (
+    0.92,
+    0.17,
+    0.72,
+  ),
+);
+
+/**
+ * [용도] 5장 스프레드 개별 카드 크기
+ * [적용 스프레드] 관계 스프레드 (Relationship Spread)
+ * [레이아웃] Vertical - 상단 2장 + 하단 3장 (Flexbox column)
+ */
+$card-five-map: (
+  'base': (
+    0.75,
+    0.13,
+    0.5,
+  ),
+  'tablet': (
+    0.75,
+    0.13,
+    0.5,
+  ),
+  'tablet-upper': (
+    0.75,
+    0.13,
+    0.5,
+  ),
+  'tablet-lower': (
+    0.75,
+    0.13,
+    0.5,
+  ),
+  // Fallback for mobile-lg range
+  'mobile-lg':
+    (
+      0.75,
+      0.14,
+      0.4,
+    ),
+  'mobile-lg-upper': (
+    0.75,
+    0.14,
+    0.4,
+  ),
+  'mobile-lg-mid': (
+    0.65,
+    0.12,
+    0.4,
+  ),
+  'mobile-lg-lower': (
+    0.55,
+    0.12,
+    0.4,
+  ),
+  'mobile-md': (
+    0.45,
+    0.12,
+    0.35,
+  ),
+  'mobile-sm': (
+    0.4,
+    0.11,
+    0.3,
+  ),
+  // Fallback for mobile-xs range
+  'mobile-xs':
+    (
+      0.35,
+      0.1,
+      0.25,
+    ),
+  'mobile-xs-upper': (
+    0.35,
+    0.1,
+    0.25,
+  ),
+  'mobile-xs-lower': (
+    0.3,
+    0.11,
+    0.25,
+  ),
+  'mobile-fold': (
+    0.3,
+    0.08,
+    0.25,
+  ),
+  'land-tablet': (
+    0.5,
+    0.12,
+    0.38,
+  ),
+  'land-mobile-md': (
+    0.45,
+    0.1,
+    0.32,
+  ),
+  'land-mobile-sm': (
+    0.4,
+    0.1,
+    0.28,
+  ),
+  'land-mobile-xs': (
+    0.35,
+    0.09,
+    0.24,
+  ),
+  'land-mobile-fold': (
+    0.32,
+    0.09,
+    0.22,
+  ),
+  'land-desktop': (
+    0.55,
+    0.14,
+    0.42,
+  ),
+  'land-xl': (
+    0.6,
+    0.15,
+    0.48,
+  ),
+);
+
+/**
+ * [용도] 6장 스프레드 개별 카드 크기
+ * [적용 스프레드] 헥사그램 스프레드 (Hexagram Spread)
+ * [레이아웃] Grid - 2행 × 3열 (CSS Grid)
+ */
+// 왜 내 컴에서 tablet 적용되지 않았나? 812px일 때는 **화면 높이(Height)**가 태블릿 기준인 768px보다 작아서 태블릿 설정(0.75)이 무시되고, 더 큰 **기본값(base: 0.9 < - 이전값. 현재는 0.75로 바꿈)**이 적용되었기 때문입니다.
+$card-six-map: (
+  'base': (
+    0.75,
+    0.15,
+    0.6,
+  ),
+  'desktop': (
+    0.75,
+    0.15,
+    0.65,
+  ),
+  'tablet': (
+    0.65,
+    0.15,
+    0.6,
+  ),
+  'tablet-upper': (
+    0.65,
+    0.15,
+    0.6,
+  ),
+  'tablet-lower': (
+    0.65,
+    0.15,
+    0.6,
+  ),
+  // Fallback for mobile-lg range when sub-breakpoints don't match (e.g., height < 667px)
+  'mobile-lg':
+    (
+      0.65,
+      0.15,
+      0.5,
+    ),
+  'mobile-lg-upper': (
+    0.65,
+    0.15,
+    0.5,
+  ),
+  'mobile-lg-mid': (
+    0.65,
+    0.15,
+    0.5,
+  ),
+  'mobile-lg-lower': (
+    0.6,
+    0.15,
+    0.45,
+  ),
+  'mobile-md': (
+    0.52,
+    0.14,
+    0.45,
+  ),
+  'mobile-sm': (
+    0.46,
+    0.14,
+    0.45,
+  ),
+  // Fallback for mobile-xs range when sub-breakpoints don't match
+  'mobile-xs':
+    (
+      0.38,
+      0.13,
+      0.45,
+    ),
+  'mobile-xs-upper': (
+    0.38,
+    0.13,
+    0.4,
+  ),
+  'mobile-xs-lower': (
+    0.34,
+    0.12,
+    0.4,
+  ),
+  'mobile-fold': (
+    0.31,
+    0.11,
+    0.35,
+  ),
+  'land-tablet': (
+    0.8,
+    0.2,
+    0.35,
+  ),
+  'land-mobile-md': (
+    0.6,
+    0.17,
+    0.35,
+  ),
+  'land-mobile-sm': (
+    0.55,
+    0.16,
+    0.35,
+  ),
+  'land-mobile-xs': (
+    0.55,
+    0.14,
+    0.33,
+  ),
+  'land-mobile-fold': (
+    0.45,
+    0.13,
+    0.33,
+  ),
+  'land-desktop': (
+    0.9,
+    0.2,
+    0.65,
+  ),
+  'land-xl': (
+    0.9,
+    0.15,
+    0.65,
+  ),
+);
+
+/**
+ * [용도] 6장 스프레드 그리드 간격 (row-gap, column-gap)
+ * [적용 스프레드] 헥사그램 스프레드 (Hexagram Spread)
+ * [값 순서] 6개의 튜플:
+ *   - Speed Row Gap (행간=세로), Speed Column Gap (열간=가로)
+ *   - Spread Row Gap (행간=세로), Spread Column Gap (열간=가로)
+ *   - Answer Row Gap (행간=세로), Answer Column Gap (열간=가로)
+ */
+$card-six-gap-map: (
+  'base': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'tablet-upper': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'tablet-lower': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      5px,
+      5px,
+      2px,
+      2px,
+      4px,
+      4px,
+    ),
+  'mobile-lg-upper': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'mobile-lg-mid': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'mobile-lg-lower': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'mobile-md': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'mobile-sm': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      5px,
+      5px,
+      2px,
+      2px,
+      4px,
+      4px,
+    ),
+  'mobile-xs-upper': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'mobile-xs-lower': (
+    4px,
+    4px,
+    2px,
+    2px,
+    3px,
+    3px,
+  ),
+  'mobile-fold': (
+    3px,
+    3px,
+    1px,
+    1px,
+    2px,
+    2px,
+  ),
+  'land-tablet': (
+    10px,
+    10px,
+    5px,
+    5px,
+    8px,
+    8px,
+  ),
+  'land-mobile-md': (
+    8px,
+    8px,
+    4px,
+    4px,
+    6px,
+    6px,
+  ),
+  'land-mobile-sm': (
+    6px,
+    6px,
+    3px,
+    3px,
+    5px,
+    5px,
+  ),
+  'land-mobile-xs': (
+    5px,
+    5px,
+    2px,
+    2px,
+    4px,
+    4px,
+  ),
+  'land-mobile-fold': (
+    4px,
+    4px,
+    2px,
+    2px,
+    3px,
+    3px,
+  ),
+  'land-desktop': (
+    15px,
+    15px,
+    5px,
+    5px,
+    10px,
+    10px,
+  ),
+  'land-xl': (
+    15px,
+    15px,
+    5px,
+    5px,
+    10px,
+    10px,
+  ),
+);
+
+// ============================================
+// 4. Celtic Cross 설정
+// ============================================
+
+/**
+ * [용도] 켈틱 크로스 스프레드 개별 카드 크기
+ * [적용 스프레드] 켈틱 크로스 (Celtic Cross) - 10장
+ * [레이아웃] 좌측 3×3 그리드 + 우측 1×4 세로 배열
+ */
+$card-celtic-cross-map: (
+  'base': (
+    0.35,
+    0.09,
+    0.33,
+  ),
+  'tablet': (
+    0.35,
+    0.09,
+    0.33,
+  ),
+  'tablet-upper': (
+    0.35,
+    0.09,
+    0.33,
+  ),
+  'tablet-lower': (
+    0.35,
+    0.09,
+    0.33,
+  ),
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      0.32,
+      0.08,
+      0.3,
+    ),
+  'mobile-lg-upper': (
+    0.32,
+    0.08,
+    0.3,
+  ),
+  'mobile-lg-mid': (
+    0.3,
+    0.08,
+    0.28,
+  ),
+  'mobile-lg-lower': (
+    0.3,
+    0.08,
+    0.25,
+  ),
+  'mobile-md': (
+    0.3,
+    0.08,
+    0.24,
+  ),
+  'mobile-sm': (
+    0.3,
+    0.08,
+    0.24,
+  ),
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      0.3,
+      0.08,
+      0.24,
+    ),
+  'mobile-xs-upper': (
+    0.3,
+    0.08,
+    0.24,
+  ),
+  'mobile-xs-lower': (
+    0.28,
+    0.08,
+    0.23,
+  ),
+  'mobile-fold': (
+    0.28,
+    0.08,
+    0.22,
+  ),
+  'land-tablet': (
+    0.28,
+    0.16,
+    0.3,
+  ),
+  'land-mobile-md': (
+    0.24,
+    0.16,
+    0.22,
+  ),
+  'land-mobile-sm': (
+    0.22,
+    0.14,
+    0.22,
+  ),
+  'land-mobile-xs': (
+    0.2,
+    0.13,
+    0.22,
+  ),
+  'land-mobile-fold': (
+    0.18,
+    0.12,
+    0.22,
+  ),
+  'land-desktop': (
+    0.35,
+    0.1,
+    0.35,
+  ),
+  'land-xl': (
+    0.35,
+    0.1,
+    0.35,
+  ),
+);
+
+// Celtic Cross Gap Map
+// 순서:
+// Speed: Left Row (행간=세로), Left Col (열간=가로), Right Row (우측 4장의 세로 간격), Block (두 그룹 사이)
+// Spread: Left Row (행간=세로), Left Col (열간=가로), Right Row (우측 4장의 세로 간격), Block (두 그룹 사이)
+// Answer: Left Row (행간=세로), Left Col (열간=가로), Right Row (우측 4장의 세로 간격), Block (두 그룹 사이)
+$celtic-cross-gap-map: (
+  'base': (
+    40px,
+    40px,
+    30px,
+    50px,
+    8px,
+    8px,
+    8px,
+    9px,
+    8px,
+    8px,
+    8px,
+    14px,
+  ),
+  'tablet': (
+    40px,
+    40px,
+    30px,
+    50px,
+    8px,
+    8px,
+    8px,
+    9px,
+    8px,
+    8px,
+    8px,
+    14px,
+  ),
+
+  // Fallback for mobile-lg
+  'mobile-lg':
+    (
+      35px,
+      35px,
+      25px,
+      40px,
+      7px,
+      7px,
+      7px,
+      8px,
+      7px,
+      7px,
+      7px,
+      12px,
+    ),
+  'mobile-lg-upper': (
+    35px,
+    35px,
+    25px,
+    40px,
+    7px,
+    7px,
+    7px,
+    8px,
+    7px,
+    7px,
+    7px,
+    12px,
+  ),
+  'mobile-lg-mid': (
+    30px,
+    30px,
+    20px,
+    35px,
+    7px,
+    7px,
+    7px,
+    8px,
+    7px,
+    7px,
+    7px,
+    12px,
+  ),
+  'mobile-lg-lower': (
+    25px,
+    25px,
+    15px,
+    30px,
+    6px,
+    6px,
+    6px,
+    7px,
+    6px,
+    6px,
+    6px,
+    10px,
+  ),
+  'mobile-md': (
+    15px,
+    20px,
+    10px,
+    20px,
+    5px,
+    5px,
+    5px,
+    6px,
+    5px,
+    5px,
+    5px,
+    8px,
+  ),
+  'mobile-sm': (
+    10px,
+    15px,
+    8px,
+    15px,
+    4px,
+    4px,
+    4px,
+    5px,
+    4px,
+    4px,
+    4px,
+    6px,
+  ),
+
+  // Fallback for mobile-xs
+  'mobile-xs':
+    (
+      8px,
+      14px,
+      6px,
+      14px,
+      3px,
+      3px,
+      3px,
+      4px,
+      3px,
+      3px,
+      3px,
+      5px,
+    ),
+  'mobile-xs-upper': (
+    8px,
+    14px,
+    6px,
+    14px,
+    3px,
+    3px,
+    3px,
+    4px,
+    3px,
+    3px,
+    3px,
+    5px,
+  ),
+  'mobile-xs-lower': (
+    6px,
+    12px,
+    5px,
+    12px,
+    2px,
+    2px,
+    2px,
+    3px,
+    2px,
+    2px,
+    2px,
+    4px,
+  ),
+  'mobile-fold': (
+    4px,
+    12px,
+    4px,
+    12px,
+    1px,
+    1px,
+    1px,
+    2px,
+    1px,
+    1px,
+    1px,
+    3px,
+  ),
+  'land-tablet': (
+    40px,
+    40px,
+    30px,
+    60px,
+    8px,
+    8px,
+    8px,
+    9px,
+    8px,
+    8px,
+    8px,
+    18px,
+  ),
+  'land-mobile-md': (
+    20px,
+    30px,
+    10px,
+    50px,
+    6px,
+    6px,
+    6px,
+    15px,
+    6px,
+    6px,
+    6px,
+    15px,
+  ),
+  'land-mobile-sm': (
+    15px,
+    25px,
+    8px,
+    40px,
+    5px,
+    5px,
+    5px,
+    12px,
+    5px,
+    5px,
+    5px,
+    12px,
+  ),
+  'land-mobile-xs': (
+    10px,
+    15px,
+    7px,
+    30px,
+    4px,
+    4px,
+    4px,
+    8px,
+    4px,
+    4px,
+    4px,
+    8px,
+  ),
+  'land-mobile-fold': (
+    7px,
+    10px,
+    7px,
+    20px,
+    3px,
+    3px,
+    3px,
+    7px,
+    3px,
+    3px,
+    3px,
+    7px,
+  ),
+  'land-desktop': (
+    40px,
+    40px,
+    30px,
+    60px,
+    8px,
+    8px,
+    8px,
+    9px,
+    8px,
+    8px,
+    8px,
+    18px,
+  ),
+  'land-xl': (
+    60px,
+    60px,
+    40px,
+    80px,
+    10px,
+    10px,
+    10px,
+    12px,
+    10px,
+    10px,
+    10px,
+    20px,
+  ),
+);

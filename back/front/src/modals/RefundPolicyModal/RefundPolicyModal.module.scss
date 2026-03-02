@@ -1,0 +1,644 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+%durumagi-container {
+  width: 40%;
+  min-width: 550px; // & 크기 이상해지면 없애거나 수정
+  height: 80%;
+  //   /* 그림자 효과 */
+  //   box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+  background-image: url('/assets/images/durumagi.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  @include App.position-absolute-right-half();
+  @include App.flex-box-center(column);
+  position: relative;
+}
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.backdrop {
+  position: fixed;
+  top: 0px;
+  left: 0;
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  z-index: 100001;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 80%;
+  z-index: 200001; // ChargeModal(200000) 때문
+  overflow: hidden;
+  @include App.flex-box-center(column);
+  border: none;
+  background-color: transparent;
+  @extend %durumagi-container;
+}
+.title {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  p {
+    @include App.dongle-font(1.8rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content {
+  width: 70%;
+  height: 60%;
+  @include App.dongle-font(1.7rem);
+  @include App.flex-box-center(column);
+  justify-content: space-between;
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: black;
+
+    & > h3 {
+      @include App.flex-box-center(row);
+      @include App.simulated-bold(0.8px, black);
+    }
+  }
+}
+/* answerModal 스타일 스크롤바가 믹스인에서 자동 적용됨 */
+
+.button-box {
+  width: 100%;
+  height: 15%;
+  @include App.flex-box-center(row);
+  justify-content: end;
+  padding-top: 20px;
+  margin-top: 10px;
+  box-sizing: border-box;
+
+  @media (orientation: landscape) and (max-height: 600px) {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+.button {
+  margin: 10px;
+  margin-left: 0px;
+  min-width: 90px;
+}
+
+.title-japanese {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  margin-bottom: 10px;
+  p {
+    @include App.potta-font(1.4rem);
+    margin: 10px;
+    margin-left: 20px;
+  }
+}
+.modal-content-japanese {
+  width: 70%;
+  height: 60%;
+  @include App.potta-font(1.2rem);
+  line-height: 1.5;
+  margin: 0 auto;
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    color: black;
+
+    & > h3 {
+      @include App.flex-box-center(row);
+      @include App.simulated-bold(0.8px, black);
+    }
+  }
+}
+
+//~ 디바이스
+@include App.desktop {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 400px;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 500px;
+  }
+} //~ 481px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  .modal {
+    width: 90%;
+    max-width: 100%;
+    min-width: unset;
+    max-height: 500px;
+  }
+}
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+//~ 아이폰 SE
+@include App.mobile-xs {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+  .button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+/* 세로 모드에서 잘림 방지 — 550px 이하 화면에 맞춤 */
+@media (orientation: portrait) and (max-width: 550px) {
+  .modal {
+    width: 100%;
+    min-width: unset;
+    max-width: 500px;
+  }
+}
+
+//* 아이패드 프로 가로
+@include App.landscape-desktop {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+} //* 태블릿 아이패드, 아이패드 프로 가로
+@include App.landscape-tablet {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 95vh;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+}
+//* IPhon 14 Pro Max 가로모드
+@include App.landscape-mobile-md {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 95vh;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+}
+//* 아이폰XR 가로모드
+@include App.landscape-mobile-sm {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+}
+//* 아이폰SE 가로모드
+@include App.landscape-mobile-xs {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+}
+
+//* 갤럭시 폴드 가로모드
+@include App.landscape-mobile-fold {
+  div.backdrop {
+    position: fixed;
+    top: 0px;
+    left: 0;
+    width: 100vw;
+    height: 100%;
+    z-index: 100001;
+    background: rgba(0, 0, 0, 0.75);
+  }
+  div.modal {
+    width: 70%;
+    max-width: 500px;
+    height: 100%;
+    max-height: 500px;
+  }
+  .modal-content {
+    width: 63%;
+    height: 60%;
+    @include App.dongle-font(1.7rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+  }
+  button.button {
+    margin: 0px;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+  .modal-content-japanese {
+    width: 63%;
+    height: 60%;
+    @include App.potta-font(1.2rem);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+    margin: 0 auto;
+    .content {
+      width: 100%;
+      max-width: 100%;
+      height: 78%;
+      overflow-y: auto;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      /* Firefox */
+    }
+  }
+}

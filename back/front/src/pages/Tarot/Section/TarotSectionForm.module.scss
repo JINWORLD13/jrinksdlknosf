@@ -1,0 +1,469 @@
+@use '../../../styles/scss/App.module.scss';
+
+.no-scroll {
+  overflow: hidden;
+}
+.container {
+  width: 100vw;
+  height: calc(100vh - 130px);
+  background-image: url('/assets/images/universe.jpg'); //& 배경 이미지.
+  background-size: cover;
+  color: gold;
+  overflow-x: hidden;
+  overflow-y: auto;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  // `flex-box-center`가 align-items:center를 걸어 왼쪽 메뉴가 컨텐츠 높이만큼 늘어나지 않음
+  align-items: stretch;
+  //& grid 쓰면 복사, 저장완료 모달뜰때 일그러짐.
+  // display: grid;
+  // grid-template-rows: 1fr;
+  // grid-template-columns: 180px 1fr;
+}
+//! flex는 겉박스에 쓰면 창이 줄어들시 가려짐. 확인 계속해보기.
+//! overflow 설정해야 가려지지 않음.
+.container-box1 {
+  width: 180px;
+  height: 100%;
+  // 내부 스크롤 컨테이너(.container)에서 fixed 없이 따라붙게
+  position: sticky;
+  top: 0;
+  overflow: visible;
+}
+.container-box2 {
+  width: calc(100% - 130px);
+  height: 100%;
+  position: relative;
+}
+
+// 1366px 이상에서만 두루마기 가운데 정렬
+@media screen and (min-width: 1367px) {
+  .container-box2 {
+    @include App.flex-box-center(row);
+  }
+}
+
+.answer-container {
+  width: 100%;
+  height: 100%;
+  @include App.position-absolute-center();
+}
+
+//~ 디바이스
+@include App.desktop {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+    @include App.flex-box-center(row);
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+//~ 480px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+//~ 아이폰XR
+@include App.mobile-sm {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+//~ 아이폰 SE
+@include App.mobile-xs {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  .container {
+    width: 100vw;
+    height: Calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+  }
+  .answer-container {
+    width: 90%;
+    height: 90%;
+    @include App.position-absolute-center();
+  }
+}
+
+//! 반응형 웹브라우저
+@mixin web-response {
+  width: 100vw;
+  height: calc(100vh - 130px);
+  @include App.flex-box-center(column);
+  justify-content: start;
+}
+@mixin container-box1-mobile {
+  width: 100%;
+  height: auto;
+  overflow: unset;
+  position: relative;
+  top: auto;
+}
+@mixin container-box2-mobile {
+  width: 100%;
+  height: auto;
+  position: relative;
+  flex-grow: 1;
+}
+
+//~ 1366px 이하 웹 반응형 (696px 이하 모습 적용)
+@media screen and (max-width: 1366px) {
+  .container {
+    width: 100vw;
+    height: calc(100vh - 130px);
+    @include App.flex-box-center(column);
+    justify-content: start;
+  }
+  .container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  .container-box2 {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-grow: 1;
+    @include App.flex-box-center(row);
+  }
+  .answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+
+//* 아이패드 프로 가로
+@include App.landscape-desktop {
+  div.container {
+    width: 100vw;
+    height: auto;
+    overflow-y: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//* 태블릿 아이패드, 아이패드 프로 가로
+@include App.landscape-tablet {
+  div.container {
+    width: 100vw;
+    height: auto;
+    overflow-y: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//* IPhon 14 Pro Max 가로모드
+@include App.landscape-mobile-md {
+  div.container {
+    width: 100vw;
+    height: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//* 아이폰XR 가로모드
+@include App.landscape-mobile-sm {
+  div.container {
+    width: 100vw;
+    height: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//* 아이폰SE 가로모드
+@include App.landscape-mobile-xs {
+  div.container {
+    width: 100vw;
+    height: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}
+
+//* 갤럭시 폴드 가로모드 (653px 아래 세팅하고 겹쳐지니 div.으로 구체화 시킴.)
+@include App.landscape-mobile-fold {
+  div.container {
+    width: 100vw;
+    height: auto;
+    padding-top: 50px;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: start;
+  }
+  div.container-box1 {
+    width: 100%;
+    height: auto;
+    overflow: unset;
+    position: relative;
+    top: auto;
+  }
+  div.container-box2 {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+  }
+  div.answer-container {
+    width: 100%;
+    height: 100%;
+    @include App.position-absolute-center();
+  }
+}

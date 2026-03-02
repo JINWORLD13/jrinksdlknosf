@@ -1,0 +1,170 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+.container {
+  --home-height: calc(100dvh - 130px);
+  width: 100%;
+  height: var(--home-height);
+  display: flex;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  position: relative;
+}
+
+/* 오늘의 타로 등 풀스크린 뷰 — 코스모스 글래스모피즘 */
+.background {
+  width: 100%;
+  max-width: 1290px;
+  min-width: 250px;
+  height: 100%;
+  min-height: var(--home-height);
+  max-height: 1300px;
+  @include App.cosmic-glass-backdrop(16px);
+  z-index: 10;
+  @include App.position-absolute-center();
+  top: 0px;
+  transform: translate(-50%, 0%);
+  color: gold;
+  @include App.flex-box-center(row);
+  overflow: auto;
+
+  // * {
+  //   border: 1px solid red;
+  // }
+}
+
+.tarot-master-container {
+  position: relative;
+  width: 100%;
+  height: var(--home-height);
+}
+
+/* Three.js 씬 로딩 중 전체 화면 로딩 오버레이 */
+.threeSceneLoadingOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--app-background, #0a0a0f);
+}
+.flex-grow {
+  @include App.flex-grow(1);
+}
+//~ 디바이스
+@include App.desktop {
+  .background {
+    flex-direction: column;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  .background {
+    flex-direction: column;
+  }
+}
+//~ 481px ~ 768px 디바이스
+@include App.mobile-lg {
+  .background {
+    flex-direction: column;
+  }
+}
+
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  .background {
+    flex-direction: column;
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  .background {
+    flex-direction: column;
+  }
+}
+//~ 아이폰 SE
+@include App.mobile-xs {
+  .background {
+    flex-direction: column;
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  .background {
+    flex-direction: column;
+  }
+}
+
+/* 내담자 정보 버튼 (아이콘) — Yes/No 위 (right: 10px, bottom: 90px + 70px + 10 = 170px) */
+.clientInfoButton {
+  position: absolute;
+  right: 10px;
+  bottom: 170px;
+  z-index: 20;
+  width: 70px;
+  height: 70px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(139, 92, 246, 0.6);
+  border-radius: 50%;
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.25) 0%,
+      transparent 50%
+    ),
+    rgba(30, 20, 50, 0.7);
+  backdrop-filter: blur(10px);
+  color: #e9d5ff;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+    0 0 16px rgba(139, 92, 246, 0.25);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s, color 0.2s;
+
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.9);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35),
+      0 0 24px rgba(139, 92, 246, 0.35);
+    transform: translateY(-2px);
+    color: #fff;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+//* landscape mode - ONLY for touch devices in landscape
+@media screen and (orientation: landscape) and (max-width: 1024px) and (max-height: 600px) {
+  .background {
+    flex-direction: row;
+  }
+  .container {
+    --home-height: 100vh;
+    height: 100vh;
+    min-height: 100vh;
+
+    // Safe area handling for notched phones in landscape
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom); // Handle home indicator bar
+  }
+  .tarot-master-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--home-height);
+    min-height: var(--home-height);
+  }
+}

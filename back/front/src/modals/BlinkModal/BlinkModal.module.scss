@@ -1,0 +1,154 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+
+// Base Mixin for consistent logic
+@mixin blink-modal-base($font-size: 2rem, $ja-font-size: 1.2rem) {
+  @include App.no-select;
+  width: auto;
+  height: auto;
+  padding: 20px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: rgb(0, 0, 0, 0.5); // Default background
+  position: fixed;
+  left: 50%;
+  bottom: 10%;
+  transform: translate(-50%, -50%);
+  z-index: 100000000;
+  color: white;
+  pointer-events: none;
+  cursor: not-allowed;
+  text-align: center;
+  @include App.dongle-font($font-size);
+  font-size: $font-size;
+  line-height: 32px;
+
+  div {
+    white-space: nowrap;
+  }
+
+  // Japanese Override
+  :global(html[lang='ja']) & {
+    @include App.potta-font($ja-font-size);
+    font-size: $ja-font-size;
+    line-height: 18px;
+    word-break: auto-phrase;
+    text-wrap: balance;
+    line-break: strict;
+  }
+}
+
+.blink-modal {
+  @include blink-modal-base(2rem, 1.2rem);
+}
+
+.blink-modal-japanese {
+  // Legacy support if needed, but the :global override above handles it dynamically.
+  // Keeping it to avoid breaking existing logic that might manually select this class.
+  @include blink-modal-base(
+    1.2rem,
+    1.2rem
+  ); // Force smaller default if this class is explicitly used
+
+  // Manual font fixes for specific spans (from original file)
+  span[style*='Potta One'] {
+    font-size: 1.25rem;
+  }
+  span[style*='2.2rem'] {
+    font-size: 2.2rem;
+  }
+
+  // Media query adjustment
+  @media (max-width: 322px) {
+    font-size: 1rem;
+    span[style*='Potta One'] {
+      font-size: 0.875rem;
+    }
+    span[style*='2.2rem'] {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+// --- Variant Styles (Centralized) ---
+
+.charging {
+  background-color: rgb(255, 0, 0, 0.7) !important;
+}
+
+.unavailable-voucher {
+  background-color: rgb(150, 50, 255, 0.7) !important;
+}
+
+.unavailable-which-tarot,
+.speedTarotUnavailable {
+  // Assuming mapped to same style
+  background-color: rgba(76, 236, 143, 0.7) !important;
+}
+
+.which-spread {
+  color: gold !important;
+  background-color: rgb(78, 6, 78, 0.8) !important;
+  font-weight: bold;
+}
+
+.fill-in-the-question {
+  background-color: rgba(15, 15, 79, 0.837) !important;
+}
+
+.over-in-the-question {
+  background-color: rgb(
+    255,
+    0,
+    0,
+    0.7
+  ) !important; // Match charging/warning style
+}
+
+.minimum-amount {
+  background-color: rgb(150, 50, 255, 0.7) !important; // Match voucher style
+}
+
+// --- Notification Styles ---
+
+.speedTarotNotification {
+  position: fixed;
+  left: 50%;
+  top: 15%;
+  bottom: auto;
+  transform: translate(-50%, -50%);
+  @include App.dongle-font(2rem);
+  font-size: 2rem;
+  line-height: 20px;
+
+  :global(html[lang='ja']) & {
+    @include App.potta-font(1.25rem);
+    font-size: 1.25rem;
+  }
+}
+
+.speedTarotNotification-japanese {
+  @extend .speedTarotNotification;
+  // This class was explicitly setting JA fonts, but the nesting above covers it.
+  // Keeping for compatibility with dynamic class switching in JS.
+}
+
+// Small Screen Adjustments
+@media (max-width: 322px) {
+  .blink-modal {
+    font-size: 1.5rem;
+    line-height: 24px;
+    padding: 15px;
+
+    :global(html[lang='ja']) & {
+      font-size: 1rem;
+    }
+  }
+
+  .speedTarotNotification {
+    font-size: 1.5rem;
+    :global(html[lang='ja']) & {
+      font-size: 1rem;
+    }
+  }
+}

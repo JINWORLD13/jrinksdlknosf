@@ -1,0 +1,1 @@
+exports.tarotService = require("./tarotService");

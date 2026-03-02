@@ -1,0 +1,45 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/CardFlipInteraction.module.scss';
+@use '../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+%btn {
+  width: 18px;
+  height: 18px;
+  text-align: center; // 가로 중앙 정렬
+  line-height: 18px; // 버튼 높이와 동일하게 설정하여 세로 중앙 정렬
+  padding: 1px;
+  border-radius: 5px;
+  border: 2px solid #8b5cf6;
+  color: #e9d5ff;
+  background: linear-gradient(135deg, #2d1554 0%, #4c1d95 100%);
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+}
+%btn-hover {
+  border: 2px solid #a78bfa;
+  color: white;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.5);
+  transform: translateY(-1px);
+}
+.btn {
+  @include App.no-select;
+  @include App.no-drag;
+  @extend %btn;
+  @include App.dongle-font(1.5rem);
+}
+.btn:hover {
+  @extend %btn-hover;
+}
+.btn-japanese {
+  @include App.no-select;
+  @include App.no-drag;
+  @extend %btn;
+  line-height: 10px;
+  @include App.potta-font(0.9rem);
+}
+.btn-japanese:hover {
+  @extend %btn-hover;
+}

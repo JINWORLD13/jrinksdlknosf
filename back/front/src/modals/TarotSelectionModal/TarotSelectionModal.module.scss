@@ -1,0 +1,194 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/Font-Exact.module.scss' as Font;
+
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.selectionModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(280px, 90vw, 600px);
+  max-width: 90%;
+  background: rgba(4, 4, 30, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 30px;
+  padding: 30px;
+  z-index: 100001;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: modalFadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &[data-lang='ko'],
+  &[data-lang='en'] {
+    font-family: 'Dongle', sans-serif;
+  }
+
+  &[data-lang='ja'] {
+    font-family: 'PottaOne', cursive;
+  }
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+
+  .title {
+    color: #ffd700;
+    margin: 0;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1;
+
+    :global(.ja) &,
+    &[data-lang='ja'] & {
+      font-size: 1.8rem;
+      line-height: 1.4;
+      word-break: auto-phrase;
+      text-wrap: balance;
+      line-break: strict;
+    }
+
+    @media (max-width: 400px) {
+      font-size: 2.4rem;
+      :global(.ja) & {
+        font-size: 1.5rem;
+      }
+    }
+  }
+
+  .closeBtn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 2rem;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 0 5px;
+
+    &:hover {
+      color: white;
+    }
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (min-width: 600px) {
+    flex-direction: row;
+  }
+}
+
+.choiceBtn {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 15px;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 215, 0, 0.6);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 215, 0, 0.2);
+
+    .imgWrapper {
+      border-color: rgba(255, 215, 0, 0.4);
+      img {
+        transform: scale(1.08);
+      }
+    }
+
+    .textWrapper h3 {
+      color: #ffd700;
+    }
+  }
+
+  .imgWrapper {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+  }
+
+  .textWrapper {
+    h3 {
+      color: white;
+      margin: 0 0 2px 0;
+      font-size: 2.4rem;
+      line-height: 0.9;
+      transition: color 0.3s ease;
+
+      :global(.ja) &,
+      &[data-lang='ja'] & {
+        font-size: 1.3rem;
+        line-height: 1.4;
+        word-break: auto-phrase;
+        text-wrap: balance;
+        line-break: strict;
+      }
+    }
+
+    p {
+      color: rgba(255, 255, 255, 0.75);
+      margin: 0;
+      line-height: 0.85;
+      font-size: 1.8rem;
+
+      :global(.ja) &,
+      &[data-lang='ja'] & {
+        font-size: 0.9rem;
+        line-height: 1.5;
+        font-weight: 300;
+        word-break: auto-phrase;
+        text-wrap: balance;
+        line-break: strict;
+      }
+    }
+
+    @media (max-width: 400px) {
+      h3 {
+        font-size: 2rem;
+      }
+      p {
+        font-size: 1.5rem;
+      }
+    }
+  }
+}

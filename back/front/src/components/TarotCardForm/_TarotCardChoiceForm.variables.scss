@@ -1,0 +1,296 @@
+// TarotCardChoiceForm 공통 변수 및 Mixin
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../styles/scss/TarotModal.module.scss';
+@use '../../styles/scss/CardDeckMixins.module.scss' as CardDeck;
+
+// ============================================
+// 색상 변수
+// ============================================
+$tarot-primary-purple: #8b5cf6;
+$tarot-primary-purple-light: #a78bfa;
+$tarot-primary-purple-dark: #2d1554;
+$tarot-primary-purple-darker: #4c1d95;
+$tarot-text-light: #e9d5ff;
+$tarot-box-shadow-color: rgba(25, 40, 171, 1);
+
+// ============================================
+// Shadow 변수
+// ============================================
+$tarot-main-box-shadow: 7px 20px 400px 77px $tarot-box-shadow-color;
+$tarot-btn-shadow: 0 0 15px rgba(139, 92, 246, 0.4);
+$tarot-btn-shadow-hover: 0 0 25px rgba(139, 92, 246, 0.7);
+
+// ============================================
+// Gradient 변수
+// ============================================
+$tarot-btn-gradient: linear-gradient(
+  135deg,
+  $tarot-primary-purple-dark 0%,
+  $tarot-primary-purple-darker 100%
+);
+$tarot-btn-gradient-hover: linear-gradient(
+  135deg,
+  $tarot-primary-purple 0%,
+  $tarot-primary-purple-light 100%
+);
+
+// ============================================
+// Mixin: Choice-card (Moved from module)
+// ============================================
+@mixin choice-card($ratio) {
+  @include CardDeck.card($ratio);
+  z-index: 1;
+  opacity: 1;
+  transition: transform 0.07s ease, opacity 0.05s ease;
+}
+
+// ============================================
+// Mixin: Choice-box Base
+// ============================================
+@mixin choice-box-base($padding-top: 0px) {
+  width: 100%;
+  height: 100%;
+  background-color: rgb(0, 0, 0, 0);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  box-shadow: $tarot-main-box-shadow;
+  -webkit-box-shadow: $tarot-main-box-shadow;
+  -moz-box-shadow: $tarot-main-box-shadow;
+  padding-top: $padding-top;
+}
+
+// 호버 시 코스모스 글로우 강화
+$choice-card-hover-glow: 0 8px 28px rgba(0, 0, 0, 0.28),
+  0 0 28px rgba(139, 92, 246, 0.35),
+  0 0 12px rgba(255, 215, 0, 0.15),
+  inset 0 1px 0 rgba(255, 255, 255, 0.1);
+
+// ============================================
+// Mixin: 공통 Choice 스타일
+// ============================================
+@mixin common-choice-styles {
+  .choice-card:hover {
+    transform: translateY(-20px);
+    box-shadow: $choice-card-hover-glow;
+  }
+
+  .choice-card img {
+    @include CardDeck.card-image(0);
+  }
+
+  .invisible {
+    @include TarotModal.invisible();
+  }
+
+  .flex-grow {
+    @include App.flex-grow(1);
+  }
+}
+
+// ============================================
+// Mixin: Responsive Choice Layout (핵심 통합 Mixin)
+// ============================================
+@mixin responsive-choice-layout(
+  $card-ratio,
+  $margin-top,
+  $margin-left,
+  $flex-grow3: 3,
+  $flex-grow2: null,
+  $padding-top: 0px
+) {
+  .choice-box {
+    @include choice-box-base($padding-top);
+  }
+
+  .choice-card {
+    @include choice-card($card-ratio);
+  }
+
+  .choice-spread:not(:first-child) {
+    margin-top: $margin-top;
+  }
+
+  .choice-card:not(:first-child) {
+    margin-left: $margin-left;
+  }
+
+  .flex-grow3 {
+    @include App.flex-grow($flex-grow3);
+  }
+
+  @if $flex-grow2 {
+    .flex-grow2 {
+      @include App.flex-grow($flex-grow2);
+    }
+  }
+
+  @include common-choice-styles();
+}
+
+// ============================================
+// Mixin: Landscape Choice Layout (가로모드 통합 Mixin)
+// ============================================
+@mixin landscape-choice-layout(
+  $card-ratio,
+  $margin-top,
+  $margin-left,
+  $flex-grow3: 5,
+  $flex-grow2: null
+) {
+  div.choice-box {
+    @include choice-box-base(0px);
+    @include App.flex-box-center(column);
+    justify-content: space-between;
+  }
+
+  div.cards-container {
+    @include App.flex-box-center(column);
+    flex: 1;
+    justify-content: center;
+  }
+
+  div.choice-spread {
+    @include App.flex-box-center(row);
+  }
+
+  div.choice-spread:not(:first-child) {
+    margin-top: $margin-top;
+  }
+
+  div.choice-card {
+    @include choice-card($card-ratio);
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  div.choice-card:not(:first-child) {
+    margin-left: $margin-left;
+  }
+
+  div.choice-card:hover {
+    transform: translateY(-20px) scale(1.05);
+    z-index: 100;
+    box-shadow: $choice-card-hover-glow;
+  }
+
+  div.choice-card img {
+    @include CardDeck.card-image(0);
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    pointer-events: none;
+  }
+
+  div.invisible {
+    @include TarotModal.invisible();
+  }
+
+  div.flex-grow {
+    @include App.flex-grow(1);
+  }
+
+  .flex-grow3 {
+    @include App.flex-grow($flex-grow3);
+  }
+
+  @if $flex-grow2 {
+    .flex-grow2 {
+      @include App.flex-grow($flex-grow2);
+    }
+  }
+
+  div.btn-box {
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-bottom: 10px;
+
+    .btn {
+      @include btn-base;
+      @include FontExact.exact-korean-font('size-150');
+    }
+
+    .btn:hover {
+      @include btn-hover;
+    }
+
+    .btn-japanese {
+      @include btn-japanese-base(1rem);
+    }
+
+    .btn-japanese:hover {
+      @include btn-japanese-hover;
+    }
+  }
+}
+
+// ============================================
+// Mixin: 버튼 기본 스타일
+// ============================================
+@mixin btn-base {
+  width: auto;
+  height: auto;
+  min-width: 70px;
+  padding: 7px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  border: none;
+  border-radius: 25px;
+  border: 2px solid $tarot-primary-purple;
+  color: $tarot-text-light;
+  background: $tarot-btn-gradient;
+  cursor: pointer;
+  line-height: 1.2;
+  box-shadow: $tarot-btn-shadow;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+}
+
+@mixin btn-hover {
+  border: 2px solid $tarot-primary-purple-light;
+  color: white;
+  background: $tarot-btn-gradient-hover;
+  cursor: pointer;
+  box-shadow: $tarot-btn-shadow-hover;
+  transform: translateY(-2px);
+}
+
+// ============================================
+// Mixin: 버튼 Japanese 스타일
+// ============================================
+@mixin btn-japanese-base($font-size: 1rem) {
+  width: auto;
+  height: auto;
+  min-width: 70px;
+  padding: 7px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  border: none;
+  border-radius: 25px;
+  border: 2px solid $tarot-primary-purple;
+  color: $tarot-text-light;
+  background: $tarot-btn-gradient;
+  cursor: pointer;
+  line-height: 1.2;
+  box-shadow: $tarot-btn-shadow;
+  transition: all 0.3s ease;
+  margin-right: 10px;
+  font-size: $font-size;
+}
+
+@mixin btn-japanese-hover($font-size: null) {
+  border: 2px solid $tarot-primary-purple-light;
+  color: white;
+  background: $tarot-btn-gradient-hover;
+  cursor: pointer;
+  box-shadow: $tarot-btn-shadow-hover;
+  transform: translateY(-2px);
+  @if $font-size {
+    font-size: $font-size;
+  }
+}

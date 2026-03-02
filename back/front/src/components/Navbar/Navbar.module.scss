@@ -1,0 +1,1465 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+
+// ==================== Variables ====================
+$NavHeight: 50px;
+
+// Menu widths for different devices
+$MenuItemWidthForGalaxyFold: 70%;
+$MenuItemWidthForIPhonSE: 55%;
+$MenuItemWidthForIPhonXR: 60%;
+$MenuItemWidthForTablet: 50%;
+
+// ==================== Mixins ====================
+@mixin navbar-background {
+  // 깊은 우주 그라디언트 배경
+  background: radial-gradient(
+      ellipse at top,
+      rgba(75, 0, 130, 0.4) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at bottom,
+      rgba(25, 25, 112, 0.3) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(25, 0, 50, 0.95) 0%,
+      rgba(15, 0, 40, 0.98) 50%,
+      rgba(5, 0, 25, 1) 100%
+    );
+  background-color: #0a0015;
+  position: relative;
+
+  // 신비로운 테두리 장식
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      rgba(218, 165, 32, 0) 0%,
+      rgba(218, 165, 32, 0.8) 20%,
+      rgba(255, 215, 0, 1) 50%,
+      rgba(218, 165, 32, 0.8) 80%,
+      rgba(218, 165, 32, 0) 100%
+    )
+    1;
+  box-shadow: 0 2px 20px rgba(138, 43, 226, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  // 반짝이는 별 배경 (애니메이션)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    // 🔍 테스트: 이 배경색이 보이면 ::before가 렌더링되는 것입니다
+    // background: rgba(255, 0, 0, 0.1); // 디버깅용 - 빨간색이 보이면 OK
+    background-image: 
+      /* 💫 큰 별들 - navbar 중앙에 집중 (더 크게!) */ radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 20%,
+          rgba(255, 255, 255, 0.5) 40%,
+          transparent 60%
+        )
+        10% 50% / 16px 16px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.95) 20%,
+          rgba(255, 215, 0, 0.6) 40%,
+          transparent 60%
+        )
+        30% 50% / 18px 18px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 20%,
+          rgba(255, 255, 255, 0.5) 40%,
+          transparent 60%
+        )
+        50% 50% / 20px 20px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.95) 20%,
+          rgba(255, 215, 0, 0.6) 40%,
+          transparent 60%
+        )
+        70% 50% / 18px 18px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 20%,
+          rgba(255, 255, 255, 0.5) 40%,
+          transparent 60%
+        )
+        90% 50% / 16px 16px no-repeat,
+      /* ⭐ 중간 별들 - 중앙 근처만 (상하 40-60%) */
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.8) 30%,
+          transparent 60%
+        )
+        15% 45% / 10px 10px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        25% 55% / 10px 10px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        40% 40% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        60% 60% / 10px 10px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        75% 45% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        85% 55% / 10px 10px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        95% 50% / 8px 8px no-repeat,
+      /* ✨ 작은 별들 - 중앙 집중 */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 50%) 8%
+        50% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, transparent 50%) 20%
+        48% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, transparent 50%) 35%
+        52% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 50%) 45%
+        47% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 50%) 55%
+        53% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, transparent 50%) 65%
+        49% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, transparent 50%) 80%
+        51% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 50%) 92%
+        48% / 5px 5px no-repeat;
+    animation: twinkleStars 8s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // 성운 효과
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at 30% 50%,
+        rgba(138, 43, 226, 0.15) 0%,
+        transparent 40%
+      ),
+      radial-gradient(
+        ellipse at 70% 50%,
+        rgba(72, 61, 139, 0.12) 0%,
+        transparent 40%
+      );
+    animation: nebulaDrift 15s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// 별 반짝임 애니메이션
+@keyframes twinkleStars {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// 성운 움직임 애니메이션
+@keyframes nebulaDrift {
+  0% {
+    opacity: 0.3;
+    filter: blur(20px);
+  }
+  100% {
+    opacity: 0.5;
+    filter: blur(30px);
+  }
+}
+
+@mixin navbar-base {
+  width: 100%;
+  max-width: 100%;
+  height: $NavHeight;
+  padding: 15px 0;
+  vertical-align: middle;
+  @include navbar-background;
+  z-index: 100000;
+  position: relative;
+  color: gold;
+  -webkit-tap-highlight-color: transparent;
+  @include App.no-select;
+}
+
+@mixin icon-dropdown-box-base {
+  padding-bottom: 30px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 0, 40, 0.95) 0%,
+    rgba(5, 0, 25, 0.98) 100%
+  );
+  border: 2px solid rgba(255, 215, 0, 0.8);
+  border-top: none;
+  border-bottom-left-radius: 50px;
+  border-bottom-right-radius: 50px;
+  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 0 40px rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(10px);
+  @include App.flex-box-center(column);
+  justify-content: start;
+  position: absolute;
+  top: 35px;
+  right: 0px;
+  z-index: 100000;
+  list-style-type: none;
+}
+
+@mixin link-styles {
+  color: gold;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+      0 0 30px rgba(255, 215, 0, 0.5), 0 0 45px rgba(255, 215, 0, 0.3);
+    transform: scale(1.05);
+  }
+  &:visited {
+    color: gold;
+  }
+}
+
+@mixin language-item-base {
+  height: 60px;
+  margin-left: 10px;
+  margin-right: 10px;
+  @include App.flex-box-center(row);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.7),
+      0 0 24px rgba(255, 215, 0, 0.4);
+    transform: translateY(-2px);
+  }
+}
+
+// ==================== Mixins: Landscape ====================
+@mixin landscape-mobile-base {
+  .navbar,
+  .navbar-japanese {
+    background: transparent;
+    position: absolute;
+    border-bottom: 2px solid transparent;
+    border-image: none;
+    box-shadow: none;
+  }
+
+  .title-link > div {
+    padding-top: 10px;
+  }
+
+  .icon-dropDown-container,
+  .icon-dropDown-container-japanese {
+    z-index: 100001;
+    font-weight: 600;
+    white-space: pre;
+    cursor: pointer;
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-dropDown-box {
+    top: -15px;
+    z-index: 100000;
+    border-bottom-right-radius: 0%;
+    @include App.dongle-font(1.7rem);
+  }
+
+  .icon-language-dropDown-box {
+    @include App.flex-box-center(row);
+    align-items: center;
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+  }
+
+  .icon-language-dropDown-item,
+  .icon-language-dropDown-item-japanese {
+    height: 30px;
+    width: 30%;
+    @include App.flex-box-center(row);
+    border: 0.5px solid goldenrod;
+    cursor: pointer;
+    position: static;
+    font-size: 1rem;
+    white-space: nowrap;
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .japanese-icon-language-dropDown-item,
+  .icon-japanese-language-dropDown-item-japanese {
+    height: 30px;
+    width: 30%;
+    @include App.flex-box-center(row);
+    @include App.potta-font(0.6rem);
+    border: 0.5px solid goldenrod;
+    cursor: pointer;
+    position: static;
+  }
+
+  .navbar-japanese .icon-dropDown-box {
+    position: absolute;
+    top: -15px;
+    padding-right: 20px;
+  }
+
+  .navbar-japanese .icon-dropDown-item {
+    @include App.potta-font(0.9rem);
+    top: 0px;
+    margin-top: 10px;
+    margin-left: 0px;
+    border-bottom: 0.5px solid goldenrod;
+    @include App.flex-box-center(column);
+    line-height: 1.8;
+  }
+
+  .navbar-japanese .icon-language-dropDown-box {
+    @include App.flex-box-center(row);
+    border-bottom-left-radius: 0%;
+    border-bottom-right-radius: 0%;
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    margin-bottom: 0px;
+  }
+}
+
+// ==================== Base Navbar Styles ====================
+.navbar {
+  @include navbar-base;
+  @include App.dongle-font(1.8rem);
+}
+
+.navbar-japanese {
+  @include navbar-base;
+  @include App.potta-font(1rem);
+}
+
+// ==================== Container ====================
+.container {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(row);
+  position: relative;
+  z-index: 1;
+}
+
+// ==================== Title Section ====================
+.title-wrapper {
+  height: $NavHeight;
+  @include App.flex-box-center(column);
+  margin-left: 30px;
+}
+
+.title-link {
+  height: 100%;
+  @include App.flex-box-center(column);
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.title-text {
+  height: 100%;
+  @include FontExact.exact-korean-font('size-220') /* was: 2.2rem */;
+  @include App.simulated-bold(0.8px, #ffd700);
+  @include App.flex-box-center(column);
+  @include link-styles;
+  position: relative;
+  z-index: 1;
+
+  // 타로 카드 느낌의 빛나는 텍스트
+  background: linear-gradient(
+    135deg,
+    #ffd700 0%,
+    #ffed4e 25%,
+    #ffd700 50%,
+    #ffed4e 75%,
+    #ffd700 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.6));
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.navbar-japanese .title-text {
+  @include App.dongle-font(2.2rem);
+  font-weight: 800;
+}
+
+// ==================== Spacer ====================
+.spacer {
+  @include App.flex-grow(1);
+  min-width: 10px;
+}
+
+// ==================== Menu Container ====================
+.menu-container {
+  @include App.flex-box-center(row);
+  width: auto;
+  height: 100%;
+}
+
+.empty {
+  width: 30px;
+}
+
+// ==================== Menu Box ====================
+.menu-box {
+  @include App.flex-box-center(row);
+  font-weight: 600;
+  width: auto;
+  height: 100%;
+  white-space: pre;
+  cursor: pointer;
+  margin-right: 3%;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+
+  &:last-child {
+    margin-right: 0%;
+    width: 0px;
+  }
+
+  & > div:hover {
+    color: #ffd700;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.6),
+      0 0 24px rgba(255, 215, 0, 0.3);
+    transform: translateY(-1px);
+  }
+
+  // 음악 컨트롤에는 hover transform 적용 안 함
+  &.music-control-box {
+    & > div:hover,
+    &:hover {
+      transform: none;
+    }
+  }
+}
+
+// ==================== Link Styles ====================
+.link-tag-font-style > div {
+  @include link-styles;
+}
+
+// ==================== Language Dropdown (Desktop) ====================
+.language-dropDown-container {
+  position: relative;
+  font-weight: 600;
+  white-space: pre;
+  cursor: pointer;
+
+  & > div:hover {
+    color: goldenrod;
+  }
+}
+
+.language-dropDown-box {
+  width: 140px;
+  height: auto;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 0, 40, 0.95) 0%,
+    rgba(5, 0, 25, 0.98) 100%
+  );
+  @include App.flex-box-center(column);
+  position: absolute;
+  top: 35px;
+  right: 0px;
+  z-index: 100000;
+  list-style-type: none;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  border: 2px solid rgba(255, 215, 0, 0.8);
+  border-top: none;
+  box-shadow: 0 8px 24px rgba(138, 43, 226, 0.3),
+    0 0 30px rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+}
+
+.language-dropDown-item,
+.language-dropDown-item-japanese {
+  @include language-item-base;
+  @include App.dongle-font(1.8rem);
+  border-bottom: 1px solid rgba(255, 215, 0, 0.4);
+
+  &:hover {
+    border-bottom-color: rgba(255, 215, 0, 0.8);
+  }
+}
+
+.japanese-language-dropDown-item,
+.japanese-language-dropDown-item-japanese {
+  @include language-item-base;
+  @include App.potta-font(1rem);
+}
+
+// ==================== Music Controls ====================
+.music-volume-box-desktop {
+  width: 200px;
+  padding: 15px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 0, 40, 0.95) 0%,
+    rgba(5, 0, 25, 0.98) 100%
+  );
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 10px;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100001;
+  @include App.flex-box-center(column);
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3),
+    0 0 40px rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 15px;
+
+  // hover 시에도 레이아웃 변경 방지
+  // 상위의 .menu-box > div:hover 스타일(transform: none)을 이기기 위해서 specificity를 확실하게 높임 (삼중 체이닝)
+  &.music-volume-box-desktop.music-volume-box-desktop.music-volume-box-desktop:hover {
+    transform: translateX(-50%);
+  }
+}
+
+.music-control-item {
+  width: 100%;
+  @include App.flex-box-center(column);
+  gap: 5px;
+  color: gold;
+  @include App.dongle-font(1.5rem);
+
+  // hover 시에도 레이아웃 변경 방지
+  &:hover {
+    transform: none;
+  }
+}
+
+.volume-slider {
+  width: 100%;
+  height: 5px;
+  border-radius: 5px;
+  background: linear-gradient(to right, goldenrod, gold);
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: gold;
+    cursor: pointer;
+
+    &:hover {
+      background: goldenrod;
+    }
+  }
+
+  &::-moz-range-thumb {
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: gold;
+    cursor: pointer;
+    border: none;
+
+    &:hover {
+      background: goldenrod;
+    }
+  }
+}
+
+.music-icon-container,
+.music-icon-container-japanese {
+  // position: absolute;
+  // right: 65px;
+  width: auto;
+  z-index: 100002;
+  @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  cursor: pointer;
+
+  &.needs-interaction {
+    animation: pulse 2s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.15);
+  }
+}
+
+.music-volume-box {
+  width: 150px;
+  padding: 10px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 0, 40, 0.95) 0%,
+    rgba(5, 0, 25, 0.98) 100%
+  );
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 10px;
+  position: absolute;
+  top: 100%;
+  // right: 25px; // removed
+  z-index: 100001;
+  @include App.flex-box-center(column);
+  gap: 10px;
+  box-shadow: 0 8px 32px rgba(138, 43, 226, 0.3),
+    0 0 40px rgba(255, 215, 0, 0.1);
+  backdrop-filter: blur(10px);
+  margin-top: 15px; // spacing from icon
+  left: 50%;
+  transform: translateX(-50%);
+
+  // hover 시에도 레이아웃 변경 방지
+  // 상위의 .menu-box > div:hover 스타일(transform: none)을 이기기 위해 specificity 높임
+  &.music-volume-box.music-volume-box.music-volume-box:hover {
+    transform: translateX(-50%);
+  }
+}
+
+.music-mobile-wrapper {
+  position: absolute;
+  right: 65px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 100002;
+}
+
+// ==================== Icon Dropdown (Mobile/Tablet) ====================
+.icon-dropDown-container,
+.icon-dropDown-container-japanese {
+  position: absolute;
+  right: 30px;
+  width: auto;
+  z-index: 100001;
+  @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  font-weight: 600;
+  white-space: pre;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 12px rgba(255, 215, 0, 0.7),
+      0 0 24px rgba(255, 215, 0, 0.4);
+    transform: scale(1.1);
+  }
+}
+
+.icon-dropDown-box {
+  width: 40%;
+  max-width: 300px;
+  @include icon-dropdown-box-base;
+}
+
+.icon-dropDown-item {
+  width: 70%;
+  max-width: 200px;
+  height: auto;
+  margin-top: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-bottom: 0.5px solid rgba(255, 215, 0, 0.5);
+  @include App.flex-box-center(column);
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.3);
+    border-bottom-color: rgba(255, 215, 0, 0.9);
+    transform: translateX(5px);
+    cursor: pointer;
+  }
+}
+
+.icon-language-dropDown-box {
+  width: 70%;
+  max-width: 200px;
+  background-color: rgb(0, 0, 0, 0);
+  @include App.flex-box-center(column);
+  align-items: flex-end;
+}
+
+.icon-language-dropDown-item {
+  width: auto;
+  height: auto;
+  margin-top: 10px;
+  @include App.flex-box-center(row);
+  @include App.dongle-font(1.8rem);
+  border-bottom: 0.5px solid rgba(255, 215, 0, 0.5);
+  border-bottom-width: 60%;
+  cursor: pointer;
+  line-height: 1;
+  position: relative;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.3);
+    border-bottom-color: rgba(255, 215, 0, 0.9);
+    transform: translateX(3px);
+  }
+}
+
+.japanese-icon-language-dropDown-item {
+  width: auto;
+  height: auto;
+  margin-top: 10px;
+  @include App.flex-box-center(row);
+  @include App.potta-font(1rem);
+  border-bottom: 0.5px solid rgba(255, 215, 0, 0.5);
+  cursor: pointer;
+  position: relative;
+  line-height: 1.8;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.6),
+      0 0 20px rgba(255, 215, 0, 0.3);
+    border-bottom-color: rgba(255, 215, 0, 0.9);
+    transform: translateX(3px);
+  }
+}
+
+// Japanese specific styles
+.navbar-japanese {
+  .icon-dropDown-box {
+    width: 70%;
+  }
+
+  .icon-dropDown-item {
+    width: 70%;
+    padding-bottom: 10px;
+    @include App.potta-font(1rem);
+    line-height: 1.8;
+  }
+}
+
+.icon-language-dropDown-box-japanese {
+  width: 70%;
+  max-width: 200px;
+  height: auto;
+  background-color: rgb(0, 0, 0, 0);
+  @include App.flex-box-center(column);
+  align-items: flex-end;
+  position: absolute;
+  top: 70px;
+  z-index: 100000;
+  list-style-type: none;
+  cursor: pointer;
+}
+
+.icon-language-dropDown-item-japanese {
+  width: auto;
+  height: auto;
+  margin-top: 10px;
+  @include App.flex-box-center(row);
+  @include App.dongle-font(1.8rem);
+  border-bottom: 0.5px solid goldenrod;
+  cursor: pointer;
+  line-height: 1;
+  position: relative;
+
+  &:hover {
+    color: goldenrod;
+  }
+}
+
+.icon-japanese-language-dropDown-item-japanese {
+  width: auto;
+  height: auto;
+  margin-top: 10px;
+  @include App.flex-box-center(row);
+  @include App.potta-font(1rem);
+  border-bottom: 0.5px solid goldenrod;
+  cursor: pointer;
+  position: relative;
+  line-height: 1.8;
+
+  &:hover {
+    color: goldenrod;
+  }
+}
+
+// ==================== Responsive: Desktop (1025px ~ 1366px) ====================
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .icon-dropDown-box {
+    width: 100%;
+    height: auto;
+    top: 35px;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForTablet;
+    height: auto;
+    margin-top: 10px;
+
+    &:last-child {
+      width: $MenuItemWidthForTablet;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForTablet;
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.8rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(1rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .navbar-japanese {
+    .icon-dropDown-box {
+      width: $MenuItemWidthForTablet + 20%;
+    }
+
+    .icon-dropDown-item {
+      width: $MenuItemWidthForTablet + 10%;
+      margin-top: 10px;
+      padding-bottom: 10px;
+
+      &:last-child {
+        width: $MenuItemWidthForTablet + 10%;
+        height: auto;
+      }
+    }
+  }
+
+  .icon-language-dropDown-box-japanese {
+    width: $MenuItemWidthForTablet + 10%;
+    @include App.flex-box-center(column);
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.dongle-font(1.8rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.potta-font(1rem);
+  }
+}
+
+// ==================== Responsive: Tablet (769px ~ 1024px) ====================
+@media (min-width: 769px) and (max-width: 1024px) {
+  .icon-dropDown-box {
+    width: 100%;
+    height: auto;
+    top: 35px;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForTablet;
+    height: auto;
+    margin-top: 10px;
+
+    &:last-child {
+      width: $MenuItemWidthForTablet;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForTablet;
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.8rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(1rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .navbar-japanese {
+    .icon-dropDown-box {
+      width: $MenuItemWidthForTablet + 20%;
+    }
+
+    .icon-dropDown-item {
+      width: $MenuItemWidthForTablet + 10%;
+      margin-top: 10px;
+      padding-bottom: 10px;
+
+      &:last-child {
+        width: $MenuItemWidthForTablet + 10%;
+        height: auto;
+      }
+    }
+  }
+
+  .icon-language-dropDown-box-japanese {
+    width: $MenuItemWidthForTablet + 10%;
+    @include App.flex-box-center(column);
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.dongle-font(1.8rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.potta-font(1rem);
+  }
+}
+
+// ==================== Responsive: Mobile (481px ~ 768px) ====================
+@media (min-width: 481px) and (max-width: 768px) {
+  .icon-dropDown-box {
+    width: $MenuItemWidthForIPhonSE;
+    height: auto;
+    @include icon-dropdown-box-base;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForIPhonXR;
+    height: auto;
+    margin-top: 10px;
+
+    &:last-child {
+      width: $MenuItemWidthForIPhonXR;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForIPhonXR;
+    height: auto;
+    background-color: rgb(0, 0, 0, 0);
+    align-items: flex-end;
+    z-index: 100000;
+    list-style-type: none;
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.5rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(1rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .navbar-japanese {
+    .icon-dropDown-box {
+      width: $MenuItemWidthForIPhonXR;
+      top: 35px;
+    }
+
+    .icon-dropDown-item {
+      width: $MenuItemWidthForIPhonXR;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      @include App.potta-font(1.05rem);
+    }
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.dongle-font(1.5rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.potta-font(1rem);
+  }
+}
+
+// ==================== Responsive: iPhone 14 Pro Max / XR / SE (281px ~ 480px) ====================
+@media (min-width: 281px) and (max-width: 480px) {
+  .icon-dropDown-box {
+    width: $MenuItemWidthForIPhonSE;
+    height: auto;
+    @include icon-dropdown-box-base;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForIPhonXR;
+    height: auto;
+    margin-top: 10px;
+
+    &:last-child {
+      width: $MenuItemWidthForIPhonXR;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForIPhonXR;
+    height: auto;
+    background-color: rgb(0, 0, 0, 0);
+    align-items: flex-end;
+    z-index: 100000;
+    list-style-type: none;
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.5rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(1rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .navbar-japanese {
+    @include App.potta-font(1rem);
+
+    .icon-dropDown-box {
+      width: $MenuItemWidthForIPhonSE;
+      top: 35px;
+    }
+
+    .icon-dropDown-item {
+      width: $MenuItemWidthForIPhonXR;
+      margin-top: 10px;
+      padding-bottom: 10px;
+      @include App.potta-font(1.05rem);
+    }
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.dongle-font(1.5rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    @include App.potta-font(1rem);
+  }
+}
+
+// XR specific sizing (376px ~ 414px)
+@media (min-width: 376px) and (max-width: 414px) {
+  .navbar-japanese {
+    @include App.potta-font(1.2rem);
+  }
+}
+
+// ==================== Responsive: Galaxy Fold (max 280px) ====================
+@media (max-width: 280px) {
+  .navbar {
+    @include App.dongle-font(1.5rem);
+  }
+
+  .icon-dropDown-box {
+    width: $MenuItemWidthForGalaxyFold;
+    height: auto;
+    @include icon-dropdown-box-base;
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForGalaxyFold;
+    height: auto;
+    background-color: rgb(0, 0, 0, 0);
+    z-index: 100000;
+    list-style-type: none;
+    align-items: flex-end;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForGalaxyFold;
+    height: auto;
+
+    &:last-child {
+      width: $MenuItemWidthForGalaxyFold;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.2rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(0.8rem);
+    height: auto;
+    margin-top: 10px;
+  }
+
+  .navbar-japanese {
+    @include App.potta-font(0.9rem);
+
+    .icon-dropDown-container-japanese {
+      @include FontExact.exact-korean-font('size-125') /* was: 1.25rem */;
+    }
+
+    .icon-dropDown-item {
+      margin-top: 15px;
+      padding-bottom: 8px;
+      @include App.potta-font(0.9rem);
+    }
+  }
+
+  .icon-language-dropDown-box-japanese {
+    width: $MenuItemWidthForGalaxyFold;
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 8px;
+    @include App.dongle-font(1.3rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 15px;
+    @include App.potta-font(0.8rem);
+  }
+}
+
+// ==================== Landscape: Universal Catch-all (Mobile/Tablet) ====================
+@media screen and (orientation: landscape) and (max-width: 1024px) and (max-height: 600px) {
+  @include landscape-mobile-base;
+
+  // Default sizing for safety
+  .icon-dropDown-box {
+    width: 30%;
+    max-width: 300px;
+  }
+}
+
+// ==================== Landscape: iPad Pro (1025px ~ 1366px) ====================
+// Removed iPad Pro (1025-1366) landscape block to prevent laptop conflict
+// @media screen and (orientation: landscape) and (min-width: 1025px) and (max-width: 1366px) { ... }
+
+// ==================== Landscape: Tablet (933px ~ 1024px) ====================
+@media screen and (orientation: landscape) and (min-width: 933px) and (max-width: 1024px) and (max-height: 600px) {
+  .navbar {
+    @include App.dongle-font(2.5rem);
+  }
+
+  .icon-dropDown-box {
+    width: 100%;
+    height: auto;
+    top: 35px;
+  }
+
+  .icon-dropDown-item {
+    width: $MenuItemWidthForTablet;
+    height: auto;
+    margin-top: 10px;
+
+    &:last-child {
+      width: $MenuItemWidthForTablet;
+      height: auto;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: $MenuItemWidthForTablet;
+    align-items: flex-end;
+    max-width: none;
+  }
+
+  .icon-language-dropDown-item {
+    @include App.dongle-font(1.5rem);
+    height: auto;
+    margin-top: 10px;
+    border: 0.5px solid goldenrod;
+  }
+
+  .japanese-icon-language-dropDown-item {
+    @include App.potta-font(1.1rem);
+    height: auto;
+    margin-top: 10px;
+    border: 0.5px solid goldenrod;
+  }
+
+  .navbar-japanese {
+    @include App.potta-font(1.2rem);
+
+    .icon-dropDown-box {
+      width: $MenuItemWidthForTablet + 20%;
+    }
+
+    .icon-dropDown-item {
+      width: $MenuItemWidthForTablet + 10%;
+      margin-top: 25px;
+      padding-bottom: 10px;
+      @include App.potta-font(1.4rem);
+
+      &:last-child {
+        width: $MenuItemWidthForTablet + 10%;
+        height: auto;
+      }
+    }
+  }
+
+  .icon-language-dropDown-box-japanese {
+    width: $MenuItemWidthForTablet + 10%;
+    align-items: flex-end;
+  }
+
+  .icon-language-dropDown-item-japanese {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    @include App.dongle-font(2.2rem);
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-japanese-language-dropDown-item-japanese {
+    margin-top: 10px;
+    margin-bottom: 0px;
+    @include App.potta-font(1.3rem);
+  }
+}
+
+// Removed specific landscape block (897-932px) to rely on universal height-constrained query
+
+// Removed specific landscape block (668-896px) to rely on universal height-constrained query
+
+// Removed specific landscape block (654-667px) to rely on universal height-constrained query
+
+// ==================== Landscape: Galaxy Fold (max 653px) ====================
+@media screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px) {
+  @include landscape-mobile-base;
+
+  .icon-dropDown-container,
+  .icon-dropDown-container-japanese {
+    font-size: 1rem;
+    font-weight: 600;
+    white-space: pre;
+    cursor: pointer;
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .icon-dropDown-box {
+    width: 30%;
+  }
+
+  .icon-dropDown-item {
+    margin-top: 0px;
+    padding-bottom: 0px;
+
+    &:first-child {
+      margin-top: 3px;
+    }
+  }
+
+  .icon-language-dropDown-box {
+    width: 80%;
+    max-width: 300px;
+    @include App.flex-box-center(row);
+    align-items: center;
+  }
+
+  .icon-language-dropDown-item,
+  .icon-language-dropDown-item-japanese {
+    width: 30%;
+    @include App.dongle-font(1.05rem);
+    border: 0.5px solid goldenrod;
+    position: static;
+
+    &:hover {
+      color: goldenrod;
+    }
+  }
+
+  .japanese-icon-language-dropDown-item,
+  .icon-japanese-language-dropDown-item-japanese {
+    width: 30%;
+    border: 0.5px solid goldenrod;
+    position: static;
+  }
+
+  .navbar-japanese .icon-dropDown-box {
+    width: 30%;
+    max-width: 200px;
+  }
+
+  .navbar-japanese .icon-dropDown-item {
+    width: 75%;
+    line-height: 1.8;
+  }
+
+  .navbar-japanese .icon-language-dropDown-box {
+    width: 75%;
+    max-width: 300px;
+  }
+}
+
+// ==================== Universal Touch Landscape Fix ====================
+// [HOTFIX] Forced update for mobile landscape detection
+// Restrict transparent navbar to devices that are BOTH narrow (<=1024px) AND short (<=600px)
+@media screen and (orientation: landscape) and (max-width: 1024px) and (max-height: 600px) {
+  .navbar,
+  .navbar-japanese {
+    background: transparent;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    border-bottom: 2px solid transparent;
+    border-image: none;
+    box-shadow: none;
+    z-index: 100000;
+  }
+
+  .title-link > div {
+    padding-top: 10px;
+  }
+
+  .icon-dropDown-container,
+  .icon-dropDown-container-japanese {
+    z-index: 100001;
+    font-weight: 600;
+    white-space: pre;
+    cursor: pointer;
+  }
+
+  .icon-dropDown-box {
+    top: -15px;
+    background-color: rgba(0, 0, 0, 0.9);
+    width: auto;
+    min-width: 250px;
+  }
+
+  .navbar-japanese .icon-dropDown-box {
+    top: -15px;
+    padding-right: 20px;
+  }
+}

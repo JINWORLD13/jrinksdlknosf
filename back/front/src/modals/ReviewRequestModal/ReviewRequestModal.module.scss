@@ -1,0 +1,244 @@
+@use '../../styles/scss/App.module.scss';
+
+// 리뷰창은 항상 최상단에 표시 (다른 모달/오버레이보다 위)
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 5, 30, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483647;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal {
+  position: relative;
+  width: 92vw;
+  max-width: 400px;
+  padding: 28px 24px 32px;
+  border-radius: 24px;
+  background: linear-gradient(
+    165deg,
+    rgba(28, 12, 52, 0.98) 0%,
+    rgba(22, 8, 42, 0.99) 50%,
+    rgba(18, 6, 38, 0.98) 100%
+  );
+  box-shadow:
+    0 0 0 1px rgba(255, 215, 0, 0.12),
+    0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+    0 24px 56px rgba(0, 0, 0, 0.5),
+    0 0 48px rgba(139, 92, 246, 0.15),
+    0 0 80px rgba(255, 215, 0, 0.06);
+  color: rgba(255, 255, 255, 0.96);
+  text-align: center;
+  animation: slideUp 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+  overflow: hidden;
+}
+
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 215, 0, 0.4) 20%,
+    rgba(255, 215, 0, 0.7) 50%,
+    rgba(255, 215, 0, 0.4) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+// 한글(Dongle) 기준 크기. 일(Potta)은 App 비율(potta-font-match-dongle)로 동일 시각 크기.
+$title-size: 1.65rem;
+$desc-size: 1.35rem;
+$thanks-size: 1.3rem;
+$primary-btn-size: 1.45rem;
+$secondary-btn-size: 1.3rem;
+
+.modalJa {
+  @include App.potta-font-match-dongle(0.95rem); // 기본 상속용
+}
+
+.starWrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+  animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
+}
+
+@keyframes starPop {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.starIcon {
+  color: rgba(255, 215, 0, 0.98);
+  filter:
+    drop-shadow(0 0 10px rgba(255, 215, 0, 0.5))
+    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.title {
+  margin: 0 0 14px;
+  @include App.dongle-font($title-size);
+  color: rgba(255, 215, 0, 0.98);
+  text-shadow:
+    0 0 20px rgba(255, 215, 0, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+  line-height: 1.25;
+  letter-spacing: 0.02em;
+}
+
+.modalJa .title {
+  @include App.potta-font-match-dongle($title-size);
+  letter-spacing: 0.04em;
+}
+
+.desc {
+  margin: 0 0 10px;
+  padding: 0 4px;
+  @include App.dongle-font($desc-size);
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.modalJa .desc {
+  @include App.potta-font-match-dongle($desc-size);
+  line-height: 1.55;
+}
+
+.thanks {
+  margin: 0 0 24px;
+  padding: 0 4px;
+  @include App.dongle-font($thanks-size);
+  line-height: 1.45;
+  color: rgba(255, 215, 0, 0.88);
+}
+
+.modalJa .thanks {
+  @include App.potta-font-match-dongle($thanks-size);
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.primaryBtn {
+  width: 100%;
+  padding: 16px 24px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(
+    145deg,
+    rgba(255, 220, 100, 0.4) 0%,
+    rgba(255, 195, 60, 0.35) 50%,
+    rgba(255, 180, 40, 0.3) 100%
+  );
+  color: rgba(255, 255, 255, 0.98);
+  @include App.dongle-font($primary-btn-size);
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  box-shadow:
+    0 0 0 1px rgba(255, 215, 0, 0.2),
+    0 1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 4px 20px rgba(255, 180, 0, 0.25);
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow:
+      0 0 0 1px rgba(255, 215, 0, 0.3),
+      0 1px 0 rgba(255, 255, 255, 0.12) inset,
+      0 6px 24px rgba(255, 180, 0, 0.35);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    box-shadow:
+      0 0 0 1px rgba(255, 215, 0, 0.2),
+      0 2px 16px rgba(255, 180, 0, 0.2);
+  }
+}
+
+.modalJa .primaryBtn {
+  @include App.potta-font-match-dongle($primary-btn-size);
+  letter-spacing: 0.03em;
+}
+
+.secondaryBtn {
+  width: 100%;
+  padding: 14px 24px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  color: rgba(255, 255, 255, 0.88);
+  @include App.dongle-font($secondary-btn-size);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    );
+    border-color: rgba(255, 255, 255, 0.18);
+    color: rgba(255, 255, 255, 0.95);
+  }
+
+  &:active {
+    transform: scale(0.98);
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.modalJa .secondaryBtn {
+  @include App.potta-font-match-dongle($secondary-btn-size);
+  letter-spacing: 0.03em;
+}

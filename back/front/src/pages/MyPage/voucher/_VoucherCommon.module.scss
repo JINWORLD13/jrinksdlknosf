@@ -1,0 +1,63 @@
+@use '../../../styles/scss/App.module.scss';
+
+// 공통 박스 스타일 믹스인
+@mixin cosmic-box {
+  background: rgba(76, 29, 149, 0.3);
+  border: 2px solid rgba(167, 139, 250, 0.8);
+  backdrop-filter: none;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4), 0 0 40px rgba(139, 92, 246, 0.2),
+    inset 0 0 30px rgba(139, 92, 246, 0.1);
+}
+
+@mixin cosmic-box-enhanced {
+  background: rgba(76, 29, 149, 0.3);
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 40px rgba(139, 92, 246, 0.15);
+  padding: 20px;
+}
+
+// 공통 폰트 클래스 믹스인
+@mixin font-classes {
+  .korean-dongle-font {
+    @include App.dongle-font(2.5rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.3rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.7rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+}
+
+// 반응형 폰트 믹스인
+@mixin responsive-fonts(
+  $korean1,
+  $japanese1,
+  $korean2,
+  $japanese2,
+  $jp-line-height: 2,
+  $jp-line-height2: 2
+) {
+  .korean-dongle-font {
+    @include App.dongle-font($korean1);
+  }
+  .japanese-potta-font {
+    @include App.potta-font($japanese1);
+    line-height: $jp-line-height;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font($korean2);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font($japanese2);
+    line-height: $jp-line-height2;
+  }
+}

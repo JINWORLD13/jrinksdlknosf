@@ -1,0 +1,788 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+@use '../../../styles/scss/Font.module.scss' as Font;
+@use 'sass:map';
+
+// ============================================
+// 변수 및 플레이스홀더
+// ============================================
+$tarot-info-padding-bottom: 10px;
+$tarot-history-menu-container-margin-bottom: 10px;
+$tarot-history-record-bottom-margin-top: 7px;
+
+%menu-box {
+  width: auto;
+  height: 100%;
+  padding: 13px 20px;
+  @include App.flex-box-center(row);
+  background: transparent;
+  border: none;
+  border-radius: 20px;
+  box-shadow: none;
+  cursor: pointer;
+  @include Cosmic.cosmic-text-color;
+  transition: all 0.3s ease;
+  backdrop-filter: none;
+}
+
+%menu-box-item {
+  width: 100%;
+  height: auto;
+  @include App.flex-box-center(column);
+  overflow: auto;
+  background: linear-gradient(
+    to right,
+    rgba(45, 21, 84, 0.6) 0%,
+    rgba(76, 29, 149, 0.5) 100%
+  );
+  border-bottom: 2px solid rgba(139, 92, 246, 0.5);
+  @include Cosmic.cosmic-text-color;
+  opacity: 1;
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+%menu-box-item-child {
+  width: 100%;
+  height: auto;
+  padding: 10px;
+  @include App.flex-box-center(row);
+  justify-content: space-between;
+}
+
+%menu-box-item-grandchild {
+  width: 70%;
+  @include App.flex-box-center(row);
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+}
+
+%menu-box-item-grandchild-child {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+%menu-box-item-second-child {
+  width: 100%;
+  height: auto;
+  padding-right: 10px;
+  padding-bottom: 8px;
+  text-align: end;
+  @include App.flex-box-center(row);
+  justify-content: end;
+}
+
+%menu-box-item-button {
+  @include App.no-select;
+  width: auto;
+  height: auto;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1em;
+}
+
+// ============================================
+// 기본 스타일 (Base)
+// ============================================
+.user-info3-body {
+  width: 100%;
+  height: 100%; // Fill parent container
+  max-height: 100%; // Ensure it doesn't exceed parent
+  overflow: hidden; // Prevent outer scrollbars
+  flex-grow: 1;
+  position: relative;
+  @include App.flex-box-center(row);
+
+  .user-info3-body-center {
+    width: 95%;
+    height: 100%; // Changed from 90% to remove the extra gap
+  }
+}
+
+.tarot-history-record {
+  @include App.no-select;
+  width: auto;
+  @include App.dongle-font(2rem);
+  text-align: end;
+  margin-right: 10px;
+  // position: absolute; // Removed
+  // top: 0; // Removed
+  // right: 10px; // Removed
+  margin-left: auto; // Added for flex alignment
+  @include Cosmic.cosmic-heading-color;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+.tarot-history-record-bottom {
+  @include App.no-select;
+  width: auto;
+  @include App.dongle-font(2rem);
+  text-align: end;
+  margin-right: 20px;
+  margin-top: $tarot-history-record-bottom-margin-top;
+  @include Cosmic.cosmic-heading-color;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+}
+
+.tarot-info {
+  width: 100%;
+  // height: 100%; // Removed to prevent overflow with header
+  flex: 1; // Fill remaining space
+  min-height: 100%; // Ensure min-height for percentage-based child heights
+  // overflow: hidden; // Removed to fix clipping
+  padding-bottom: 0px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tarot-history-menu-container {
+  width: 100%;
+  height: 10%;
+  max-height: 60px;
+  @include App.flex-box-center(row);
+  justify-content: start;
+  @include App.no-select;
+  padding: 10px 5px;
+  gap: 8px;
+  margin-bottom: $tarot-history-menu-container-margin-bottom;
+}
+
+.tarot-history-menu-box {
+  @extend %menu-box;
+  @include App.dongle-font(1.3em);
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  padding: 14px 24px;
+  min-width: fit-content;
+  white-space: nowrap;
+  justify-content: center;
+
+  &:hover {
+    @include App.dongle-font(1.3em);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+  }
+}
+
+.tarot-history-menu-box-clicked {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  text-decoration: underline;
+  text-decoration-color: gold;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.tarot-history {
+  width: 100%;
+  flex: 1; // User requested 90%
+  // min-height: 90%; // User requested 90% - REMOVED to allow flex sizing
+  min-height: 0; // Allow shrinking
+  // max-height: 85%; // Fixed percentage height
+  // min-height: 90%; // Ensure it applies
+  // min-height: 0; // Keep just in case, though fixed height overrides this utility
+  // margin-bottom: 60px; // Removed as requested
+  overflow-y: auto;
+  border: 3px solid rgba(139, 92, 246, 0.6);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+}
+
+.tarot-history-item {
+  @extend %menu-box-item;
+  @include App.dongle-font(1.9rem);
+}
+
+.tarot-history-item-content {
+  @extend %menu-box-item-child;
+}
+
+.tarot-history-item-info {
+  @extend %menu-box-item-grandchild;
+}
+
+.tarot-history-item-label {
+  @extend %menu-box-item-grandchild-child;
+}
+
+.tarot-history-item-date {
+  width: 30%;
+  text-align: end;
+}
+
+.tarot-history-item-action {
+  @extend %menu-box-item-second-child;
+  button {
+    @include App.no-select;
+    @extend %menu-box-item-button;
+    @include App.dongle-font(1.5rem);
+  }
+  .additional-question-button {
+    margin-right: 12px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0 10px;
+    min-height: 36px;
+    border-radius: 18px;
+    @include Cosmic.cosmic-button; // Normal button for additional question
+
+    .count-badge {
+      font-size: 0.9em;
+      opacity: 0.9;
+    }
+  }
+
+  .delete-button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    padding: 0;
+    @include App.flex-box-center(row);
+    border-radius: 50% !important;
+    @include Cosmic.cosmic-button-danger;
+  }
+}
+
+// 일본어 기본 스타일 (Base)
+.user-info3-body-japanese {
+  @extend .user-info3-body;
+  overflow: auto;
+}
+.user-info3-body-center-japanese {
+  @extend .user-info3-body-center;
+}
+.tarot-history-record-japanese {
+  @extend .tarot-history-record;
+  @include App.potta-font(1.25rem);
+}
+.tarot-history-record-bottom-japanese {
+  @extend .tarot-history-record-bottom;
+  @include App.potta-font(1.25rem);
+}
+.tarot-info-japanese {
+  @extend .tarot-info;
+}
+.tarot-history-menu-container-japanese {
+  @extend .tarot-history-menu-container;
+  height: 12%;
+  margin-bottom: 0; // Japanese specific
+}
+.tarot-history-menu-box-japanese {
+  @extend .tarot-history-menu-box;
+  @include App.potta-font(1.4rem);
+  padding: 12px 22px;
+  &:hover {
+    @include App.potta-font(1.4rem);
+  }
+}
+.tarot-history-menu-box-clicked-japanese {
+  @extend .tarot-history-menu-box-clicked;
+}
+.tarot-history-japanese {
+  @extend .tarot-history;
+  // margin-bottom: 20px; // Removed
+}
+.tarot-history-item-japanese {
+  @extend .tarot-history-item;
+  @include App.potta-font(1.6em);
+  .tarot-history-item-info > div:nth-child(2) {
+    margin-top: 3px;
+  }
+  .tarot-history-item-action button {
+    @include App.potta-font(1.5rem);
+  }
+}
+
+.font-japanese {
+  @include App.potta-font(0.7em);
+}
+.font-english {
+  @include App.dongle-font(1.6em);
+}
+.invisible {
+  display: none;
+}
+
+// ============================================
+// 반응형 맵 (Responsive Map)
+// ============================================
+// 각 브레이크포인트별 변경되는 값들을 정의
+$responsive-map: (
+  'desktop': (
+    'query': '(min-width: 1025px)',
+    'h2-font': 2.4rem,
+    // Not used in desktop block in original, but added for consistency if needed
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 50px,
+    'menu-box-p': 0px 5px,
+    'menu-box-font': 2.2rem,
+    'menu-box-font-ja': 1.4rem,
+    'history-h': 80%,
+    'item-font': 2.2rem,
+    'item-font-ja': 1.5rem,
+    'btn-font': 1.8rem,
+    'btn-font-ja': 1.5rem,
+  ),
+  'tablet': (
+    'query': '(min-width: 769px) and (max-width: 1024px)',
+    'h2-font': 2.7rem,
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 40px,
+    'menu-box-p': 5px 2px,
+    'menu-box-font': 2.2rem,
+    'menu-box-font-ja': 1.2rem,
+    'history-h': 80%,
+    'item-font': 1.8rem,
+    'item-font-ja': 1.5rem,
+    'btn-font': 1.5rem,
+    'btn-font-ja': 1.5rem,
+  ),
+  'mobile-lg': (
+    'query': '(min-width: 481px) and (max-width: 768px)',
+    'h2-font': 2.4rem,
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 40px,
+    'menu-box-p': 5px 2px,
+    'menu-box-font': 1.9rem,
+    'menu-box-font-ja': 1.2rem,
+    'history-h': 80%,
+    'item-font': 1.5rem,
+    'item-font-ja': 1.2rem,
+    'btn-font': 1.6rem,
+    'btn-font-ja': 1.2rem,
+  ),
+  'iphone-14': (
+    'query': '(min-width: 415px) and (max-width: 480px)',
+    'h2-font': 2.4rem,
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 40px,
+    'menu-box-p': 5px 2px,
+    'menu-box-font': 1.9rem,
+    'menu-box-font-ja': 1.2rem,
+    'history-h': 80%,
+    'item-font': 1.5rem,
+    'item-font-ja': 1.2rem,
+    'btn-font': 1.6rem,
+    'btn-font-ja': 1.2rem,
+  ),
+  'iphone-xr': (
+    'query': '(min-width: 376px) and (max-width: 414px)',
+    'h2-font': 2.3rem,
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'record-font': 1.9rem,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 40px,
+    'menu-box-p': 5px 2px,
+    'menu-box-font': 1.7rem,
+    'menu-box-font-ja': 1.05rem,
+    'history-h': 80%,
+    'item-font': 1.5rem,
+    'item-font-ja': 1rem,
+    'btn-font': 1.6rem,
+    'btn-font-ja': 1rem,
+  ),
+  'iphone-se': (
+    'query': '(min-width: 281px) and (max-width: 375px)',
+    'h2-font': 2.3rem,
+    'body-height': 100%,
+    'body-padding': 5px,
+    'body-mb': 45px,
+    'center-height': 70vh,
+    'record-font': 1.8rem,
+    'record-font-ja': 1.1rem,
+    'info-pb': 10px,
+    'menu-cont-h': 10%,
+    'menu-cont-max-h': 40px,
+    'menu-box-p': 5px 2px,
+    'menu-box-font': 1.3rem,
+    'menu-box-font-ja': 1.2rem,
+    'history-h': 80%,
+    'item-font': 1.6rem,
+    'item-font-ja': 1.2rem,
+    'btn-font': 1.2rem,
+    'btn-font-ja': 1.2rem,
+  ),
+);
+
+// ============================================
+// 반응형 믹스인
+// ============================================
+@each $key, $vals in $responsive-map {
+  $query: map.get($vals, 'query');
+
+  @media #{$query} {
+    // H2
+    .h2 {
+      @include App.flex-box-center(row);
+      @if map.get($vals, 'h2-font') {
+        @include App.dongle-font(map.get($vals, 'h2-font'));
+      }
+    }
+    .h2-japanese {
+      @include App.flex-box-center(row);
+      @if map.get($vals, 'h2-font') {
+        // Japanese h2 font scaling logic (approximate based on original)
+        // Original had 1.4rem ~ 1.5rem for most
+        @include App.potta-font(1.4rem);
+      }
+    }
+
+    // Body
+    .user-info3-body,
+    .user-info3-body-japanese {
+      width: 100%;
+      // max-height: map.get($vals, 'body-height'); // Removed again to fix squash
+      // height: map.get($vals, 'body-height'); // Removed
+      // flex: 1; // Fill remaining space dynamically
+      height: 100%; // Changed from 80vh to 100% to fill available space without forcing overflow
+      // min-height: 0; // REMOVED - This was causing collapse on mobile
+      padding: map.get($vals, 'body-padding');
+      margin-bottom: map.get($vals, 'body-mb');
+      @include App.flex-box-center(row);
+      // overflow: hidden; // Removed to fix clipping
+
+      .user-info3-body-center,
+      .user-info3-body-center-japanese {
+        width: 95%;
+        height: 100%;
+        display: flex; // Added to enable flex context for child
+        flex-direction: column; // Stack child vertically
+        justify-content: center; // Center content if needed, though flex:1 child will take space
+      }
+    }
+
+    // Record
+    @if map.get($vals, 'record-font') {
+      .tarot-history-record {
+        @include App.dongle-font(map.get($vals, 'record-font'));
+      }
+    }
+    @if map.get($vals, 'record-font-ja') {
+      .tarot-history-record-japanese {
+        @include App.potta-font(map.get($vals, 'record-font-ja'));
+      }
+    }
+
+    .tarot-history-record-bottom {
+      margin-top: $tarot-history-record-bottom-margin-top;
+    }
+
+    // Info List
+    .tarot-info,
+    .tarot-info-japanese {
+      width: 100%;
+      height: 100%; // Explicit height to pass down percentage
+      min-height: 100%; // Ensure min-height for percentage-based child heights
+      flex: 1; // Fill remaining space
+      // overflow: hidden; // Removed to fix clipping
+      // padding-bottom: map.get($vals, 'info-pb'); // Removed to avoid double spacing with flex margin
+      display: flex;
+      flex-direction: column;
+      // Scrollbar logic is complex to mixin-ize inside media query due to selector nesting,
+      // but we can just re-declare the mixin call which generates the styles.
+      // However, App.scrollBar-custom-className generates global selectors or nested?
+      // It generates `&::-webkit-scrollbar`. Safe to use here.
+      // Note: Original code repeated this for every media query.
+    }
+
+    // Menu Container
+    .tarot-history-menu-container,
+    .tarot-history-menu-container-japanese {
+      width: 100%;
+      height: map.get($vals, 'menu-cont-h');
+      max-height: map.get($vals, 'menu-cont-max-h');
+      @include App.flex-box-center(row);
+      justify-content: start;
+      margin-bottom: $tarot-history-menu-container-margin-bottom;
+    }
+    .tarot-history-menu-container-japanese {
+      margin-bottom: 0;
+    }
+
+    // Menu Box
+    .tarot-history-menu-box {
+      width: auto;
+      height: 100%;
+      padding: map.get($vals, 'menu-box-p');
+      @include App.dongle-font(map.get($vals, 'menu-box-font'));
+
+      &:hover {
+        @include App.dongle-font(map.get($vals, 'menu-box-font'));
+        background-color: transparent;
+      }
+      &:active {
+        color: gold;
+      }
+    }
+    .tarot-history-menu-box-clicked {
+      background-color: transparent;
+      text-decoration: underline;
+      text-decoration-color: gold;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+
+    // Menu Box Japanese
+    .tarot-history-menu-box-japanese {
+      width: auto;
+      height: 100%;
+      padding: map.get($vals, 'menu-box-p');
+      @include App.potta-font(map.get($vals, 'menu-box-font-ja'));
+
+      &:hover {
+        @include App.potta-font(map.get($vals, 'menu-box-font-ja'));
+        background-color: transparent;
+      }
+      &:active {
+        color: gold;
+      }
+    }
+    .tarot-history-menu-box-clicked-japanese {
+      background-color: transparent;
+      text-decoration: underline;
+      text-decoration-color: gold;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 4px;
+    }
+
+    // History List Area
+    .tarot-history,
+    .tarot-history-japanese {
+      width: 100%;
+      // flex: 1;
+      @if map.get($vals, 'history-h') {
+        min-height: map.get($vals, 'history-h');
+      } @else {
+        min-height: 90%;
+      }
+      // max-height: 85%;
+      // margin-bottom: 60px; // Removed
+      overflow-y: auto; // !important removed
+    }
+
+    // History Item
+    .tarot-history-item {
+      @include App.dongle-font(map.get($vals, 'item-font'));
+    }
+
+    .tarot-history-item-action button {
+      @include App.no-select;
+      @include App.dongle-font(map.get($vals, 'btn-font'));
+      &:hover {
+        @include App.dongle-font(map.get($vals, 'btn-font'));
+      }
+    }
+
+    // History Item Japanese
+    .tarot-history-item-japanese {
+      @include App.potta-font(map.get($vals, 'item-font-ja'));
+
+      .tarot-history-item-action button {
+        @include App.no-select;
+        @include App.potta-font(map.get($vals, 'btn-font-ja'));
+        &:hover {
+          @include App.potta-font(map.get($vals, 'btn-font-ja'));
+        }
+      }
+    }
+  }
+}
+
+// Responsive Stepped Overrides (Starting from 620px)
+
+// ≤ 1366px: Override tarot-history min-height to 50vh
+@media (max-width: 1366px) {
+  .tarot-history,
+  .tarot-history-japanese {
+    flex: 1;
+    min-height: 50vh;
+  }
+}
+
+// < 700px - Unified Mobile Layout (Based on 390px Korean Style)
+@media (max-width: 700px) {
+  .tarot-history-menu-container,
+  .tarot-history-menu-container-japanese {
+    gap: 4px;
+    padding: 10px 4px;
+  }
+
+  .tarot-history-menu-box {
+    padding: 5px 2px; // Tight padding from 390px map
+    @include App.dongle-font(1.6rem);
+    &:hover {
+      @include App.dongle-font(1.6rem);
+    }
+  }
+
+  .tarot-history-menu-box-japanese {
+    padding: 5px 2px;
+    @include App.potta-font(1.05rem);
+    &:hover {
+      @include App.potta-font(1.05rem);
+    }
+  }
+
+  // Preserve font-size responsiveness while keeping layout fixed
+  @media (max-width: 480px) {
+    .tarot-history-menu-box {
+      @include App.dongle-font(1.45rem);
+    }
+    .tarot-history-menu-box-japanese {
+      @include App.potta-font(1rem);
+    }
+  }
+  @media (max-width: 320px) {
+    .tarot-history-menu-box {
+      @include App.dongle-font(1.35rem);
+    }
+    .tarot-history-menu-box-japanese {
+      @include App.potta-font(0.85rem);
+    }
+  }
+}
+
+// Mobile Footer Delete All Button
+.mobile-delete-all-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; // Left aligned
+  margin-top: 15px;
+  padding-left: 5px; // Slight padding
+  padding-bottom: 20px;
+
+  .mobile-delete-all-button {
+    @include App.no-select;
+    @include App.dongle-font(1.5rem);
+    padding: 6px 12px;
+    background-color: rgba(220, 38, 38, 0.4);
+    background-image: none; // Essential to remove default purple gradient
+    border: 2px solid rgba(220, 38, 38, 0.7);
+    border-radius: 12px;
+    color: #ffffff;
+    text-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+
+    &:hover:not(:disabled) {
+      background-color: rgba(220, 38, 38, 0.6);
+      border-color: rgba(220, 38, 38, 0.9);
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(220, 38, 38, 0.8);
+    }
+    &:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+  }
+
+  .mobile-delete-all-button-japanese {
+    @include App.potta-font(1rem);
+    padding: 5px 10px;
+  }
+}
+
+// Landscape Mobile Optimization (Generic for short screens)
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  .tarot-history-menu-container,
+  .tarot-history-menu-container-japanese {
+    margin-bottom: 5px;
+    height: auto;
+    min-height: 30px; // Compact height
+    max-height: none; // Allow flex
+  }
+
+  .tarot-history-menu-box {
+    padding: 2px 10px; // Very compact vertical padding
+    @include App.dongle-font(1.3rem);
+  }
+
+  .tarot-history-menu-box-japanese {
+    padding: 2px 10px;
+    @include App.potta-font(0.85rem);
+  }
+
+  .tarot-history-item,
+  .tarot-history-item-japanese {
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+
+  // Reduce list height to make room for footer in short landscape screens
+  .tarot-history,
+  .tarot-history-japanese {
+    flex: 1; // Fill remaining space dynamically
+    height: auto;
+    min-height: 90%;
+    max-height: none;
+    overflow-y: auto;
+  }
+
+  // Compact footer container
+  .tarot-history-record-bottom,
+  .tarot-history-record-bottom-japanese {
+    margin-top: 5px;
+    // display: flex;
+    // align-items: center;
+    // justify-content: space-between; // Horizontal layout for count + button?
+  }
+
+  // Optimize Delete All Button Container
+  // Optimize Delete All Button Container
+  // Hide in landscape as user requested it to stay in header (top)
+  .mobile-delete-all-container {
+    display: none !important;
+  }
+
+  // Ensure inner body adapts in landscape
+  .user-info3-body,
+  .user-info3-body-japanese {
+    height: 100% !important;
+    max-height: 100% !important;
+    min-height: 100% !important; // As requested, strict equality
+    overflow: hidden !important;
+
+    // Also reset the center container
+    .user-info3-body-center,
+    .user-info3-body-center-japanese {
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+    }
+  }
+}

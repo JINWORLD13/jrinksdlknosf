@@ -1,0 +1,189 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+* {
+  scroll-behavior: auto;
+  box-sizing: border-box;
+}
+
+/* 통일된 전역 스크롤바 스타일 - 모든 모드, 모든 사이즈에서 타로모달과 동일 */
+html,
+body,
+* {
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  width: 1rem;
+  height: 1rem;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+*::-webkit-scrollbar-track {
+  background-color: rgba(45, 21, 84, 0.3);
+  border-radius: 20px;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  border-radius: 20px;
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #a78bfa 0%, #c084fc 100%);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.8);
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  /* display: flex; */
+  /* place-items: center; */
+
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+/* Select 태그 글로벌 스타일 */
+select {
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, 0.95) 0%,
+    rgba(76, 29, 149, 0.9) 100%
+  );
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 10px;
+  color: rgba(255, 255, 255, 0.95);
+  padding: 8px 12px;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.3),
+    inset 0 0 20px rgba(139, 92, 246, 0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+}
+
+select:hover {
+  background: linear-gradient(
+    135deg,
+    rgba(76, 29, 149, 0.95) 0%,
+    rgba(139, 92, 246, 0.9) 100%
+  );
+  border-color: rgba(139, 92, 246, 0.9);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.5),
+    inset 0 0 25px rgba(139, 92, 246, 0.15);
+}
+
+select:focus {
+  outline: none;
+  border-color: gold;
+  box-shadow: 0 0 30px rgba(255, 215, 0, 0.4),
+    inset 0 0 25px rgba(139, 92, 246, 0.2);
+}
+
+/* Option 태그 글로벌 스타일 */
+option {
+  background-color: rgba(45, 21, 84, 0.98) !important;
+  color: gold !important;
+  padding: 8px 12px;
+  border-radius: 8px !important;
+  margin: 2px 0;
+}
+
+option:hover,
+option:checked {
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.8) 0%,
+    rgba(167, 139, 250, 0.7) 100%
+  ) !important;
+  color: gold !important;
+}
+
+option:focus {
+  background-color: black !important;
+  color: gold !important;
+}
+
+/* 1366px 이하 모든 사이즈에서 동일한 스크롤바 유지 */
+/* 1366px 이하 모든 사이즈에서 동일한 스크롤바 유지 */
+@media (max-width: 1024px) {
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar,
+  *::-webkit-scrollbar {
+    width: 0.7rem;
+    height: 0.7rem;
+  }
+}
+
+/* 320px 이하 (수평/수직 스크롤 방지 -> 반응형 너비 적용) */
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* 320px 이하 화면에서 가로 스크롤이 생기는 원인(min-width: 320px) 해결 */

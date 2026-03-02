@@ -1,0 +1,475 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+
+%info-box-elem {
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  background-color: transparent;
+}
+
+@mixin info-box($width, $height) {
+  width: $width;
+  height: $height;
+  background: rgba(76, 29, 149, 0.3); // 사이드 메뉴와 동일한 배경색
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 40px rgba(139, 92, 246, 0.15);
+  backdrop-filter: blur(8px);
+}
+
+// 유저 정보 감싸는 큰 박스
+.user-info-container {
+  width: 100%;
+  height: 100%;
+  // min-height: calc(100vh - 130px);
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  // overflow: auto;
+  @include App.dongle-font(1.5rem);
+  @include App.no-select;
+}
+.user-info1 {
+  width: 100%;
+  height: 100%;
+  @extend %info-box-elem;
+  // 유저 정보
+  .user-info1-box1 {
+    @include info-box(38%, 90%);
+    height: auto;
+    margin-right: 2%;
+    position: relative;
+  }
+  .user-info1-box2 {
+    @include info-box(38%, 90%);
+    height: auto;
+    margin-right: 2%;
+    position: relative;
+  }
+}
+
+//! 일본어 버전
+
+div.user-info-container-japanese {
+  width: 100%;
+  height: 100%;
+  // min-height: calc(100vh - 130px);
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  // overflow: auto;
+  @include App.potta-font(0.8rem);
+  @include App.no-select;
+}
+.user-info1-japanese {
+  width: 100%;
+  height: 100%;
+  @extend %info-box-elem;
+  .user-info1-box1-japanese {
+    @include info-box(38%, 90%);
+    height: auto;
+    margin-right: 2%;
+    position: relative;
+  }
+  .user-info1-box2-japanese {
+    @include info-box(38%, 90%);
+    height: auto;
+    margin-right: 2%;
+    position: relative;
+  }
+}
+
+//~ 디바이스
+@include App.desktop {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 250px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.7rem);
+  }
+  .user-info1 {
+    width: 65%;
+    height: auto;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 250px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(1rem);
+  }
+  .user-info1-japanese {
+    width: 65%;
+    height: auto;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 240px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.7rem);
+  }
+  .user-info1 {
+    width: 70%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 100%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 100%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 240px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(1rem);
+  }
+  .user-info1-japanese {
+    width: 80%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+
+//~ 481px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 240px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.5rem);
+  }
+  .user-info1 {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    height: 100%;
+    // min-height: calc(100vh - 240px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(0.9rem);
+  }
+  .user-info1-japanese {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.4rem);
+  }
+  .user-info1 {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(0.75rem);
+  }
+  .user-info1-japanese {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.5rem);
+  }
+  .user-info1 {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(0.7rem);
+  }
+  .user-info1-japanese {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+//~ 아이폰 SE
+@include App.mobile-xs {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1.3rem);
+  }
+  .user-info1 {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(0.6rem);
+  }
+  .user-info1-japanese {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100vw;
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.dongle-font(1rem);
+  }
+  .user-info1 {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    // 유저 정보
+    .user-info1-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    //! 임시방편(세로 혹은 가로 모드에서 컨텐츠들이 페이지 높이보다 오버하게 배치되면, 디바이스 가로모드에서 스크롤을 내린후 세로모드시 모든 컨텐츠가 밀려 올라가 가려지니;; 높이를 over하게 하면 됨.)
+    // height: 100%;
+    min-height: calc(100vh - 260px);
+    // min-height: calc(100vh - 220px);
+    // min-height: calc(100vh - 130px);
+    @include App.potta-font(0.5rem);
+  }
+  .user-info1-japanese {
+    width: 100%;
+    height: auto;
+    // height: 100%;
+    @include App.flex-box-center(column);
+    justify-content: start;
+    align-items: center;
+
+    .user-info1-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+    .user-info1-box2-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+}

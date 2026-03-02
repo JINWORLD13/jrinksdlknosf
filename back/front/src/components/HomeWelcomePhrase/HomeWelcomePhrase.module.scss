@@ -1,0 +1,58 @@
+@use '../../styles/scss/App.module.scss';
+
+/* 로딩폼 위에 겹쳐 보이도록 로딩보다 높은 z-index */
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000000000000000000000001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: transparent;
+  transition: opacity 0.5s ease-out;
+
+  &[data-phase='enter'] {
+    opacity: 0;
+  }
+
+  &[data-phase='visible'] {
+    opacity: 1;
+  }
+
+  &[data-phase='exit'] {
+    opacity: 0;
+  }
+}
+
+/* 일본어 기준(Potta 크기). Dongle은 potta-to-dongle(일본어에 셋팅된 크기)로 동일 시각 크기 */
+.phrase {
+  max-width: min(90vw, 320px);
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 0.75rem 1.25rem;
+  margin: 0;
+  text-align: center;
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  white-space: normal;
+  color: rgba(228, 238, 255, 0.92);
+  text-shadow:
+    0 0 6px rgba(200, 218, 255, 0.5),
+    0 0 12px rgba(180, 200, 255, 0.25),
+    0 1px 2px rgba(0, 0, 0, 0.4);
+  transition: opacity 0.4s ease-out;
+  @include App.dongle-font-match-potta(1.2rem);
+}
+
+/* 일본어: Potta(Kosugi Maru) 고정 크기 — ？ 등 일본어 문자가 정상 렌더 */
+.overlay[data-lang='ja'] .phrase {
+  @include App.potta-font(1.2rem);
+}
+
+/* 한국어/영어: Dongle을 potta-to-dongle(일본어에 셋팅된 크기)로 동일 시각 크기 */
+.overlay[data-lang='ko'] .phrase,
+.overlay[data-lang='en'] .phrase {
+  @include App.dongle-font-match-potta(1.2rem);
+}

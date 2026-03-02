@@ -1,0 +1,63 @@
+/**
+ * Celtic Cross CSS 변수 전용 파일
+ * 
+ * :root 변수만 포함하여 전역에서 사용할 수 있도록 합니다.
+ * 이 파일은 App.jsx에서 전역으로 import됩니다.
+ */
+
+// ============================================
+// Celtic Cross 중앙 통제 CSS 변수
+// Answer Modal, Speed Tarot, Spread Modal 모두에서 참조
+// ============================================
+:root {
+  // Grid gap (Answer Modal의 .celtic-cross gap)
+  --celtic-grid-gap: 0.75rem;
+
+  // Card sizes (Small / Medium / Large)
+  --celtic-card-size-small: 40px;
+  --celtic-card-size-medium: 45px;
+  --celtic-card-size-large: 50px;
+
+  // Border sizes (Small / Medium / Large)
+  --celtic-border-size-small: 0.15rem;
+  --celtic-border-size-medium: 0.17rem;
+  --celtic-border-size-large: 0.2rem;
+}
+
+// 반응형 브레이크포인트별 Celtic Cross 변수 조정
+@media screen and (max-width: 768px) {
+  :root {
+    --celtic-grid-gap: 0.6rem;
+    --celtic-card-size-small: 35px;
+    --celtic-card-size-medium: 40px;
+    --celtic-card-size-large: 45px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  :root {
+    --celtic-grid-gap: 0.5rem;
+    --celtic-card-size-small: 30px;
+    --celtic-card-size-medium: 35px;
+    --celtic-card-size-large: 40px;
+  }
+}
+
+@media screen and (max-width: 375px) {
+  :root {
+    --celtic-grid-gap: 0.4rem;
+    --celtic-card-size-small: 28px;
+    --celtic-card-size-medium: 32px;
+    --celtic-card-size-large: 36px;
+  }
+}
+
+// 가로모드 Celtic Cross 변수 조정
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  :root {
+    --celtic-grid-gap: 0.4rem;
+    --celtic-card-size-small: 30px;
+    --celtic-card-size-medium: 35px;
+    --celtic-card-size-large: 40px;
+  }
+}

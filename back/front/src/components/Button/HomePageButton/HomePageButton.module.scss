@@ -1,0 +1,204 @@
+@use '../../../styles/scss/App.module.scss';
+
+.homepage {
+  // Positioning
+  position: fixed;
+  right: 10px; /* 화면 가장자리로부터 margin 추가 */
+  bottom: calc(var(--footer-height, 80px) + 10px); /* Footer 높이 + Invite 버튼과의 간격 (10px + 70px + 10px) */
+  z-index: 11;
+
+  // Display & Box Model
+  @include App.flex-box-center(column);
+  width: 70px;
+  height: 70px;
+  padding: 0; /* 텍스트 제거로 padding 제거 */
+  border: 2px solid rgba(139, 92, 246, 0.8);
+  border-radius: 50%;
+
+  // Background & Colors
+  background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 90% 30%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 10% 70%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 10%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 30% 90%, rgba(255, 255, 255, 0.2) 0.5px, transparent 0.5px),
+    radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.3) 0.5px, transparent 0.5px),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+  background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+    16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  color: #ff8ba7; /* 원래 분홍색으로 되돌리기 */
+
+  // Typography
+  @include App.dongle-font(1.5rem);
+  line-height: 0.7;
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399;
+
+  // Visual Effects
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  // Misc
+  cursor: grabbing;
+  user-select: none; // 드래그 방지
+  -webkit-user-select: none; // Safari 지원
+  -moz-user-select: none; // Firefox 지원
+  -ms-user-select: none; // IE 지원
+  transition: all 0.3s ease;
+
+  &::before {
+    // Positioning
+    position: absolute;
+    top: 55%; /* 정가운데보다 조금 아래 */
+    left: 50%;
+
+    // Display & Box Model
+    display: flex;
+    align-items: center;
+    justify-content: center; /* 수정구슬 중앙 배치 */
+    width: 40px; /* 책 배경 크기 */
+    height: 30px; /* 책 배경 높이 */
+
+    // Content & Colors
+    content: '🔮'; /* 집 대신 수정구슬 아이콘 */
+    color: #e0e0ff; /* 수정구슬 색상 (밝은 보라색) */
+
+    // Typography
+    @include App.dongle-font(1.6rem); /* 수정구슬 크기 */
+    text-shadow: -1px -1px 0 #663399, 1px -1px 0 #663399, -1px 1px 0 #663399,
+      1px 1px 0 #663399, 0px 1px 0 #663399, 0px -1px 0 #663399,
+      1px 0px 0 #663399, -1px 0px 0 #663399, 0 0 8px rgba(255, 215, 0, 0.4),
+      0 0 16px rgba(255, 215, 0, 0.2);
+
+    // Visual Effects
+    transform: translate(-50%, -50%); /* 정가운데 정렬 */
+  }
+}
+
+.homepage:hover {
+  // Border & Colors
+  border-color: rgba(139, 92, 246, 1);
+  background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+    radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+    radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+    radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+    radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+    radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+    radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+    radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+    linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+  background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+    16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  animation: starTwinkle 1.5s ease-in-out infinite;
+  color: #ffd700; /* 호버 시 텍스트 색상 (금색) */
+
+  // Typography
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+    0 0 8px rgba(255, 215, 0, 0.8), 0 0 16px rgba(255, 215, 0, 0.6),
+    0 0 24px rgba(255, 215, 0, 0.4);
+
+  // Visual Effects
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 12px 40px rgba(139, 92, 246, 0.4),
+    0 0 30px rgba(139, 92, 246, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+
+  &::before {
+    // Colors
+    color: #ffd700; /* 호버 시 수정구슬 색상 (금색) */
+
+    // Typography
+    @include App.dongle-font(1.7rem); /* 수정구슬 크기 */
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 15px rgba(255, 215, 0, 0.8), 0 0 25px rgba(255, 215, 0, 0.6),
+      0 0 35px rgba(255, 215, 0, 0.4), 0 0 45px rgba(255, 215, 0, 0.2);
+  }
+}
+
+.homepage:active {
+  // Background & Colors
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.8),
+    rgba(79, 70, 229, 0.7)
+  );
+  color: #ff6b9d; /* 클릭 시 텍스트 색상 (핑크) */
+
+  // Typography
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+    0 0 15px rgba(255, 107, 157, 0.8);
+
+  // Visual Effects
+  transform: translateY(0px) scale(0.98);
+
+  &::before {
+    // Colors
+    color: #ff6b9d; /* 클릭 시 수정구슬 색상 (핑크) */
+
+    // Typography
+    text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+      -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399,
+      0 0 20px rgba(255, 107, 157, 0.9), 0 0 30px rgba(255, 107, 157, 0.7),
+      0 0 40px rgba(255, 107, 157, 0.5);
+  }
+}
+
+/* 웹브라우저 690px ~ 1023px에서는 footer가 있으므로 bottom: 90px */
+@media screen and (min-width: 690px) and (max-width: 1023px) {
+  .homepage {
+    bottom: calc(var(--footer-height, 80px) + 10px);
+  }
+}
+
+/* 1024px 이상에서는 footer가 있으므로 bottom: 90px 유지 */
+@media screen and (min-width: 1024px) {
+  .homepage {
+    bottom: calc(var(--footer-height, 80px) + 10px);
+  }
+}
+
+/* 가로모드이면서 높이가 매우 낮은 경우 (모바일 가로 회전)만 footer 없음 - 가장 구체적인 조건이므로 마지막에 위치 */
+@media screen and (orientation: landscape) and (max-width: 1023px) and (max-height: 600px) {
+  .homepage {
+    bottom: 0;
+  }
+}
+
+/* 마이페이지에서 사용되는 홈버튼에 bottom 마진 추가 */
+:global(.container) .homepage {
+  bottom: calc(var(--footer-height, 80px) + 10px);
+}
+
+/* 별 반짝임 애니메이션 */
+@keyframes starTwinkle {
+  0%, 100% {
+    background: radial-gradient(circle at 20% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, #ffffff 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, #ffffff 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+  50% {
+    background: radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 90% 30%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 60% 10%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      radial-gradient(circle at 30% 90%, rgba(255, 255, 255, 0.4) 0.5px, transparent 0.5px),
+      radial-gradient(circle at 70% 50%, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+      linear-gradient(135deg, rgba(139, 92, 246, 0.9), rgba(79, 70, 229, 0.8));
+    background-size: 20px 20px, 15px 15px, 25px 25px, 18px 18px, 22px 22px,
+      16px 16px, 24px 24px, 19px 19px, 100% 100%;
+  }
+}

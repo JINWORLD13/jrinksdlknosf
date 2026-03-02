@@ -1,0 +1,92 @@
+@mixin desktop {
+  @media screen and (min-width: 1024px) and (max-width: 1366px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media screen and (min-width: 768px) and (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin mobile-lg {
+  // 480px ~ 768px
+  @media screen and (min-width: 480px) and (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mobile-md {
+  // iPhone 14 Pro Max (430px)
+  @media only screen and (min-width: 414px) and (max-width: 480px) {
+    @content;
+  }
+}
+
+@mixin mobile-sm {
+  // iPhone XR
+  @media screen and (min-width: 375px) and (max-width: 414px) {
+    @content;
+  }
+}
+
+@mixin mobile-xs {
+  // iPhone SE
+  @media screen and (min-width: 280px) and (max-width: 375px) {
+    @content;
+  }
+}
+
+@mixin mobile-fold {
+  // Galaxy Fold
+  @media screen and (max-width: 280px) {
+    @content;
+  }
+}
+
+// Landscape Mixins
+// Defined based on typical device heights in landscape (max-height: 600px)
+
+@mixin landscape-desktop {
+  // iPad Pro Landscape
+  @media screen and (orientation: landscape) and (min-width: 1024px) and (max-width: 1366px) and (max-height: 600px) {
+    @content;
+  }
+}
+
+@mixin landscape-tablet {
+  // Tablet, iPad, iPad Pro Landscape
+  @media screen and (orientation: landscape) and (min-width: 932px) and (max-width: 1024px) and (max-height: 600px) {
+    @content;
+  }
+}
+
+@mixin landscape-mobile-md {
+  // iPhone 14 Pro Max Landscape
+  @media screen and (orientation: landscape) and (min-width: 896px) and (max-width: 932px) and (max-height: 600px) {
+    @content;
+  }
+}
+
+@mixin landscape-mobile-sm {
+  // iPhone XR Landscape
+  // Adjusted min-width to 668px to avoid overlap with SE (667px)
+  @media screen and (orientation: landscape) and (min-width: 667px) and (max-width: 896px) and (max-height: 600px) {
+    @content;
+  }
+}
+
+@mixin landscape-mobile-xs {
+  // iPhone SE Landscape
+  @media screen and (orientation: landscape) and (min-width: 653px) and (max-width: 667px) and (max-height: 600px) {
+    @content;
+  }
+}
+
+@mixin landscape-mobile-fold {
+  // Galaxy Fold Landscape
+  @media screen and (orientation: landscape) and (max-width: 653px) and (max-height: 600px) {
+    @content;
+  }
+}

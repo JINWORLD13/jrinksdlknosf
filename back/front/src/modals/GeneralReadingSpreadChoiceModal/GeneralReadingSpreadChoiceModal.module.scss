@@ -1,0 +1,388 @@
+@use '../../styles/scss/App.module.scss' as App;
+
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+/* 타이틀/취소 폰트 크기: ReadingTypeChoiceModal(리딩 방식을 선택하세요)과 동일 적용 — 한/영·일어 별도 */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: grid;
+  place-items: center;
+  padding: max(16px, env(safe-area-inset-top))
+    max(16px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom))
+    max(16px, env(safe-area-inset-left));
+  overflow-y: auto;
+  align-content: center;
+  min-height: 100%;
+
+  /* 불러오는 중 모달 표시 시 root 스크롤 비활성화(네이티브에서 스크롤바 방지) */
+  &.rootAdLoading {
+    overflow: clip;
+  }
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  @include App.cosmic-glass-backdrop(16px);
+}
+
+.modal {
+  @include App.no-select;
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(75, 0, 130, 0.12) 0%,
+      transparent 45%
+    ),
+    rgba(10, 8, 28, 0.88);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 1px 0 0 rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: #e9d5ff;
+  animation: modalAppearPortrait 0.35s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    border-radius: 14px 14px 0 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.12) 20%,
+      rgba(255, 215, 0, 0.15) 50%,
+      rgba(255, 255, 255, 0.12) 80%,
+      transparent 100%
+    );
+    pointer-events: none;
+  }
+}
+
+@keyframes modalAppearPortrait {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 0%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0%) scale(1);
+  }
+}
+
+@keyframes modalAppearLandscape {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 420px ~ 696px 구간 (가로모드·max-height 600px 제외): 모달 화면 정가운데 */
+@media (min-width: 420px) {
+  .modal {
+    top: 50%;
+    transform: translate(-50%, -50%);
+    animation-name: modalAppearLandscape;
+  }
+}
+
+/* 가로모드 + 짧은 뷰포트: 사용자 요청에 따라 정가운데 배치 제외, 높이만 제한 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .modal {
+    max-height: 600px;
+    animation-name: modalAppearLandscape;
+  }
+}
+
+/* 제목: 블록은 가운데, 블록 안에서는 왼쪽 정렬(줄맞춤·띄어쓰기 일정) */
+.title {
+  margin: 0 auto 0.35rem;
+  width: fit-content;
+  max-width: 100%;
+  @include App.dongle-font(2.2rem);
+  font-weight: 400;
+  text-align: left;
+  line-height: 1.25;
+  flex-shrink: 0;
+  @include App.cosmic-gold-text;
+  letter-spacing: -0.01em;
+  padding-top: 0.2rem;
+
+  /* 일본어: 제목·취소 전반 살짝 축소 */
+  [data-lang='ja'] & {
+    @include App.potta-font(1.6rem);
+    line-height: 1.4;
+    padding-top: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* 질문 요약 문구: 제목과 동일하게 가운데 블록 + 왼쪽 정렬 */
+.questionSummary {
+  margin: 0 auto 0.75rem;
+  width: fit-content;
+  max-width: 100%;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 2.2rem;
+  line-height: 1.35;
+  color: rgba(233, 213, 255, 0.85);
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  [data-lang='ja'] & {
+    @include App.potta-font(1.6rem); /* 일어 제목성 문구 살짝 축소 */
+  }
+}
+
+/* 넓은 화면: 5장 일렬, 좁은 화면: 2xn — 콘텐츠 높이만 사용 */
+.cardGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  flex-shrink: 0;
+  align-content: start;
+}
+
+@media (min-width: 420px) {
+  .cardGrid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+/* 카드 비율 3:4 (타로 카드형) */
+.card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  border-radius: 12px;
+  border: 2px solid rgba(139, 92, 246, 0.45);
+  background-color: rgba(139, 92, 246, 0.2);
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-clip: border-box;
+  color: #e9d5ff;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), 0 0 14px rgba(139, 92, 246, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  transition: background-color 0.2s, border-color 0.25s, box-shadow 0.25s ease;
+  overflow: hidden;
+  text-align: center;
+  min-height: 0;
+  aspect-ratio: 3 / 4;
+  position: relative;
+}
+
+.card:hover {
+  background-color: rgba(139, 92, 246, 0.28);
+  border-color: rgba(139, 92, 246, 0.7);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.25), 0 0 24px rgba(139, 92, 246, 0.35),
+    0 0 10px rgba(255, 215, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.12) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* 숫자만 표시 */
+.cardNumber {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: rgba(233, 213, 255, 0.95);
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  background: rgba(0, 0, 0, 0.25);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+
+%text-btn-base {
+  padding: 0.5rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  background: transparent;
+  border: none;
+  color: rgba(233, 213, 255, 0.8);
+  cursor: pointer;
+}
+
+.close {
+  @extend %text-btn-base;
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+
+  /* 한/영: 첫 번째 모달 취소 버튼과 동일 */
+  :global(html[lang='ko']) &,
+  :global(html[lang='en']) & {
+    font-size: 1.7rem;
+  }
+}
+
+.close:hover {
+  color: #e9d5ff;
+}
+
+/* 취소 버튼 폰트 크기 살짝 축소 */
+:global(html[lang='ja']) .root .close {
+  font-size: 1.12rem;
+}
+
+/* 광고 시청 확인 모달 (isNative, 1~5번 선택 시) */
+.adConfirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100002;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.adConfirmBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+}
+
+.adConfirmModal {
+  @include App.no-select;
+  position: relative;
+  max-width: 340px;
+  width: 100%;
+  padding: 1.5rem;
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.25) 0%,
+      transparent 50%
+    ),
+    rgba(0, 0, 0, 0.95);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+  color: #e9d5ff;
+}
+
+.adConfirmTitle {
+  margin: 0 0 0.75rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.adConfirmText {
+  margin: 0 0 1.25rem;
+  font-size: 0.95rem;
+  color: rgba(233, 213, 255, 0.9);
+  text-align: center;
+  line-height: 1.5;
+}
+
+.adConfirmBtnBox {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.adConfirmCancel {
+  @extend %text-btn-base;
+  font-size: 1.1rem;
+}
+
+.adConfirmCancel:hover:not(:disabled) {
+  color: #e9d5ff;
+}
+
+.adConfirmCancel:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* 광고 로딩 중 전체 화면 블로킹 (확인 클릭 ~ 전면광고 표시 전) */
+.adLoadingOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100003;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  pointer-events: auto;
+}
+
+.adLoadingBackdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.adLoadingContent {
+  position: relative;
+  padding: 1.5rem 2rem;
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  background: rgba(0, 0, 0, 0.9);
+  color: #e9d5ff;
+}
+
+.adLoadingText {
+  margin: 0;
+  font-size: 1rem;
+  color: rgba(233, 213, 255, 0.95);
+  white-space: nowrap;
+}

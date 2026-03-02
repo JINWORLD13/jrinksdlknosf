@@ -1,0 +1,628 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+@use '../../../styles/scss/Font.module.scss' as Font;
+
+%info-box-elem {
+  @include App.flex-box-center(row);
+  align-items: end;
+  background-color: transparent;
+}
+
+@mixin info-box($width, $height) {
+  width: $width;
+  height: $height;
+  @include App.flex-box-center(column);
+  align-items: space-between;
+  @include Cosmic.cosmic-box($width, $height);
+}
+
+@mixin info2-box($width, $height) {
+  width: $width;
+  height: $height;
+  @include Cosmic.cosmic-heading-color;
+  font-weight: 800;
+  background: rgba(76, 29, 149, 0.3); // 사이드 메뉴와 동일한 배경색
+  border: 2px solid rgba(139, 92, 246, 0.7);
+  border-radius: 15px;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5), 0 0 60px rgba(139, 92, 246, 0.3),
+    inset 0 0 40px rgba(139, 92, 246, 0.15);
+}
+//~ 여기
+// Header Container (Grid Layout)
+.tarot-header {
+  width: 90%;
+  margin-top: 50px;
+  margin-bottom: 10px;
+  display: grid; // Default to Grid for perfect centering
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 15px;
+
+  // Responsive switch: If screen is narrow, stack vertically
+  @media (max-width: 700px) {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  // Restore Grid for Landscape even on small screens
+  @media (max-width: 700px) and (orientation: landscape) {
+    display: grid;
+  }
+}
+
+.h2 {
+  @include App.flex-box-center(row);
+  @include App.no-select;
+  @include Cosmic.cosmic-heading-color;
+  // margin-top: 20px; // Removed, handled by header container
+  grid-column: 2; // Center column in Grid
+  text-align: center;
+  // flex properties not needed in Grid, but harmless
+  justify-content: center;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  white-space: nowrap;
+  @include App.simulated-bold(0.8px, gold);
+}
+.h2-japanese {
+  @include App.flex-box-center(row);
+  @include Cosmic.cosmic-heading-color;
+  line-height: 2.5;
+  // margin-top: 20px; // Removed
+  grid-column: 2; // Center column
+  text-align: center;
+  justify-content: center;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  white-space: nowrap;
+  @include App.simulated-bold(0.8px, gold);
+}
+.korean-dongle-font {
+  @include App.dongle-font(2.55rem);
+  @include Cosmic.cosmic-text-color;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  @include App.simulated-bold(0.8px, gold);
+}
+.japanese-potta-font {
+  @include App.potta-font(1.5rem);
+  @include Cosmic.cosmic-text-color;
+  line-height: 2;
+  color: gold;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  @include App.simulated-bold(0.8px, gold);
+}
+
+// Delete all button (absolute positioning)
+.delete-all-button.delete-all-button {
+  @include App.no-select;
+  @include App.dongle-font(1.6rem);
+  // position: absolute; // Removed
+  // top: 25px; // Removed
+  // right: 30px; // Removed
+  // right: 30px; // Removed
+  grid-column: 3; // Right column in Grid
+  justify-self: end; // Align to the right in Grid
+  // margin-left: auto; // Not needed in Grid
+  padding: 6px 12px;
+  background-color: rgba(220, 38, 38, 0.4);
+  background-image: none;
+  border: 2px solid rgba(220, 38, 38, 0.7);
+  border-radius: 12px;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+  z-index: 0;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgba(220, 38, 38, 0.6);
+    background-image: none;
+    border-color: rgba(220, 38, 38, 0.9);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.8);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+
+.delete-all-button-japanese.delete-all-button-japanese {
+  @include App.no-select;
+  @include Font.mypage-delete-all-ja-font-default;
+  // position: absolute; // Removed
+  // top: 25px; // Removed
+  // right: 30px; // Removed
+  // right: 30px; // Removed
+  grid-column: 3; // Right column in Grid
+  justify-self: end; // Align to the right in Grid
+  // margin-left: auto; // Not needed
+  padding: 5px 10px;
+  background-color: rgba(220, 38, 38, 0.4);
+  background-image: none;
+  border: 2px solid rgba(220, 38, 38, 0.7);
+  border-radius: 12px;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(220, 38, 38, 0.8);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 0 20px rgba(220, 38, 38, 0.6);
+  z-index: 0;
+
+  @media (max-width: 700px) {
+    display: none;
+  }
+
+  &:hover:not(:disabled) {
+    background-color: rgba(220, 38, 38, 0.6);
+    background-image: none;
+    border-color: rgba(220, 38, 38, 0.9);
+    transform: scale(1.08);
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.8);
+  }
+
+  &:active:not(:disabled) {
+    transform: scale(0.98);
+  }
+}
+//~ 까지
+// 유저 정보 감싸는 큰 박스
+.user-info-container {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 130px);
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  overflow: auto;
+  @include App.dongle-font(1.5rem);
+  @include Cosmic.cosmic-text-color;
+}
+// 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+.user-info2 {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(column);
+
+  .user-info2-box1 {
+    @include info2-box(90%, 95%);
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: flex-start; // Stack items from the top
+  }
+}
+
+//! 일본어 버전
+.user-info-container-japanese {
+  width: 100%;
+  height: 100%;
+  min-height: calc(100vh - 130px);
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  overflow: auto;
+  @include App.potta-font(0.8rem);
+  @include Cosmic.cosmic-text-color;
+}
+// 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+.user-info2-japanese {
+  width: 100%;
+  height: 100%;
+  @include App.flex-box-center(column);
+
+  .user-info2-box1-japanese {
+    @include info2-box(90%, 95%);
+    position: relative;
+    @include App.flex-box-center(column);
+    justify-content: flex-start; // Stack items from the top
+  }
+}
+
+//~ 디바이스
+@include App.desktop {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100%;
+    height: auto;
+    @include App.dongle-font(1.7rem);
+    padding-bottom: 20px;
+  }
+
+  // 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2 {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  .user-info-container-japanese {
+    height: auto;
+    @include App.potta-font(1rem);
+  }
+
+  // 타로 상담 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2-japanese {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  .delete-all-button {
+    @include App.dongle-font(1.4rem);
+    // padding: 5px 12px;
+    padding: 5px 12px;
+  }
+
+  .delete-all-button-japanese {
+    @include Font.mypage-delete-all-ja-font-compact;
+    // padding: 4px 10px;
+    padding: 4px 10px;
+  }
+}
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100%;
+    height: auto;
+    @include App.dongle-font(1.7rem);
+    padding-bottom: 20px;
+  }
+
+  // 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2 {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1 {
+      width: 96%;
+      min-height: calc(100vh - 130px);
+      margin: 2%;
+    }
+  }
+
+  .user-info-container-japanese {
+    height: auto;
+    @include App.potta-font(1rem);
+  }
+
+  // 타로 상담 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2-japanese {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1-japanese {
+      width: 96%;
+      min-height: calc(100vh - 130px);
+      margin: 2%;
+    }
+  }
+}
+
+//~ 481px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100%;
+    height: auto;
+    @include App.dongle-font(1.5rem);
+    padding-bottom: 20px;
+  }
+
+  // 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2 {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1 {
+      width: 96%;
+      min-height: calc(100vh - 130px);
+      margin: 2%;
+    }
+  }
+
+  .user-info-container-japanese {
+    height: auto;
+    @include App.potta-font(0.9rem);
+  }
+
+  // 타로 상담 기록(일, 주, 월, 3개월, 연 단위로)
+  .user-info2-japanese {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1-japanese {
+      width: 96%;
+      min-height: calc(100vh - 130px);
+      margin: 2%;
+    }
+  }
+}
+
+//~ Mobile Viewports Unified (< 700px) - Based on 390px Korean Style
+@media (max-width: 700px) {
+  div.user-info-container,
+  div.user-info-container-japanese {
+    width: 100%;
+    height: auto;
+    // padding-bottom: 20px; // Removed as requested
+    @include App.flex-box-center(column);
+    justify-content: flex-start;
+  }
+
+  .user-info2,
+  .user-info2-japanese {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+    .user-info2-box1,
+    .user-info2-box1-japanese {
+      width: 96%;
+      min-height: calc(100vh - 130px); // Added as requested
+      margin: 2%;
+    }
+  }
+
+  // Language specific container adjustments (preserve font-size overrides)
+  @include App.mobile-md {
+    div.user-info-container {
+      @include App.dongle-font(1.4rem);
+    }
+    .user-info-container-japanese {
+      @include App.potta-font(0.75rem);
+    }
+  }
+  @include App.mobile-sm {
+    // 390px Range
+    div.user-info-container {
+      @include App.dongle-font(1.5rem);
+    }
+    .user-info-container-japanese {
+      @include App.potta-font(0.7rem);
+    }
+  }
+  @include App.mobile-xs {
+    div.user-info-container {
+      @include App.dongle-font(1.3rem);
+    }
+    .user-info-container-japanese {
+      @include App.potta-font(0.6rem);
+    }
+  }
+  @include App.mobile-fold {
+    div.user-info-container {
+      @include App.dongle-font(1rem);
+    }
+    .user-info-container-japanese {
+      @include App.potta-font(0.5rem);
+    }
+  }
+}
+
+// (Redundant mobile browser overrides removed to favor unified 700px block above)
+
+//* 아이패드 프로 가로
+@include App.landscape-desktop {
+  // iPad Pro Landscape: Similar to large desktop but ensure fit
+  div.user-info-container {
+    min-height: auto; // Prevent forced height
+    height: 100%;
+  }
+}
+//* 태블릿 아이패드, 아이패드 프로 가로
+@include App.landscape-tablet {
+  .tarot-header {
+    margin-top: 15px; // Reduced
+    margin-bottom: 10px; // Reduced
+  }
+  div.user-info-container {
+    min-height: auto;
+  }
+}
+//* IPhon 14 Pro Max 가로모드 (Mobile Landscape)
+@include App.landscape-mobile-md {
+  .tarot-header {
+    margin-top: 30px; // Increased from 15px
+    margin-bottom: 10px;
+    gap: 10px;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  .h2 {
+    @include App.dongle-font(2.6rem); // Increased from 2.2rem
+  }
+  div.user-info-container {
+    height: auto;
+    min-height: auto;
+    overflow: visible; // Hide scrollbar if content fits, or let page scroll
+    justify-content: flex-start;
+  }
+  // Ensure visible in landscape even if width < 700px
+  .delete-all-button {
+    display: block; // Explicitly show in landscape
+    padding: 3px 8px;
+    @include App.dongle-font(1.3rem);
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+  .delete-all-button-japanese {
+    display: block; // Explicitly show in landscape
+    padding: 3px 8px;
+    @include Font.mypage-delete-all-ja-font-compact;
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+}
+
+//* 아이폰XR 가로모드
+@include App.landscape-mobile-sm {
+  .tarot-header {
+    margin-top: 25px; // Increased from 10px
+    margin-bottom: 10px;
+    gap: 8px;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  div.user-info-container {
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    justify-content: flex-start;
+  }
+  .h2 {
+    @include App.dongle-font(2.4rem); // Increased from 2rem
+  }
+  .delete-all-button {
+    display: block; // Explicitly show in landscape
+    padding: 3px 6px;
+    @include App.dongle-font(1.2rem);
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+  .delete-all-button-japanese {
+    display: block; // Explicitly show in landscape
+    padding: 3px 6px;
+    @include Font.mypage-delete-all-ja-font-compact;
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+}
+
+//* 아이폰SE 가로모드 (Smallest Height)
+@include App.landscape-mobile-xs {
+  .tarot-header {
+    margin-top: 20px; // Increased from 5px
+    margin-bottom: 10px;
+    gap: 5px;
+    grid-template-columns: 1fr auto 1fr;
+  }
+  div.user-info-container {
+    padding-top: 5px;
+    height: auto;
+    min-height: auto;
+    overflow: visible;
+    justify-content: flex-start;
+  }
+  .h2 {
+    @include App.dongle-font(2.2rem); // Increased from 1.8rem
+  }
+  .delete-all-button {
+    display: block; // Explicitly show in landscape
+    padding: 2px 5px;
+    @include App.dongle-font(1.1rem);
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+  .delete-all-button-japanese {
+    display: block; // Explicitly show in landscape
+    padding: 2px 5px;
+    @include Font.mypage-delete-all-ja-font-compact;
+    width: fit-content;
+    justify-self: end;
+    margin-right: 5px;
+    z-index: 5;
+  }
+}
+//* 갤럭시 폴드 가로모드
+@include App.landscape-mobile-fold {
+  // 유저 정보 감싸는 큰 박스(info2는 유저 타로 상담 회수)
+  div.user-info-container {
+    width: 100%;
+    height: auto;
+    @include App.dongle-font(1.5rem);
+  }
+
+  // 타로 상담 질문 기록(일, 주, 월, 3개월, 연 단위로)
+  div.user-info2 {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1 {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+
+  div.user-info-container-japanese {
+    height: auto;
+    @include App.potta-font(0.8rem);
+    .user-info1-japanese {
+      width: 100%;
+      height: 40%;
+      @include App.flex-box-center(column);
+      justify-content: start;
+      align-items: center;
+      .user-info1-box1-japanese {
+        width: 96%;
+        margin: 2%;
+      }
+
+      .user-info1-box2-japanese {
+        width: 96%;
+        margin: 2%;
+      }
+    }
+  }
+
+  // 타로 상담 기록(일, 주, 월, 3개월, 연 단위로)
+  div.user-info2-japanese {
+    width: 100%;
+    height: auto;
+    @include App.flex-box-center(column);
+
+    .user-info2-box1-japanese {
+      width: 96%;
+      margin: 2%;
+    }
+  }
+  // Ensure visible in Galaxy Fold landscape
+  .delete-all-button,
+  .delete-all-button-japanese {
+    display: block;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    font-size: 1.2rem;
+  }
+}
+
+// Generic Landscape Safety Net (Ensure button is visible everywhere in landscape)
+@media screen and (orientation: landscape) and (max-height: 600px) {
+  .delete-all-button.delete-all-button,
+  .delete-all-button-japanese.delete-all-button-japanese {
+    display: block;
+    z-index: 20;
+  }
+}

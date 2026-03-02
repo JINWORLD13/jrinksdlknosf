@@ -1,0 +1,34 @@
+@use '../../../styles/scss/App.module.scss' as App;
+@use '../../../styles/scss/SpreadLayoutDefinitions.module.scss' as Definitions;
+
+.spread-root-container {
+  @include App.flex-box-center(column);
+  @include App.flex-gap(10px);
+  width: auto;
+  height: auto;
+  margin: auto;
+}
+
+.card-six-speed {
+  @include Definitions.card-six-speed-style();
+}
+
+.flip {
+  @include Definitions.flip();
+}
+
+.flip-click {
+  @include Definitions.flip-click();
+}
+
+.front {
+  @include Definitions.front();
+}
+
+.front-reversed {
+  @include Definitions.front-reversed();
+}
+
+.back {
+  @include Definitions.back();
+}

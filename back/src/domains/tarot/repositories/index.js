@@ -1,0 +1,1 @@
+exports.tarotRepository = require("./tarotRepository");

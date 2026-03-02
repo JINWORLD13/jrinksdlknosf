@@ -1,0 +1,65 @@
+{
+  "strategy": "exact-match-only",
+  "description": "모든 font-size를 정확히 일치하는 크기로 매핑 (크기 변화 없음)",
+
+  "korean_mappings": {
+    "3rem": "size-300",
+    "2.8rem": "size-280",
+    "2.7rem": "size-270",
+    "2.5rem": "size-250",
+    "2.4rem": "size-240",
+    "2.3rem": "size-230",
+    "2.2rem": "size-220",
+    "2rem": "size-200",
+    "1.9rem": "size-190",
+    "1.8rem": "size-180",
+    "1.75rem": "size-175",
+    "1.7rem": "size-170",
+    "1.6rem": "size-160",
+    "1.5rem": "size-150",
+    "1.45rem": "size-145",
+    "1.4rem": "size-140",
+    "1.35rem": "size-135",
+    "1.3rem": "size-130",
+    "1.25rem": "size-125",
+    "1.2rem": "size-120",
+    "1.15rem": "size-115",
+    "1.125rem": "size-1125",
+    "1.11rem": "size-111",
+    "1.1rem": "size-110",
+    "1.05rem": "size-105",
+    "1rem": null,
+    "0.98rem": "size-098",
+    "0.95rem": "size-095",
+    "0.9rem": "size-090",
+    "0.875rem": "size-0875",
+    "0.85rem": "size-085",
+    "0.8rem": "size-080",
+    "0.75rem": "size-075",
+    "0.7rem": "size-070",
+    "0.65rem": "size-065",
+    "0.6rem": "size-060",
+    "0.55rem": "size-055",
+    "0.5rem": "size-050"
+  },
+
+  "japanese_mappings": {
+    "1.5rem": "ja-size-150",
+    "1.4rem": "ja-size-140",
+    "1.3rem": "ja-size-130",
+    "1.2rem": "ja-size-120",
+    "1.1rem": "ja-size-110",
+    "1rem": "ja-size-100",
+    "0.95rem": "ja-size-095",
+    "0.9rem": "ja-size-090",
+    "0.875rem": "ja-size-0875",
+    "0.8rem": "ja-size-080"
+  },
+
+  "notes": {
+    "1rem": "base size - 직접 사용, 변환 안 함",
+    "accuracy": "100% - 모든 크기 정확히 일치",
+    "complexity": "high - 35개 이상의 크기 정의",
+    "maintainability": "medium - 많은 크기지만 명확한 규칙"
+  }
+}

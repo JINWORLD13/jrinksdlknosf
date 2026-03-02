@@ -1,0 +1,115 @@
+{
+  "mappings": {
+    "1rem": {
+      "scale": "base",
+      "category": "content",
+      "frequency": 304,
+      "note": "가장 많이 사용됨"
+    },
+    "1.5rem": {
+      "scale": "content-sm",
+      "category": "content",
+      "frequency": 155
+    },
+    "1.1rem": {
+      "scale": "content-md",
+      "category": "content",
+      "frequency": 115,
+      "note": "근사값: 1.11rem, 1.15rem, 1.125rem"
+    },
+    "1.3rem": {
+      "scale": "content-xxs",
+      "category": "content",
+      "frequency": 103
+    },
+    "1.7rem": {
+      "scale": "label-lg",
+      "category": "label",
+      "frequency": 89
+    },
+    "0.9rem": {
+      "scale": "content-xxs",
+      "category": "content",
+      "frequency": 89,
+      "note": "근사값: 0.85rem, 0.875rem"
+    },
+    "1.2rem": {
+      "scale": "content-xl",
+      "category": "content",
+      "frequency": 78,
+      "japanese": true
+    },
+    "1.4rem": {
+      "scale": "content-xs",
+      "category": "content",
+      "frequency": 76
+    },
+    "0.8rem": {
+      "scale": null,
+      "category": "small",
+      "frequency": 69,
+      "note": "표준 외 - 개별 확인 필요"
+    },
+    "1.25rem": {
+      "scale": "label-lg",
+      "category": "label",
+      "frequency": 53,
+      "note": "근사값: 1.2rem"
+    },
+    "0.7rem": {
+      "scale": null,
+      "category": "small",
+      "frequency": 35,
+      "note": "표준 외 - 개별 확인 필요"
+    },
+    "1.35rem": {
+      "scale": "content-xxs",
+      "category": "content",
+      "frequency": 33,
+      "note": "근사값: 1.3rem, 1.4rem"
+    },
+    "2rem": {
+      "scale": "title-lg",
+      "category": "title",
+      "frequency": 16
+    },
+    "1.6rem": {
+      "scale": "label-md",
+      "category": "label",
+      "frequency": 14
+    },
+    "0.98rem": {
+      "scale": "normal",
+      "category": "normal",
+      "frequency": 1,
+      "note": "입력란 등"
+    }
+  },
+  "strategy": {
+    "phase1": {
+      "description": "상위 빈도 크기 변환 (전체의 60%)",
+      "targets": [
+        "1rem",
+        "1.5rem",
+        "1.1rem",
+        "1.3rem",
+        "1.7rem",
+        "0.9rem",
+        "1.2rem",
+        "1.4rem"
+      ],
+      "estimated_changes": 850
+    },
+    "phase2": {
+      "description": "중간 빈도 크기 변환",
+      "targets": ["1.25rem", "1.35rem", "2rem", "1.6rem"],
+      "estimated_changes": 116
+    },
+    "phase3": {
+      "description": "표준 외 크기 개별 검토",
+      "targets": ["0.8rem", "0.7rem", "0.5rem", "0.6rem", "3rem", "2.5rem"],
+      "estimated_changes": 150,
+      "note": "의도적 디자인일 수 있으므로 신중히 처리"
+    }
+  }
+}

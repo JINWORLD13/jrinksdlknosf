@@ -1,0 +1,1814 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+
+%user-info-box-part {
+  @include App.flex-box-center(column);
+  align-items: start;
+}
+%user-info-box-part-japanese {
+  @include App.flex-box-center(column);
+  align-items: start;
+}
+%user-info-button-box {
+  @include App.flex-box-center(row);
+  justify-content: end;
+  align-items: end;
+  position: absolute;
+  top: 0%;
+}
+@mixin user-button-shape($width, $height) {
+  width: $width;
+  height: $height;
+  padding: 0px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border: none;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  border-radius: 50px;
+  color: gold;
+  background-color: rgb(177, 40, 40);
+  transition: all 0.3s ease;
+  box-shadow: 0 0 10px rgba(177, 40, 40, 0.3);
+  cursor: pointer;
+
+  &:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  @include Cosmic.cosmic-heading-color;
+  @include App.flex-box-center(row);
+}
+// 유저 정보
+.user-info1-body {
+  width: 100%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+  line-height: 1.4;
+
+  // 유저 정보 내용 따로 폰트 사이즈 조절용
+  // @include App.dongle-font(1.5rem);
+
+  // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+  .user-info1-body-left {
+    width: auto;
+    // max-width: 10%;
+    @extend %user-info-box-part;
+  }
+  //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+  .user-info1-body-right {
+    width: auto;
+    // max-width: 90%;
+    @extend %user-info-box-part;
+  }
+}
+
+// 유저정보 버튼
+.user-info1-bottom {
+  width: 100%;
+  height: auto;
+  @extend %user-info-button-box;
+}
+.user-info1-bottom > button {
+  @include user-button-shape(auto, auto);
+  min-width: 70px;
+}
+
+//! 일본어 버전
+.h2-japanese {
+  @include Cosmic.cosmic-heading-color;
+  margin-bottom: 2%;
+  line-height: 2;
+  @include App.flex-box-center(row);
+}
+.user-info1-body-japanese {
+  width: 100%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+  // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+  .user-info1-body-left-japanese {
+    width: auto;
+    // max-width: 10%;
+    height: 100%;
+    @extend %user-info-box-part-japanese;
+  }
+  .user-info1-body-right-japanese {
+    width: auto;
+    // max-width: 90%;
+    height: 100%;
+    @extend %user-info-box-part-japanese;
+  }
+}
+// 유저정보 버튼
+.user-info1-bottom-japanese {
+  width: 100%;
+  height: auto;
+  @extend %user-info-button-box;
+}
+.user-info1-bottom-japanese > button {
+  @include user-button-shape(auto, auto);
+  @include App.potta-font(1.1rem);
+  min-width: 70px;
+}
+
+.one-card {
+  @include Cosmic.cosmic-one-card-color;
+  @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+}
+.two-cards {
+  @include Cosmic.cosmic-two-cards-color;
+  @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+}
+.three-cards {
+  @include Cosmic.cosmic-three-cards-color;
+  @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+}
+.four-cards {
+  @include Cosmic.cosmic-four-cards-color;
+  @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+}
+.ten-cards {
+  @include Cosmic.cosmic-ten-cards-color;
+  @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+}
+
+.one-card-japanese {
+  @include Cosmic.cosmic-one-card-color;
+  @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+}
+.two-cards-japanese {
+  @include Cosmic.cosmic-two-cards-color;
+  @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+}
+.three-cards-japanese {
+  @include Cosmic.cosmic-three-cards-color;
+  @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+}
+.four-cards-japanese {
+  @include Cosmic.cosmic-four-cards-color;
+  @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+}
+.ten-cards-japanese {
+  @include Cosmic.cosmic-ten-cards-color;
+  @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+}
+
+.korean-dongle-font {
+  @include App.dongle-font(2.5rem);
+}
+.japanese-potta-font {
+  @include App.potta-font(1.3rem);
+  line-height: 2;
+}
+.korean-dongle-font2 {
+  @include App.dongle-font(1.7rem);
+}
+.japanese-potta-font2 {
+  @include App.potta-font(1.1rem);
+  line-height: 2;
+}
+
+//~ 디바이스
+@include App.desktop {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 20%;
+      // @include App.dongle-font(2rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 80%;
+      // @include App.dongle-font(2rem);
+      & div {
+        // @include App.dongle-font(2rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.5rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.4rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.4rem);
+      & div span {
+        // @include App.potta-font(1.4rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(1.15rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+
+  .korean-dongle-font {
+    @include App.dongle-font(2.5rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.3rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.7rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+}
+
+//~ 태블릿, 아이패드, 아이패드 프로
+@include App.tablet {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 20%;
+      // @include App.dongle-font(2rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 80%;
+      & div {
+        // @include App.dongle-font(2rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: end;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.5rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.4rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 90%;
+      // @include App.potta-font(1.4rem);
+      & div span {
+        // @include App.potta-font(1.4rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: end;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(1.15rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+
+  .korean-dongle-font {
+    @include App.dongle-font(2.5rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.3rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.7rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+}
+
+//~ 481px ~ 768px 및 태블릿
+@include App.mobile-lg {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 20%;
+      // @include App.dongle-font(1.7rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 80%;
+      & div {
+        // @include App.dongle-font(1.7rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.25rem);
+    min-width: 70px;
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.15rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.15rem);
+      & div span {
+        // @include App.potta-font(1.15rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(1.2rem);
+    min-width: 70px;
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-170') /* was: 1.7rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-110') /* was: 1.1rem */;
+  }
+
+  .korean-dongle-font {
+    @include App.dongle-font(2.4rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.3rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.7rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+}
+
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 25%;
+      // @include App.dongle-font(1.5rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 75%;
+      & div {
+        // @include App.dongle-font(1.5rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.3rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+    // @include App.potta-font(1rem);
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.75rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    font-size: 1rem;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    font-size: 1rem;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    font-size: 1rem;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    font-size: 1rem;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    font-size: 1rem;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(2.2rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.2rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.5rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 20%;
+      // @include App.dongle-font(1.5rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 80%;
+      & div {
+        // @include App.dongle-font(1.5rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.2rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.8rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    font-size: 1rem;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    font-size: 1rem;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    font-size: 1rem;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    font-size: 1rem;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    font-size: 1rem;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(2.2rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.2rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.5rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+}
+
+//~ 아이폰 SE
+@include App.mobile-xs {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 15%;
+
+      // @include App.dongle-font(1.4rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 85%;
+      & div {
+        // @include App.dongle-font(1.4rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.2rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    // @include App.potta-font(1rem);
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 15%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.75rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(1.8rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.4rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(0.9rem);
+    line-height: 2;
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 15%;
+
+      // @include App.dongle-font(1.1rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 85%;
+      & div {
+        // @include App.dongle-font(1.1rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 15%;
+      // @include App.potta-font(0.7rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(0.7rem);
+      & div span {
+        // @include App.potta-font(0.7rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.7rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(1.8rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.3rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(0.8rem);
+    line-height: 2;
+  }
+}
+
+
+
+//~ IPhone 14 Pro Max(430px)
+@include App.mobile-md {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 25%;
+      // @include App.dongle-font(1.5rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 75%;
+      & div {
+        // @include App.dongle-font(1.5rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.3rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+    // @include App.potta-font(1rem);
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.75rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    font-size: 1rem;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    font-size: 1rem;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    font-size: 1rem;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    font-size: 1rem;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    font-size: 1rem;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(2.2rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.2rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.5rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+}
+
+//~ 아이폰XR
+@include App.mobile-sm {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 20%;
+      // @include App.dongle-font(1.5rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 80%;
+      & div {
+        // @include App.dongle-font(1.5rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.2rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 20%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.8rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-150') /* was: 1.5rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    font-size: 1rem;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    font-size: 1rem;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    font-size: 1rem;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    font-size: 1rem;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    font-size: 1rem;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(2.2rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.2rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.5rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+}
+
+//~ 아이폰 SE
+@include App.mobile-xs {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 15%;
+
+      // @include App.dongle-font(1.4rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 85%;
+      & div {
+        // @include App.dongle-font(1.4rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1.2rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    // @include App.potta-font(1rem);
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 15%;
+      // @include App.potta-font(1.1rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(1.1rem);
+      & div span {
+        // @include App.potta-font(1.1rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.75rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-140') /* was: 1.4rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-090') /* was: 0.9rem */;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(1.8rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1.1rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.4rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(0.9rem);
+    line-height: 2;
+  }
+}
+
+//~ 갤럭시 폴드
+@include App.mobile-fold {
+  h2 {
+    color: gold;
+  }
+  // 유저 정보
+  .user-info1-body {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    // 유저정보 왼쪽박스(명함, 이메일, 포인트)
+    .user-info1-body-left {
+      width: auto;
+      // max-width: 15%;
+
+      // @include App.dongle-font(1.1rem);
+    }
+    //유저정보 오른쪽박스(이름, 이메일주소, 포인트액수)
+    .user-info1-body-right {
+      width: auto;
+      // max-width: 85%;
+      & div {
+        // @include App.dongle-font(1.1rem);
+      }
+    }
+  }
+
+  // 유저정보 버튼
+  .user-info1-bottom {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.dongle-font(1rem);
+  }
+
+  .user-info1-bottom > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+
+  // 일본판
+  .h2-japanese {
+    color: gold;
+    margin-bottom: 2%;
+  }
+  .user-info1-body-japanese {
+    width: 100%;
+    color: white; // 검은색을 흰색으로 변경
+    font-weight: 900;
+    @include App.flex-box-center(row);
+    // 유저 정보 내용 따로 폰트 사이즈 조절용
+
+    .user-info1-body-left-japanese {
+      width: auto;
+      // max-width: 15%;
+      // @include App.potta-font(0.7rem);
+    }
+    .user-info1-body-right-japanese {
+      width: auto;
+      // max-width: 80%;
+      // @include App.potta-font(0.7rem);
+      & div span {
+        // @include App.potta-font(0.7rem);
+      }
+    }
+  }
+  // 유저정보 버튼
+  .user-info1-bottom-japanese {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-content: start;
+  }
+  .user-info1-bottom-japanese > button {
+    @include user-button-shape(auto, auto);
+    // 버튼 따로 폰트 사이즈 조절용
+    @include App.potta-font(0.7rem);
+  }
+
+  .user-info1-bottom-japanese > button:hover {
+    color: rgb(177, 40, 40);
+    background-color: gold;
+  }
+  .one-card {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .two-cards {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .three-cards {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .four-cards {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+  .ten-cards {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-130') /* was: 1.3rem */;
+  }
+
+  .one-card-japanese {
+    @include App.one-card;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .two-cards-japanese {
+    @include App.two-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .three-cards-japanese {
+    @include App.three-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .four-cards-japanese {
+    @include App.four-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .ten-cards-japanese {
+    @include App.ten-cards;
+    @include FontExact.exact-korean-font('size-080') /* was: 0.8rem */;
+  }
+  .korean-dongle-font {
+    @include App.dongle-font(1.8rem);
+  }
+  .japanese-potta-font {
+    @include App.potta-font(1rem);
+    line-height: 2;
+  }
+  .korean-dongle-font2 {
+    @include App.dongle-font(1.3rem);
+  }
+  .japanese-potta-font2 {
+    @include App.potta-font(0.8rem);
+    line-height: 2;
+  }
+}

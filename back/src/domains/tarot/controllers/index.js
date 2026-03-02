@@ -1,0 +1,1 @@
+exports.tarotController = require("./tarotController");

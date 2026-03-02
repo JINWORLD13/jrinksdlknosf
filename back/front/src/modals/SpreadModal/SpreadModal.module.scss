@@ -1,0 +1,927 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use 'sass:list';
+@use 'sass:map';
+@use 'sass:math';
+
+// ==============================================
+// 변수 정의
+// ==============================================
+$btn-width: 70px;
+$btn-height: 35px;
+$btn-width-horizon: 110px;
+$btn-height-horizon: 25px;
+$btn-height-horizon2: 30px;
+$border-width: 3px;
+$animation-duration: 4s;
+$rainbow-colors: (red, orange, yellow, green, blue, indigo, violet);
+
+// ==============================================
+// 믹스인 정의
+// ==============================================
+@mixin rainbow-animation {
+  $total-colors: list.length($rainbow-colors);
+
+  @keyframes rainbow {
+    @each $color in $rainbow-colors {
+      $index: list.index($rainbow-colors, $color);
+      #{math.percentage(math.div($index - 1, $total-colors))} {
+        border-color: $color;
+      }
+    }
+  }
+}
+
+@mixin glow-effect {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: box-shadow 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+  }
+}
+
+// 카드 스타일 믹스인
+@mixin card-styles($font-size) {
+  font-size: $font-size;
+
+  span.center-underline {
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 50%;
+      height: 3px;
+      background-color: currentColor;
+    }
+  }
+}
+
+// ==============================================
+// 공통 버튼 스타일
+// ==============================================
+%button-base {
+  min-width: $btn-width;
+  height: $btn-height;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  @include App.flex-box-center(row);
+}
+
+%button {
+  @extend %button-base;
+  color: #e9d5ff;
+  background: linear-gradient(135deg, #2d1554 0%, #4c1d95 100%);
+  border: 2px solid rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
+}
+
+%button-hover {
+  @extend %button-base;
+  color: white;
+  background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+  border: 2px solid rgba(167, 139, 250, 0.7);
+  box-shadow: 0 0 22px rgba(139, 92, 246, 0.5), 0 0 8px rgba(255, 215, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  transition: all 0.25s ease;
+}
+
+%button-selected {
+  @extend %button-hover;
+  box-shadow: 0 0 24px rgba(139, 92, 246, 0.55), 0 0 10px rgba(255, 215, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+// ==============================================
+// 메인 레이아웃 (Base) — 코스모스 글래스모피즘
+// ==============================================
+.spreadModal {
+  width: 530px;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  background-image: linear-gradient(
+      to bottom,
+      rgba(10, 10, 26, 0.45),
+      rgba(10, 10, 26, 0.4)
+    ),
+    url('/assets/images/universe.jpg');
+  background-size: cover;
+  background-position: center;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    inset 1px 0 0 rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  @include App.flex-box-center(column);
+  justify-content: space-evenly;
+  @include App.no-select;
+  animation: spreadModalAppear 0.35s ease-out;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 15%,
+      rgba(255, 215, 0, 0.14) 50%,
+      rgba(255, 255, 255, 0.1) 85%,
+      transparent 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+}
+
+@keyframes spreadModalAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+// ==============================================
+// 버튼 영역
+// ==============================================
+.btn-box {
+  width: 100%;
+  min-height: 7%;
+  padding: 5px 10px;
+  @include App.flex-box-center(row);
+  justify-content: space-evenly;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+
+  // 광고 버튼들
+  .ads-btn,
+  .ads-btn-japanese {
+    @extend %button;
+    position: absolute;
+    left: 10px;
+    border: $border-width solid;
+    animation: rainbow $animation-duration linear infinite;
+    @include glow-effect;
+
+    &.selected {
+      @extend %button-selected;
+      color: white;
+    }
+
+    &:hover {
+      @extend %button-hover;
+      border: $border-width solid;
+      animation: rainbow $animation-duration linear infinite;
+      @include glow-effect;
+    }
+  }
+
+  .ads-btn {
+    @include App.dongle-font(1.5rem);
+  }
+  .ads-btn-japanese {
+    @include App.potta-font(0.9rem);
+  }
+
+  // 보상 버튼들
+  .ads-reward,
+  .ads-reward-japanese {
+    @extend %button-base;
+    background: linear-gradient(135deg, #6b21a8 0%, #7e22ce 100%);
+    border: 2px solid #9333ea;
+    color: #e9d5ff;
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+    transition: all 0.3s ease;
+    position: absolute;
+    right: 10px;
+    @include App.flex-box-center(row);
+
+    &:hover {
+      background: linear-gradient(135deg, #7e22ce 0%, #9333ea 100%);
+      border-color: #a855f7;
+      color: white;
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.8);
+      transform: translateY(-2px);
+    }
+  }
+
+  .ads-reward {
+    @include App.dongle-font(1.5rem);
+  }
+  .ads-reward-japanese {
+    @include App.potta-font(0.9rem);
+  }
+
+  // 취소 버튼들
+  .cancel-btn,
+  .cancel-btn-japanese {
+    @extend %button-base;
+    background: linear-gradient(135deg, #6b21a8 0%, #7e22ce 100%);
+    border: 2px solid #9333ea;
+    color: #e9d5ff;
+    box-shadow: 0 0 20px rgba(147, 51, 234, 0.5);
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: linear-gradient(135deg, #7e22ce 0%, #9333ea 100%);
+      border-color: #a855f7;
+      color: white;
+      box-shadow: 0 0 30px rgba(147, 51, 234, 0.8);
+      transform: translateY(-2px);
+    }
+  }
+
+  .cancel-btn {
+    @include App.dongle-font(1.5rem); /* Rebuild trigger */
+  }
+  .cancel-btn-japanese {
+    @include App.potta-font(0.9rem);
+  }
+}
+
+// 타로 선택 버튼들 (탭 스타일)
+.which-tarot-btn,
+.which-tarot-btn-japanese {
+  @extend %button-base;
+  color: #e9d5ff;
+  background: linear-gradient(
+    135deg,
+    rgba(45, 21, 84, 0.7) 0%,
+    rgba(76, 29, 149, 0.6) 100%
+  );
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.2);
+  padding: 0 1px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+
+  &.selected {
+    @extend %button-selected;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60%;
+      height: 2px;
+      border-radius: 1px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 215, 0, 0.7),
+        transparent
+      );
+    }
+  }
+  &:hover:not(.disabled) {
+    @extend %button-hover;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    position: relative;
+    &:hover {
+      background-color: transparent;
+      color: gold;
+    }
+  }
+}
+
+.which-tarot-btn {
+  @include App.dongle-font(1.5rem);
+}
+.which-tarot-btn-japanese {
+  @include App.potta-font(0.85rem);
+}
+
+// ==============================================
+// 리스트 영역
+// ==============================================
+.list {
+  width: 94%;
+  height: 80%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  @include App.custom-scrollbar(5px);
+  padding-right: 2px;
+}
+
+.list-element {
+  width: 96%;
+  margin: 2%;
+  border: 2px solid rgba(255, 215, 0, 0.5);
+  border-radius: 10px;
+  animation: twinkle-border 1.5s ease-in-out infinite alternate;
+  @include App.flex-box-center(row);
+  cursor: pointer;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease,
+    background-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(139, 92, 246, 0.7);
+    animation: none;
+    box-shadow: 0 0 18px rgba(139, 92, 246, 0.35),
+      0 0 8px rgba(255, 215, 0, 0.12);
+    background-color: rgba(139, 92, 246, 0.08);
+  }
+}
+
+@keyframes twinkle-border {
+  from {
+    box-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
+  }
+  to {
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.55);
+  }
+}
+
+// ==============================================
+// 스프레드 박스
+// ==============================================
+.spread-box {
+  width: 98%;
+  height: 100%;
+  min-height: 130px;
+  margin: 1%;
+  @include App.flex-box-center(row);
+}
+
+.spread-box-purchase {
+  @extend .spread-box;
+}
+
+.spread-image {
+  width: 30%;
+  height: 100%;
+}
+
+.spread-description-box {
+  width: 80%;
+  height: 100%;
+  color: gold;
+  font-weight: 700;
+  @include App.flex-box-center(column);
+  justify-content: start;
+}
+
+.spread-title {
+  width: 100%;
+  @include FontExact.exact-korean-font('size-125');
+  @include App.flex-grow(1);
+  padding: 0.5rem 0;
+  display: flex;
+  align-items: center;
+
+  p.title,
+  p.title-japanese {
+    width: 100%;
+    margin: 0 10px;
+    color: #ffd700;
+    line-height: 1;
+  }
+  p.title {
+    @include App.dongle-font(2.4rem);
+    @include App.cosmic-gold-text;
+    letter-spacing: -0.01em;
+  }
+  p.title-japanese {
+    @include App.potta-font(1.2rem);
+    @include App.cosmic-gold-text;
+    word-break: auto-phrase;
+    text-wrap: balance;
+    line-break: strict;
+  }
+}
+
+.spread-description {
+  width: 100%;
+  text-align: start;
+  @include App.flex-grow(2);
+  display: flex;
+  justify-content: start;
+
+  p.description,
+  p.description-japanese {
+    width: 100%;
+    margin: 0 10px;
+  }
+  p.description {
+    @include App.dongle-font(1.5rem);
+    line-height: 1;
+  }
+  p.description-japanese {
+    @include App.potta-font(1rem);
+    line-height: 1.5;
+    word-break: auto-phrase;
+    text-wrap: balance;
+    line-break: strict;
+  }
+}
+
+// ==============================================
+// 해시태그 스타일
+// ==============================================
+.spread-tags {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 0 10px;
+  margin-bottom: 4px;
+}
+
+.tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: linear-gradient(
+    135deg,
+    rgba(147, 51, 234, 0.3),
+    rgba(168, 85, 247, 0.2)
+  );
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: #e9d5ff;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba(168, 85, 247, 0.5),
+      rgba(192, 132, 252, 0.4)
+    );
+    transform: scale(1.05);
+    box-shadow: 0 0 8px rgba(168, 85, 247, 0.5);
+  }
+}
+
+.tag-japanese {
+  @extend .tag;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+}
+
+.spread-price {
+  width: 100%;
+  margin-bottom: 3px;
+  @include App.flex-box-center(column);
+  justify-content: end;
+  white-space: pre;
+
+  & > div:nth-child(1) {
+    width: 100%;
+    text-align: end;
+    & > p:nth-child(1) {
+      vertical-align: middle;
+      margin-right: 0.3rem;
+      margin-bottom: 0.3rem;
+      line-height: 1;
+    }
+  }
+
+  & > div:nth-child(2) {
+    width: 100%;
+    @include App.flex-box-center(row);
+    justify-content: end;
+    & > p:nth-child(2) {
+      text-decoration: line-through;
+    }
+    & > p:last-child {
+      margin-right: 3px;
+    }
+  }
+}
+
+// ==============================================
+// 카드 스타일들 (Base)
+// ==============================================
+$card-classes: (
+  '.one-card',
+  '.two-cards',
+  '.three-cards',
+  '.four-cards',
+  '.five-cards',
+  '.six-cards',
+  '.seven-cards',
+  '.eight-cards',
+  '.nine-cards',
+  '.ten-cards',
+  '.eleven-cards',
+  '.thirteen-cards',
+  '.ads-cards'
+);
+
+@each $class in $card-classes {
+  #{$class} {
+    // Remove the @include App.one-card etc. here if they are just mixins for flex centering
+    // Assuming App mixins are essential for layout, we keep them.
+    // However, we can't dynamically call mixins by string name in Sass easily without a map of mixins,
+    // which is complex.
+    // Ideally, we should check if App.one-card etc. are just flex properties.
+    // For now, to be safe and concise, we will assume they are needed and keep the base definitions
+    // as they were, or rely on the fact that they were defined individually in the original.
+    // But to reduce lines, we can't easily loop mixin calls.
+    // So we will keep the base definitions explicit below.
+    @include card-styles(inherit);
+  }
+}
+// Explicit base definitions for App mixins
+.one-card {
+  @include App.one-card;
+}
+.two-cards {
+  @include App.two-cards;
+}
+.three-cards {
+  @include App.three-cards;
+}
+.four-cards {
+  @include App.four-cards;
+}
+.five-cards {
+  @include App.five-cards;
+}
+.six-cards {
+  @include App.six-cards;
+}
+.seven-cards {
+  @include App.seven-cards;
+}
+.eight-cards {
+  @include App.eight-cards;
+}
+.nine-cards {
+  @include App.nine-cards;
+}
+.ten-cards {
+  @include App.ten-cards;
+}
+.eleven-cards {
+  @include App.eleven-cards;
+}
+.thirteen-cards {
+  @include App.thirteen-cards;
+}
+.ads-cards {
+  @include App.ads-cards;
+}
+
+@include rainbow-animation;
+
+// ==============================================
+// 반응형 맵 (Responsive Map)
+// ==============================================
+$responsive-map: (
+  'desktop': (
+    'query': '(min-width: 1024px)',
+    'modal-width': 60vw,
+    'title-kr': 2rem,
+    'title-ja': 1.2rem,
+    'desc-kr': 1.65rem,
+    'desc-ja': 1.1rem,
+    'price-size': 1rem,
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'tablet': (
+    'query': '(min-width: 768px) and (max-width: 1024px)',
+    'modal-width': 60vw,
+    'title-kr': 1.8rem,
+    'title-ja': 1.2rem,
+    'desc-kr': 1.5rem,
+    'desc-ja': 1rem,
+    'price-size': 1rem,
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'mobile-lg': (
+    'query': '(min-width: 480px) and (max-width: 768px)',
+    'modal-width': 70vw,
+    'btn-font-exact-kr': 'size-135',
+    'btn-font-exact-ja': 'size-080',
+    'title-kr': 1.8rem,
+    'title-ja': 1.2rem,
+    'desc-kr': 1.45rem,
+    'desc-ja': 1rem,
+    'price-exact': 'size-090',
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'mobile-md': (
+    'query': '(min-width: 414px) and (max-width: 480px)',
+    'modal-width': 100%,
+    'btn-font-exact-kr': 'size-130',
+    'btn-font-exact-ja': 'size-078',
+    'title-kr': 1.8rem,
+    'title-ja': 1.2rem,
+    'desc-kr': 1.45rem,
+    'desc-ja': 1rem,
+    'price-exact': 'size-080',
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'mobile-sm': (
+    'query': '(min-width: 375px) and (max-width: 414px)',
+    'modal-width': 100%,
+    'btn-font-exact-kr': 'size-125',
+    'btn-font-exact-ja': 'size-075',
+    'title-kr': 1.8rem,
+    'title-ja': 1.2rem,
+    'desc-kr': 1.45rem,
+    'desc-ja': 0.9rem,
+    'price-exact': 'size-080',
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'mobile-xs': (
+    'query': '(min-width: 280px) and (max-width: 375px)',
+    'modal-width': 100%,
+    'btn-box-w': 90%,
+    'btn-min-w': 45px,
+    'btn-font-exact-kr': 'size-120',
+    'btn-font-exact-ja': 'size-075',
+    'title-kr': 1.7rem,
+    'title-ja': 1.1rem,
+    'desc-kr': 1.45rem,
+    'desc-ja': 0.9rem,
+    'price-exact': 'size-080',
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'mobile-xxs': (
+    'query': '(max-width: 280px)',
+    'modal-width': 100%,
+    'btn-box-w': 90%,
+    'btn-min-w': 45px,
+    'btn-font-exact-kr': 'size-120',
+    'btn-font-exact-ja': 'size-075',
+    'title-kr': 1.7rem,
+    'title-ja': 1.1rem,
+    'desc-kr': 1.45rem,
+    'desc-ja': 0.9rem,
+    'price-exact': 'size-070',
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'landscape-lg': (
+    'query': 'screen and (orientation: landscape) and (min-width: 933px)',
+    'is-mobile-landscape': true,
+    'modal-width': 50vw,
+    'modal-max-w': 650px,
+    'title-kr': 1.9rem,
+    'title-ja': 1.3rem,
+    'desc-kr': 1.65rem,
+    'desc-ja': 1.1rem,
+    'price-size': 1rem,
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'landscape-mobile-lg': (
+    'query':
+      'screen and (orientation: landscape) and (min-width: 667px) and (max-width: 932px)',
+    'is-mobile-landscape': true,
+    'modal-max-h': 310px,
+    'btn-min-h': 30px,
+    'btn-font-exact-kr': 'size-140',
+    'title-kr': 1.9rem,
+    'title-ja': 1.3rem,
+    'desc-kr': 1.4rem,
+    'desc-ja': 0.85rem,
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+  'landscape-mobile-sm': (
+    'query':
+      'screen and (orientation: landscape) and (max-width: 666px) and (max-height: 600px)',
+    'is-mobile-landscape': true,
+    'modal-max-h': 280px,
+    'btn-min-h': 25px,
+    'btn-font-exact-kr': 'size-120',
+    'title-kr': 1.7rem,
+    'title-ja': 1.1rem,
+    'desc-kr': 1.3rem,
+    'desc-ja': 0.8rem,
+    'card-size': 2rem,
+    'card-font-kr': 2rem,
+    'card-font-ja': 1.3rem,
+  ),
+);
+
+// 300px 이상일 때 수평 스크롤바 제거
+// 300px 이상일 때 수평 스크롤바 제거 - Removed to allow scrolling on mobile
+// @media (min-width: 300px) {
+//   .btn-box {
+//     overflow-x: visible;
+//   }
+// }
+
+@each $key, $vals in $responsive-map {
+  $query: map.get($vals, 'query');
+
+  @media #{$query} {
+    // Mobile Landscape Common Logic - Only apply in native app
+    @if map.get($vals, 'is-mobile-landscape') {
+      :global(body.is-mobile) {
+        .spreadModal {
+          width: fit-content;
+          min-width: 60vw;
+          max-width: 90vw;
+          height: fit-content;
+          min-height: 50vh;
+          max-height: 90vh;
+          top: 60%;
+          left: 50%;
+          transform: translate(-50%, -60%);
+          z-index: 1;
+          overflow-y: auto;
+        }
+        .spreadModal .list {
+          width: 96%;
+          height: 60vh;
+          display: flex;
+          flex-direction: row;
+          justify-content: start;
+          align-items: stretch;
+          overflow-y: hidden;
+          overflow-x: auto;
+          .list-element {
+            width: fit-content;
+            min-width: 60vw;
+            flex-shrink: 0;
+            margin: 0 2% 0 0;
+            &:last-child {
+              margin: 0;
+            }
+          }
+        }
+        .spreadModal .spread-box,
+        .spreadModal .spread-box-purchase {
+          width: 95%;
+          height: 100%;
+        }
+        .which-tarot-btn,
+        .which-tarot-btn-japanese {
+          background-color: transparent;
+          color: gold;
+          min-height: 15px;
+          &.selected,
+          &:hover {
+            background-color: gold;
+            color: purple;
+            min-height: 15px;
+          }
+        }
+        @if map.get($vals, 'btn-min-h') {
+          .which-tarot-btn {
+            min-height: map.get($vals, 'btn-min-h');
+          }
+        }
+        @if map.get($vals, 'btn-font-exact-kr') {
+          .which-tarot-btn {
+            @include FontExact.exact-korean-font(
+              map.get($vals, 'btn-font-exact-kr')
+            );
+          }
+        }
+      }
+    } @else {
+      // Normal Logic
+      .spreadModal {
+        @if map.get($vals, 'modal-width') {
+          width: map.get($vals, 'modal-width');
+        }
+        @if map.get($vals, 'modal-max-w') {
+          max-width: map.get($vals, 'modal-max-w');
+        }
+        @if map.get($vals, 'left') {
+          left: map.get($vals, 'left');
+        }
+        @if map.get($vals, 'transform') {
+          transform: map.get($vals, 'transform');
+        }
+      }
+      .which-tarot-btn {
+        background-color: transparent;
+      }
+
+      @if map.get($vals, 'btn-box-w') {
+        .btn-box {
+          width: map.get($vals, 'btn-box-w');
+        }
+      }
+      @if map.get($vals, 'btn-min-w') {
+        .spreadModal .which-tarot-btn,
+        .spreadModal .which-tarot-btn-japanese,
+        .spreadModal .which-tarot-btn:hover,
+        .spreadModal .which-tarot-btn.selected,
+        .spreadModal .which-tarot-btn-japanese:hover,
+        .spreadModal .which-tarot-btn-japanese.selected {
+          min-width: map.get($vals, 'btn-min-w');
+        }
+      }
+      @if map.get($vals, 'btn-font-exact-kr') {
+        .which-tarot-btn {
+          @include FontExact.exact-korean-font(
+            map.get($vals, 'btn-font-exact-kr')
+          );
+        }
+      }
+      @if map.get($vals, 'btn-font-exact-ja') {
+        .which-tarot-btn-japanese {
+          @include FontExact.exact-korean-font(
+            map.get($vals, 'btn-font-exact-ja')
+          );
+        }
+      }
+    }
+
+    // Common Text Styling
+    .spread-title {
+      p.title {
+        @include App.dongle-font(map.get($vals, 'title-kr'));
+        line-height: 1;
+      }
+      p.title-japanese {
+        @include App.potta-font(map.get($vals, 'title-ja'));
+        line-height: 1;
+      }
+    }
+
+    .spread-description {
+      p.description {
+        @include App.dongle-font(map.get($vals, 'desc-kr'));
+        line-height: 1;
+      }
+      p.description-japanese {
+        @include App.potta-font(map.get($vals, 'desc-ja'));
+        $lh: map.get($vals, 'desc-ja-lh');
+        @if $lh {
+          line-height: $lh;
+        } @else {
+          line-height: 1.5;
+        }
+      }
+    }
+
+    @if map.get($vals, 'price-size') {
+      .spread-price {
+        font-size: map.get($vals, 'price-size');
+      }
+    }
+    @if map.get($vals, 'price-exact') {
+      .spread-price {
+        @include FontExact.exact-korean-font(map.get($vals, 'price-exact'));
+      }
+    }
+
+    // Card Styles Loop
+    @each $class in $card-classes {
+      #{$class} {
+        @include card-styles(map.get($vals, 'card-size'));
+        @include App.dongle-font(map.get($vals, 'card-font-kr'));
+        :lang(ja) & {
+          @include App.potta-font(map.get($vals, 'card-font-ja'));
+        }
+      }
+    }
+  }
+}

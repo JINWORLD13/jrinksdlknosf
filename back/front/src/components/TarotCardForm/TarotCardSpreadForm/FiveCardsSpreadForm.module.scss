@@ -1,0 +1,7 @@
+/**
+ * FiveCardsSpreadForm 스타일
+ * 공통 SCSS를 forward하여 모든 공통 클래스를 사용할 수 있도록 합니다.
+ */
+@forward '../../../styles/scss/SpreadLayoutDefinitions.module.scss';
+
+// 이 스프레드에 특화된 스타일이 있다면 여기에 추가

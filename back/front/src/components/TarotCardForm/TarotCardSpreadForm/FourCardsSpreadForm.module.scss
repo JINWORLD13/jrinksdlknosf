@@ -1,0 +1,26 @@
+@use '../../../styles/scss/SpreadLayoutDefinitions.module.scss' as Definitions;
+
+// 스피드 타로 중앙 통제: Definitions의 mixin을 사용하여 스타일 적용
+.card-four-speed {
+  @include Definitions.card-four-spread-style();
+}
+
+.flip {
+  @include Definitions.flip();
+}
+
+.flip-click {
+  @include Definitions.flip-click();
+}
+
+.front {
+  @include Definitions.front();
+}
+
+.front-reversed {
+  @include Definitions.front-reversed();
+}
+
+.back {
+  @include Definitions.back();
+}

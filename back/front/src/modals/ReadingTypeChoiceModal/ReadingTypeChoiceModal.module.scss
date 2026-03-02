@@ -1,0 +1,948 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/_media.scss' as Media;
+
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 100001;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  padding: max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  @include App.cosmic-glass-backdrop(16px);
+}
+
+.modal {
+  @include App.no-select;
+  @include App.custom-scrollbar(5px);
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+  padding: 1.5rem;
+  max-height: min(90dvh, calc(100dvh - 2 * 12px));
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(75, 0, 130, 0.12) 0%,
+      transparent 45%
+    ),
+    rgba(10, 8, 28, 0.88);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #e9d5ff;
+
+  // 은은한 배경 장식 (샴페인 별빛 & 달의 위상)
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        1px 1px at 15% 15%,
+        #fff,
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(1.2px 1.2px at 85% 25%, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(
+        1.5px 1.5px at 50% 12%,
+        rgba(255, 255, 255, 0.7),
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(1px 1px at 35% 85%, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(
+        2px 2px at 70% 75%,
+        rgba(255, 255, 255, 0.5),
+        rgba(0, 0, 0, 0)
+      );
+    opacity: 0.2;
+    pointer-events: none;
+  }
+
+  // 달 장식 (Moon Phase SVG 대안용 CSS)
+  &::after {
+    content: '☽';
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    font-size: 2rem;
+    color: #e8d58a;
+    opacity: 0.1;
+    pointer-events: none;
+    filter: blur(0.5px);
+  }
+}
+
+/* 제목: 블록은 가운데, 블록 안에서는 왼쪽 정렬(줄맞춤·띄어쓰기 일정) */
+.title {
+  margin: 0 auto 1.25rem;
+  width: fit-content;
+  max-width: 100%;
+  @include App.dongle-font(2.2rem);
+  text-align: left;
+  line-height: 1.25;
+  flex-shrink: 0;
+  @include App.cosmic-gold-text;
+  letter-spacing: -0.01em;
+  padding-top: 0.2rem;
+
+  /* 일본어: 제목·취소 전반 살짝 축소 */
+  [data-lang='ja'] & {
+    @include App.potta-font(1.6rem);
+    line-height: 1.4;
+    padding-top: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* 2칸 가로 배치 — 이미지로 버튼 꽉 채움, 우측 하단에 질문·가격 오버레이 */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.card {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  padding: 0;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  /* 배경 이미지는 인라인 style로 지정 */
+  background-color: rgba(139, 92, 246, 0.18);
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-origin: border-box;
+  background-clip: border-box;
+  color: #e9d5ff;
+  cursor: pointer;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: #e8d58a;
+  box-shadow: 0 0 30px rgba(139, 92, 246, 0.5),
+    0 0 15px rgba(232, 213, 138, 0.3);
+  transform: translateY(-3px);
+}
+
+/* 맞춤 리딩 잠금 스타일 (클릭은 허용: 로그인 안내 블링크 모달) */
+.cardLocked {
+  filter: grayscale(0.55) brightness(0.9);
+  opacity: 0.92;
+}
+
+.cardLocked:hover {
+  border-color: rgba(139, 92, 246, 0.5);
+  box-shadow: none;
+}
+
+.cardLocked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.25) 0%,
+    rgba(0, 0, 0, 0.12) 45%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  pointer-events: none;
+}
+
+.lockCenter {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lockIcon {
+  color: rgba(254, 240, 138, 0.95);
+  filter: drop-shadow(0 0 10px rgba(254, 240, 138, 0.25));
+}
+
+.lockBadge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.25rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(254, 240, 138, 0.55);
+  color: #fef08a;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.05rem;
+  line-height: 1;
+  min-height: 28px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
+
+  // 일본어는 글리프 메트릭 때문에 위쪽 여백이 타이트해 보일 수 있어
+  // 배지 높이/패딩/라인하이트를 살짝 늘려 시각적으로 가운데 정렬되게 조정
+  :global(html[lang='ja']) & {
+    font-family: 'Kosugi Maru', sans-serif;
+    line-height: 1.15;
+    padding-top: 0.34rem;
+    padding-bottom: 0.28rem;
+    min-height: 30px;
+  }
+
+  // 한국어/영어는 배지 텍스트를 더 크게
+  :global(html[lang='ko']) &,
+  :global(html[lang='en']) & {
+    font-size: 1.35rem;
+    padding: 0.28rem 0.9rem;
+    min-height: 32px;
+  }
+}
+
+/* 우측 하단 — 질문(방식명) + 가격 */
+.cardOverlay {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 0.5rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.15rem;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.4) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+
+  /* 일본어: 줄바꿈 + 위·아래 잘림 방지 (여백 확대) */
+  :global(html[lang='ja']) & {
+    padding: 0.55rem 0.7rem 0.65rem;
+    min-height: 3.2em;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+}
+
+.cardLabel {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.3;
+  text-align: right;
+  color: #e9d5ff;
+
+  /* 일본어: 줄바꿈 허용 — 두 줄로 표시 (잘림 방지), 제목성 문구 살짝 축소 */
+  :global(html[lang='ja']) & {
+    font-size: 1.08rem;
+    line-height: 1.45;
+    white-space: normal;
+    word-break: normal;
+    text-wrap: balance;
+    line-break: strict;
+    /* 5.5em 이하로 제한해 カスタム/ジェネラル + リーディング 형태로 줄바꿈 */
+    max-width: 5.5em;
+    padding: 2px 0;
+    min-height: 2.9em;
+    display: block;
+    overflow: visible;
+  }
+
+  :global(html[lang='ko']) &,
+  :global(html[lang='en']) & {
+    font-size: 1.6rem; // 리딩 방식 글자 확대
+  }
+}
+
+.cardLabelRow {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.cardPriceRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cardPriceStar {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: #fef08a;
+}
+
+.cardPrice {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #fef08a;
+}
+
+.close {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.3rem;
+
+  :global(html[lang='ko']) &,
+  :global(html[lang='en']) & {
+    font-size: 1.7rem;
+  }
+  background: transparent;
+  border: none;
+  color: rgba(233, 213, 255, 0.8);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.close:hover {
+  color: #e9d5ff;
+}
+
+// ========== 반응형: 데스크톱 (1024–1366px) ==========
+@include Media.desktop {
+  .root {
+    padding: max(16px, env(safe-area-inset-top))
+      max(16px, env(safe-area-inset-right))
+      max(16px, env(safe-area-inset-bottom))
+      max(16px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-width: 380px;
+    padding: 1.75rem;
+    max-height: min(88dvh, 720px);
+  }
+
+  .title {
+    font-size: 2.1rem;
+    margin-bottom: 1.35rem;
+  }
+
+  .cardGrid {
+    gap: 0.85rem;
+  }
+
+  .cardLabel {
+    font-size: 1.6rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+// ========== 반응형: 태블릿 (768–1024px) ==========
+@include Media.tablet {
+  .root {
+    padding: max(14px, env(safe-area-inset-top))
+      max(14px, env(safe-area-inset-right))
+      max(14px, env(safe-area-inset-bottom))
+      max(14px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-width: 400px;
+    padding: 1.5rem;
+    max-height: min(85dvh, 580px);
+  }
+
+  .title {
+    font-size: 2.05rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .cardGrid {
+    gap: 0.8rem;
+  }
+}
+
+// ========== 반응형: 모바일 Large (480–768px) ==========
+@include Media.mobile-lg {
+  .root {
+    padding: max(12px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(12px, env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-width: min(360px, 92vw);
+    padding: 1.25rem;
+    max-height: min(88dvh, calc(100dvh - 24px));
+  }
+
+  .title {
+    font-size: 2rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .cardGrid {
+    gap: 0.7rem;
+  }
+
+  .cardLabel {
+    font-size: 1.6rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.6rem;
+    }
+  }
+
+  .close {
+    font-size: 1.6rem;
+    margin-top: 0.9rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.6rem;
+    }
+  }
+}
+
+// ========== 반응형: 모바일 Medium (414–480px) ==========
+@include Media.mobile-md {
+  .modal {
+    max-width: min(340px, 94vw);
+    padding: 1.1rem;
+  }
+
+  .title {
+    font-size: 1.95rem;
+    margin-bottom: 1rem;
+  }
+
+  .cardGrid {
+    gap: 0.65rem;
+  }
+
+  .cardLabel {
+    font-size: 1.5rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.5rem;
+    }
+  }
+
+  .lockBadge {
+    font-size: 1.2rem;
+    padding: 0.22rem 0.7rem;
+    min-height: 26px;
+  }
+
+  .close {
+    font-size: 1.55rem;
+    margin-top: 0.85rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.55rem;
+    }
+  }
+}
+
+// ========== 반응형: 모바일 Small (375–414px) ==========
+@include Media.mobile-sm {
+  .modal {
+    max-width: min(320px, 96vw);
+    padding: 1rem;
+    max-height: min(90dvh, calc(100dvh - 20px));
+  }
+
+  .title {
+    font-size: 1.9rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .cardGrid {
+    gap: 0.6rem;
+  }
+
+  .cardLabel {
+    font-size: 1.45rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.45rem;
+    }
+  }
+
+  .lockBadge {
+    font-size: 1.12rem;
+    padding: 0.2rem 0.65rem;
+    min-height: 24px;
+  }
+
+  .close {
+    font-size: 1.5rem;
+    margin-top: 0.75rem;
+    padding: 0.45rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+// ========== 반응형: 모바일 XS (280–375px) ==========
+@include Media.mobile-xs {
+  .root {
+    padding: max(8px, env(safe-area-inset-top))
+      max(8px, env(safe-area-inset-right)) max(8px, env(safe-area-inset-bottom))
+      max(8px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-width: min(300px, 98vw);
+    padding: 0.9rem;
+    max-height: min(92dvh, calc(100dvh - 16px));
+  }
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .cardGrid {
+    gap: 0.55rem;
+  }
+
+  .card {
+    border-radius: 10px;
+  }
+
+  .cardLabel {
+    font-size: 1.4rem;
+  }
+
+  .lockBadge {
+    font-size: 1.05rem;
+    padding: 0.18rem 0.6rem;
+    min-height: 22px;
+  }
+
+  .close {
+    font-size: 1.45rem;
+    margin-top: 0.65rem;
+    padding: 0.4rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.45rem;
+    }
+  }
+}
+
+// ========== 반응형: Galaxy Fold 등 극소형 (max 280px) ==========
+@include Media.mobile-fold {
+  .root {
+    padding: max(6px, env(safe-area-inset-top))
+      max(6px, env(safe-area-inset-right)) max(6px, env(safe-area-inset-bottom))
+      max(6px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-width: 100%;
+    padding: 0.75rem;
+    max-height: min(95dvh, calc(100dvh - 12px));
+    border-radius: 12px;
+  }
+
+  .title {
+    font-size: 1.5rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .cardGrid {
+    gap: 0.5rem;
+  }
+
+  .card {
+    border-radius: 8px;
+  }
+
+  .cardLabel {
+    font-size: 1.2rem;
+  }
+
+  .lockBadge {
+    font-size: 1rem;
+    padding: 0.15rem 0.5rem;
+    min-height: 20px;
+  }
+
+  .close {
+    font-size: 1.25rem;
+    margin-top: 0.55rem;
+    padding: 0.35rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.25rem;
+    }
+  }
+}
+
+// ========== 가로 모드 (landscape): 세로 모드와 동일한 글자 크기 (두 번째 모달과 동일하게) ==========
+@media (orientation: landscape) and (max-height: 600px) {
+  .root {
+    align-content: center;
+    padding: max(2px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(2px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+
+  .modal {
+    max-height: min(98vh, calc(100vh - 4px));
+    padding: 0.6rem 1.25rem;
+    overflow-y: auto;
+  }
+
+  .title {
+    margin-bottom: 0.4rem;
+    font-size: 2.2rem;
+  }
+
+  .cardGrid {
+    gap: 0.4rem;
+  }
+
+  .card {
+    min-height: 100px;
+  }
+
+  .cardLabel {
+    font-size: 1.8rem;
+  }
+
+  .close {
+    margin-top: 0.3rem;
+    padding: 0.25rem;
+    font-size: 1.7rem;
+
+    :global(html[lang='ko']) &,
+    :global(html[lang='en']) & {
+      font-size: 1.7rem;
+    }
+  }
+}
+
+// ========== 가로 모드 + 매우 낮은 높이 (예: 랜드스케이프 폴드) ==========
+@media (orientation: landscape) and (max-height: 400px) {
+  .modal {
+    max-height: min(92vh, calc(100vh - 12px));
+    padding: 0.6rem 1rem;
+  }
+
+  .title {
+    margin-bottom: 0.45rem;
+    font-size: 2rem;
+  }
+
+  .cardGrid {
+    gap: 0.4rem;
+  }
+
+  .card {
+    min-height: 100px;
+  }
+
+  .cardLabel {
+    font-size: 1.6rem;
+  }
+
+  .lockBadge {
+    font-size: 0.95rem;
+    min-height: 18px;
+    padding: 0.12rem 0.45rem;
+  }
+
+  .close {
+    margin-top: 0.4rem;
+    padding: 0.3rem;
+    font-size: 1.5rem;
+  }
+}
+
+// ========== 한국어/영어: 두 번째·세 번째 모달과 동일하게 크게 (첫 번째만 작게 나오던 현상 방지) ==========
+:global(html[lang='ko']) .root,
+:global(html[lang='en']) .root {
+  .title {
+    font-size: 2.2rem;
+  }
+  .cardLabel {
+    font-size: 1.8rem;
+  }
+  .close {
+    font-size: 1.7rem;
+  }
+}
+
+:global(html[lang='ja']) .root {
+  .title {
+    font-size: 1.46rem; /* 일어 제목 살짝 축소 */
+  }
+  .cardLabel {
+    font-size: 1.22rem;
+  }
+  .close {
+    font-size: 1.12rem; /* 일어 취소 살짝 축소 */
+  }
+}
+
+@include Media.desktop {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 2.1rem;
+    }
+    .cardLabel {
+      font-size: 1.6rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.42rem;
+    }
+    .cardLabel {
+      font-size: 1.08rem;
+    }
+  }
+}
+
+@include Media.tablet {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 2.05rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.4rem;
+    }
+  }
+}
+
+@include Media.mobile-lg {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 2rem;
+    }
+    .cardLabel {
+      font-size: 1.6rem;
+    }
+    .close {
+      font-size: 1.6rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.36rem;
+    }
+    .cardLabel {
+      font-size: 1.08rem;
+    }
+    .close {
+      font-size: 1.08rem;
+    }
+  }
+}
+
+@include Media.mobile-md {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 1.95rem;
+    }
+    .cardLabel {
+      font-size: 1.5rem;
+    }
+    .close {
+      font-size: 1.55rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.32rem;
+    }
+    .cardLabel {
+      font-size: 1.02rem;
+    }
+    .close {
+      font-size: 1.06rem;
+    }
+  }
+}
+
+@include Media.mobile-sm {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 1.9rem;
+    }
+    .cardLabel {
+      font-size: 1.45rem;
+    }
+    .close {
+      font-size: 1.5rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.3rem;
+    }
+    .cardLabel {
+      font-size: 0.98rem;
+    }
+    .close {
+      font-size: 1.02rem;
+    }
+  }
+}
+
+@include Media.mobile-xs {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 1.8rem;
+    }
+    .cardLabel {
+      font-size: 1.4rem;
+    }
+    .close {
+      font-size: 1.45rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.22rem;
+    }
+    .cardLabel {
+      font-size: 0.94rem;
+    }
+    .close {
+      font-size: 0.98rem;
+    }
+  }
+}
+
+@include Media.mobile-fold {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 1.5rem;
+    }
+    .cardLabel {
+      font-size: 1.2rem;
+    }
+    .close {
+      font-size: 1.25rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.02rem;
+    }
+    .cardLabel {
+      font-size: 0.82rem;
+    }
+    .close {
+      font-size: 0.86rem;
+    }
+  }
+}
+
+/* 가로 모드: 세로와 동일 크기 유지 (2.2rem / 1.7rem) — 두 번째 모달과 동일 */
+@media (orientation: landscape) and (max-height: 600px) {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 2.2rem;
+    }
+    .cardLabel {
+      font-size: 1.8rem;
+    }
+    .close {
+      font-size: 1.7rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.46rem;
+    }
+    .cardLabel {
+      font-size: 1.22rem;
+    }
+    .close {
+      font-size: 1.12rem;
+    }
+  }
+}
+
+@media (orientation: landscape) and (max-height: 400px) {
+  :global(html[lang='ko']) .root,
+  :global(html[lang='en']) .root {
+    .title {
+      font-size: 2rem;
+    }
+    .cardLabel {
+      font-size: 1.6rem;
+    }
+    .close {
+      font-size: 1.5rem;
+    }
+  }
+  :global(html[lang='ja']) .root {
+    .title {
+      font-size: 1.36rem;
+    }
+    .cardLabel {
+      font-size: 1.08rem;
+    }
+    .close {
+      font-size: 1.02rem;
+    }
+  }
+}

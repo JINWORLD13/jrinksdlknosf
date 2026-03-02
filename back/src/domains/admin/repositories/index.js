@@ -1,0 +1,1 @@
+exports.adminRepository = require("./adminRepository");

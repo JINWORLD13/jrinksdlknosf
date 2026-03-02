@@ -1,0 +1,784 @@
+@use '../../styles/scss/App.module.scss' as App;
+@use '../../styles/scss/_media.scss' as Media;
+
+/* 뷰포트에 고정, 다른 버튼/모달과 동일한 z-index (Navbar 100000 위) */
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  min-height: 100vh;
+  z-index: 100001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(12px, env(safe-area-inset-top))
+    max(12px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom))
+    max(12px, env(safe-area-inset-left));
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  box-sizing: border-box;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  @include App.cosmic-glass-backdrop(16px);
+}
+
+.modal {
+  @include App.no-select;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 360px;
+  padding: 1.25rem;
+  padding-top: 2.25rem; /* 닫기 아이콘 공간 */
+  max-height: min(85vh, calc(100vh - 32px));
+  overflow-y: auto;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  flex-shrink: 0;
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(75, 0, 130, 0.12) 0%,
+      transparent 45%
+    ),
+    rgba(10, 8, 28, 0.88);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #e9d5ff;
+}
+
+.closeIcon {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: rgba(233, 213, 255, 0.85);
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+
+  &:hover {
+    color: #e9d5ff;
+    background: rgba(139, 92, 246, 0.25);
+  }
+
+  &:active {
+    background: rgba(139, 92, 246, 0.35);
+  }
+}
+
+.title {
+  margin: 0 0 0.35rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 2rem;
+  font-weight: 400;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.subtitle {
+  margin: 0 0 1rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.35;
+  color: rgba(233, 213, 255, 0.85);
+  text-align: center;
+}
+
+:global(html[lang='ja']) .title,
+:global(html[lang='ja']) .subtitle {
+  font-family: 'Kosugi Maru', sans-serif;
+}
+
+:global(html[lang='ja']) .title {
+  font-size: 1.35rem;
+}
+
+:global(html[lang='ja']) .subtitle {
+  font-size: 1.05rem;
+  word-break: auto-phrase;
+  text-wrap: balance;
+  line-break: strict;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.3;
+  color: rgba(233, 213, 255, 0.95);
+}
+
+:global(html[lang='ja']) .label {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1.05rem;
+}
+
+.exampleHint {
+  font-size: 1.3rem;
+  line-height: 1.35;
+  color: rgba(233, 213, 255, 0.6);
+  margin-bottom: 0.15rem;
+}
+
+:global(html[lang='ja']) .exampleHint {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 0.9rem;
+}
+
+.input,
+.select,
+.textarea {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: #e9d5ff;
+  background: rgba(30, 20, 50, 0.6);
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  border-radius: 8px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+:global(html[lang='ja']) .input,
+:global(html[lang='ja']) .select,
+:global(html[lang='ja']) .textarea {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: rgba(233, 213, 255, 0.45);
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  outline: none;
+  border-color: rgba(139, 92, 246, 0.8);
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.25);
+}
+
+.dateInputWrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+/* 빈 날짜 입력 시 브라우저 기본 힌트(연-월-일 등) 숨김 */
+.dateInputEmpty::-webkit-datetime-edit {
+  opacity: 0;
+}
+
+.datePlaceholderOverlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.6rem;
+  padding-right: 2.5rem;
+  pointer-events: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: 1.4;
+  color: rgba(233, 213, 255, 0.45);
+  box-sizing: border-box;
+}
+
+.dateFormatHint {
+  font-size: 1.05em;
+  color: rgba(233, 213, 255, 0.75);
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 4rem;
+}
+
+.charCount {
+  margin-top: 0.25rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: rgba(233, 213, 255, 0.7);
+  text-align: right;
+}
+
+:global(html[lang='ja']) .charCount {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 0.95rem;
+}
+
+.select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23e9d5ff' viewBox='0 0 16 16'%3E%3Cpath d='M8 11L3 6h10l-5 5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.6rem center;
+  padding-right: 1.75rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.savedHint {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.25rem;
+  color: #a5f3a5;
+  flex-shrink: 0;
+}
+
+:global(html[lang='ja']) .savedHint {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+}
+
+.save {
+  padding: 0.45rem 1rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.35rem;
+  line-height: 1.2;
+  color: rgba(233, 213, 255, 0.95);
+  background: transparent;
+  border: 1px solid rgba(139, 92, 246, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+:global(html[lang='ja']) .save {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1.05rem;
+}
+
+.save:hover {
+  background: rgba(139, 92, 246, 0.2);
+  border-color: rgba(139, 92, 246, 0.7);
+  color: #e9d5ff;
+}
+
+.save:active {
+  background: rgba(139, 92, 246, 0.3);
+}
+
+.deleteAll {
+  padding: 0.45rem 0.75rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.2;
+  color: rgba(233, 213, 255, 0.9);
+  background: transparent;
+  border: 1px solid rgba(248, 113, 113, 0.5);
+  border-radius: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+:global(html[lang='ja']) .deleteAll {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+}
+
+.deleteAll:hover {
+  background: rgba(248, 113, 113, 0.2);
+  border-color: rgba(248, 113, 113, 0.7);
+  color: #fca5a5;
+}
+
+.deleteAll:active {
+  background: rgba(248, 113, 113, 0.3);
+}
+
+.deletedHint {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.25rem;
+  color: #fca5a5;
+  flex-shrink: 0;
+}
+
+:global(html[lang='ja']) .deletedHint {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+}
+
+.close {
+  padding: 0.45rem 0.75rem;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.25rem;
+  background: transparent;
+  border: none;
+  color: rgba(233, 213, 255, 0.85);
+  cursor: pointer;
+}
+
+:global(html[lang='ja']) .close {
+  font-family: 'Kosugi Maru', sans-serif;
+  font-size: 1rem;
+}
+
+.close:hover {
+  color: #e9d5ff;
+}
+
+// ========== 반응형 (작은 너비에서도 글자 크기 유지·확대) ==========
+@include Media.mobile-sm {
+  .modal {
+    max-width: min(320px, 96vw);
+    padding: 1rem;
+  }
+
+  .title {
+    font-size: 1.9rem;
+  }
+
+  .subtitle {
+    font-size: 1.35rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+  }
+
+  .exampleHint {
+    font-size: 1.25rem;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 1.35rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .charCount {
+    font-size: 1.2rem;
+  }
+
+  .savedHint {
+    font-size: 1.2rem;
+  }
+
+  .save {
+    font-size: 1.3rem;
+  }
+
+  .deleteAll {
+    font-size: 1.2rem;
+  }
+
+  .deletedHint {
+    font-size: 1.2rem;
+  }
+
+  .close {
+    font-size: 1.2rem;
+  }
+
+  :global(html[lang='ja']) .title {
+    font-size: 1.4rem;
+  }
+
+  :global(html[lang='ja']) .subtitle {
+    font-size: 1.1rem;
+  }
+
+  :global(html[lang='ja']) .label {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .exampleHint {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .input,
+  :global(html[lang='ja']) .select,
+  :global(html[lang='ja']) .textarea {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .charCount {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .savedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .save {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .deleteAll {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .deletedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .close {
+    font-size: 1rem;
+  }
+}
+
+@include Media.mobile-xs {
+  .modal {
+    max-width: min(300px, 98vw);
+    padding: 0.9rem;
+  }
+
+  .title {
+    font-size: 1.9rem;
+  }
+
+  .subtitle {
+    font-size: 1.35rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+  }
+
+  .exampleHint {
+    font-size: 1.25rem;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 1.35rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .charCount {
+    font-size: 1.2rem;
+  }
+
+  .savedHint {
+    font-size: 1.2rem;
+  }
+
+  .save {
+    font-size: 1.3rem;
+  }
+
+  .deleteAll {
+    font-size: 1.2rem;
+  }
+
+  .deletedHint {
+    font-size: 1.2rem;
+  }
+
+  .close {
+    font-size: 1.2rem;
+  }
+
+  .form {
+    gap: 0.6rem;
+  }
+
+  :global(html[lang='ja']) .title {
+    font-size: 1.4rem;
+  }
+
+  :global(html[lang='ja']) .subtitle {
+    font-size: 1.1rem;
+  }
+
+  :global(html[lang='ja']) .label {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .exampleHint {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .input,
+  :global(html[lang='ja']) .select,
+  :global(html[lang='ja']) .textarea {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .charCount {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .savedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .save {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .deleteAll {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .deletedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .close {
+    font-size: 1rem;
+  }
+}
+
+@include Media.mobile-fold {
+  .modal {
+    max-width: 100%;
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.9rem;
+  }
+
+  .subtitle {
+    font-size: 1.35rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+  }
+
+  .exampleHint {
+    font-size: 1.25rem;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 1.35rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .charCount {
+    font-size: 1.2rem;
+  }
+
+  .savedHint {
+    font-size: 1.2rem;
+  }
+
+  .save {
+    font-size: 1.3rem;
+  }
+
+  .deleteAll {
+    font-size: 1.2rem;
+  }
+
+  .deletedHint {
+    font-size: 1.2rem;
+  }
+
+  .close {
+    font-size: 1.2rem;
+  }
+
+  :global(html[lang='ja']) .title {
+    font-size: 1.4rem;
+  }
+
+  :global(html[lang='ja']) .subtitle {
+    font-size: 1.1rem;
+  }
+
+  :global(html[lang='ja']) .label {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .exampleHint {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .input,
+  :global(html[lang='ja']) .select,
+  :global(html[lang='ja']) .textarea {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .charCount {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .savedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .save {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .deleteAll {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .deletedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .close {
+    font-size: 1rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 600px) {
+  .modal {
+    max-height: min(88vh, calc(100vh - 16px));
+    padding: 0.75rem 1rem;
+  }
+
+  .title {
+    margin-bottom: 0.2rem;
+    font-size: 1.9rem;
+  }
+
+  .subtitle {
+    margin-bottom: 0.6rem;
+    font-size: 1.35rem;
+  }
+
+  .label {
+    font-size: 1.4rem;
+  }
+
+  .exampleHint {
+    font-size: 1.25rem;
+  }
+
+  .input,
+  .select,
+  .textarea {
+    font-size: 1.35rem;
+    padding: 0.45rem 0.5rem;
+  }
+
+  .charCount {
+    font-size: 1.2rem;
+  }
+
+  .savedHint {
+    font-size: 1.2rem;
+  }
+
+  .save {
+    font-size: 1.3rem;
+  }
+
+  .deleteAll {
+    font-size: 1.2rem;
+  }
+
+  .deletedHint {
+    font-size: 1.2rem;
+  }
+
+  .close {
+    font-size: 1.2rem;
+  }
+
+  .form {
+    gap: 0.5rem;
+  }
+
+  .textarea {
+    min-height: 3rem;
+  }
+
+  :global(html[lang='ja']) .title {
+    font-size: 1.4rem;
+  }
+
+  :global(html[lang='ja']) .subtitle {
+    font-size: 1.1rem;
+  }
+
+  :global(html[lang='ja']) .label {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .exampleHint {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .input,
+  :global(html[lang='ja']) .select,
+  :global(html[lang='ja']) .textarea {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .charCount {
+    font-size: 0.95rem;
+  }
+
+  :global(html[lang='ja']) .savedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .save {
+    font-size: 1.05rem;
+  }
+
+  :global(html[lang='ja']) .deleteAll {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .deletedHint {
+    font-size: 1rem;
+  }
+
+  :global(html[lang='ja']) .close {
+    font-size: 1rem;
+  }
+}

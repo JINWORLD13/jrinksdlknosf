@@ -1,0 +1,1116 @@
+@use '../../styles/scss/App.module.scss' as App;
+
+// ===== 변수 정의 =====
+$modal-min-width: 550px;
+$modal-default-width: 40%;
+$modal-content-width: 70%;
+$modal-content-width-landscape: 65%;
+$backdrop-bg: rgba(0, 0, 0, 0.75);
+$scrollbar-color: rgba(56, 189, 248, 1);
+
+// 브레이크포인트 정의
+$breakpoints: (
+  'mobile-small': 280px,
+  'mobile': 375px,
+  'mobile-large': 480px,
+  'tablet-small': 768px,
+  'tablet': 1024px,
+  'desktop': 1366px,
+);
+
+// ===== Mixins =====
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+@mixin modal-base-style {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100001;
+  overflow: hidden;
+  border: none;
+  background-color: transparent;
+  @include App.flex-box-center(column);
+  color: black;
+}
+
+@mixin backdrop-base-style {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  z-index: 100001;
+  background: $backdrop-bg;
+}
+
+@mixin modal-content-base($width: $modal-content-width) {
+  width: $width;
+  height: 60%;
+  @include App.flex-box-center(column);
+  justify-content: space-between;
+  padding: 20px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 23, 42, 0.98) 0%,
+    rgba(30, 41, 59, 0.98) 50%,
+    rgba(15, 23, 42, 0.98) 100%
+  );
+
+  .content {
+    width: 100%;
+    max-width: 100%;
+    height: 78%;
+    overflow-y: auto;
+    padding: 0 15px;
+    padding-bottom: 25px;
+    box-sizing: border-box;
+    min-width: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+
+    // 커스텀 스크롤바 (밤하늘 테마)
+    &::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 10px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: linear-gradient(
+        180deg,
+        rgba(56, 189, 248, 1) 0%,
+        rgba(125, 211, 252, 1) 50%,
+        rgba(236, 72, 153, 0.8) 100%
+      );
+      border-radius: 10px;
+      box-shadow: 0 0 5px rgba(56, 189, 248, 0.5);
+
+      &:hover {
+        background: linear-gradient(
+          180deg,
+          rgba(56, 189, 248, 1) 0%,
+          rgba(125, 211, 252, 1) 50%,
+          rgba(236, 72, 153, 1) 100%
+        );
+        box-shadow: 0 0 8px rgba(56, 189, 248, 0.7);
+      }
+    }
+  }
+}
+
+@mixin button-mobile-style {
+  .button {
+    margin: 0;
+    min-width: 80px;
+    height: auto;
+    margin-bottom: 10px;
+  }
+}
+
+// ===== 기본 스타일 =====
+%durumagi-container {
+  width: $modal-default-width;
+  min-width: $modal-min-width;
+  height: 75%;
+  background-image: url('/assets/images/durumagi.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: scroll;
+  @include App.position-absolute-right-half();
+  @include App.flex-box-center(column);
+  position: relative;
+}
+
+.backdrop {
+  @include backdrop-base-style;
+}
+
+.modal {
+  @include modal-base-style;
+  width: 500px;
+  height: 75%;
+  @extend %durumagi-container;
+}
+
+.title {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: flex-start;
+
+  p {
+    @include App.dongle-font(1.8rem);
+    margin: 10px 10px 10px 20px;
+  }
+}
+
+.modal-content {
+  @include modal-content-base;
+  // NOTE:
+  // Dongle(ko/en)와 KosugiMaru(ja)는 글리프 메트릭이 달라
+  // 동일 rem이라도 "보이는 크기"가 달라질 수 있어요.
+  // 일본어 렌더 크기를 기준으로 ko/en을 미세 보정합니다.
+  // Dongle 폰트가 시각적으로 작게 렌더되므로 배율을 높여 일본어와 동일한 시각적 크기를 맞춤
+  // 작은 화면: 기본 1.28, 화면이 넓어질수록 최대 1.35까지 허용
+  --manual-user-font-scale: 1;
+  --manual-font-scale: calc(1.28 * var(--manual-user-font-scale));
+
+  // 일본어(ja)에서 사용 중인 수치들을 "기준값"으로 둡니다.
+  --manual-base-font-size: 1.2rem;
+  --manual-title-font-size: 1.6rem;
+  --manual-section-title-font-size: 1.2rem;
+  --manual-section-icon-font-size: 1.8rem;
+  --manual-section-number-font-size: 0.85rem;
+  --manual-line-height: 1.6;
+
+  // 모바일(<=480px) 기준값 - 일본어 렌더 크기에 맞춰 증가
+  --manual-title-font-size-mobile: 1.9rem;
+  --manual-section-icon-font-size-mobile: 1.7rem;
+  --manual-section-title-font-size-mobile: 1.45rem;
+  --manual-section-number-font-size-mobile: 0.9rem;
+  --manual-section-content-font-size-mobile: 1.25rem;
+
+  @include App.dongle-font(var(--manual-base-font-size));
+  font-size: calc(var(--manual-base-font-size) * var(--manual-font-scale));
+  line-height: var(--manual-line-height);
+
+  .header {
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(56, 189, 248, 0.7);
+
+    .title {
+      @include App.flex-box-center(row);
+      @include App.simulated-bold(0.8px, white);
+      font-size: calc(var(--manual-title-font-size) * var(--manual-font-scale));
+      color: rgba(255, 255, 255, 1);
+      margin: 0;
+      text-align: center;
+      background: linear-gradient(
+        135deg,
+        rgba(251, 191, 36, 1) 0%,
+        rgba(186, 230, 253, 1) 30%,
+        rgba(224, 242, 254, 1) 50%,
+        rgba(186, 230, 253, 1) 70%,
+        rgba(236, 72, 153, 1) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(0 0 8px rgba(186, 230, 253, 0.8));
+    }
+  }
+
+  .manual-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .section-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    // 상단 액센트 바 (밤하늘 느낌)
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        rgba(251, 191, 36, 0.8) 0%,
+        rgba(56, 189, 248, 1) 30%,
+        rgba(125, 211, 252, 1) 50%,
+        rgba(236, 72, 153, 0.9) 70%,
+        rgba(125, 211, 252, 1) 100%
+      );
+      border-radius: 16px 16px 0 0;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(56, 189, 248, 0.4);
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.4);
+    }
+
+    .section-icon {
+      font-size: calc(
+        var(--manual-section-icon-font-size) * var(--manual-font-scale)
+      );
+      line-height: 1;
+    }
+
+    .section-title {
+      @include App.simulated-bold(0.6px, white);
+      font-size: calc(
+        var(--manual-section-title-font-size) * var(--manual-font-scale)
+      );
+      margin: 0;
+      color: rgba(255, 255, 255, 1);
+      background: linear-gradient(
+        135deg,
+        rgba(251, 191, 36, 1) 0%,
+        rgba(186, 230, 253, 1) 30%,
+        rgba(224, 242, 254, 1) 50%,
+        rgba(186, 230, 253, 1) 70%,
+        rgba(236, 72, 153, 1) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(0 0 8px rgba(186, 230, 253, 0.8));
+    }
+
+    // 넘버링을 왼쪽 상단으로 이동 (컨텐츠 가리지 않음)
+    .section-number {
+      position: absolute;
+      top: -12px;
+      left: 20px;
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(
+        135deg,
+        rgba(56, 189, 248, 1) 0%,
+        rgba(125, 211, 252, 1) 50%,
+        rgba(236, 72, 153, 0.95) 100%
+      );
+      color: white;
+      border-radius: 50%;
+      @include App.flex-box-center(row);
+      font-size: calc(
+        var(--manual-section-number-font-size) * var(--manual-font-scale)
+      );
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(56, 189, 248, 0.5),
+        0 0 10px rgba(56, 189, 248, 0.2);
+      z-index: 1;
+    }
+
+    .section-content {
+      position: relative;
+      z-index: 0;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 1);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      p {
+        margin: 0.8rem 0;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+          0 0 8px rgba(56, 189, 248, 0.4);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      strong {
+        font-weight: 600;
+        color: rgba(251, 191, 36, 0.95);
+        text-shadow: 0 0 5px rgba(251, 191, 36, 0.3),
+          0 0 10px rgba(56, 189, 248, 0.4);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+        display: inline-block;
+      }
+    }
+  }
+
+  .info-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.1);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(59, 130, 246, 0.8) 0%,
+        rgba(37, 99, 235, 0.9) 50%,
+        rgba(59, 130, 246, 0.8) 100%
+      );
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+  }
+
+  .warning-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(239, 68, 68, 0.1);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(239, 68, 68, 0.8) 0%,
+        rgba(220, 38, 38, 0.9) 50%,
+        rgba(239, 68, 68, 0.8) 100%
+      );
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+    }
+  }
+
+  .mode-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(56, 189, 248, 0.7);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.2);
+  }
+
+  .spread-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(16, 185, 129, 0.15);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.8) 0%,
+        rgba(5, 150, 105, 0.9) 50%,
+        rgba(16, 185, 129, 0.8) 100%
+      );
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    }
+  }
+}
+
+// ===== ko/en 폰트 배율 (화면 폭이 넓을수록 조금 더 큼) =====
+@media (min-width: 769px) {
+  .modal-content {
+    --manual-font-scale: calc(1.32 * var(--manual-user-font-scale));
+  }
+}
+
+@media (min-width: 1025px) {
+  .modal-content {
+    --manual-font-scale: calc(1.35 * var(--manual-user-font-scale));
+  }
+}
+
+.title-japanese {
+  width: 100%;
+  @include App.flex-box-center(row);
+  justify-content: flex-start;
+  margin-bottom: 10px;
+
+  p {
+    @include App.potta-font(1.4rem);
+    margin: 10px 10px 10px 20px;
+  }
+}
+
+.modal-content-japanese {
+  @include modal-content-base;
+  --manual-user-font-scale: 1;
+  @include App.potta-font(calc(1.2rem * var(--manual-user-font-scale)));
+  line-height: 1.6;
+
+  .header {
+    width: 100%;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(56, 189, 248, 0.7);
+
+    .title {
+      @include App.flex-box-center(row);
+      @include App.simulated-bold(0.8px, white);
+      font-size: calc(1.6rem * var(--manual-user-font-scale));
+      color: rgba(255, 255, 255, 1);
+      margin: 0;
+      text-align: center;
+      background: linear-gradient(
+        135deg,
+        rgba(251, 191, 36, 1) 0%,
+        rgba(186, 230, 253, 1) 30%,
+        rgba(224, 242, 254, 1) 50%,
+        rgba(186, 230, 253, 1) 70%,
+        rgba(236, 72, 153, 1) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(0 0 8px rgba(186, 230, 253, 0.8));
+    }
+  }
+
+  .manual-sections {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .section-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(56, 189, 248, 0.3);
+    border: 1px solid rgba(56, 189, 248, 0.6);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: visible;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(
+        90deg,
+        rgba(251, 191, 36, 0.8) 0%,
+        rgba(56, 189, 248, 1) 30%,
+        rgba(125, 211, 252, 1) 50%,
+        rgba(236, 72, 153, 0.9) 70%,
+        rgba(125, 211, 252, 1) 100%
+      );
+      border-radius: 14px 14px 0 0;
+      box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+    }
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(56, 189, 248, 0.4);
+      border-color: rgba(56, 189, 248, 0.8);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(56, 189, 248, 0.4);
+    }
+
+    .section-icon {
+      font-size: calc(1.8rem * var(--manual-user-font-scale));
+      line-height: 1;
+    }
+
+    .section-title {
+      @include App.simulated-bold(0.5px, white);
+      font-size: calc(1.2rem * var(--manual-user-font-scale));
+      margin: 0;
+      color: rgba(255, 255, 255, 1);
+      background: linear-gradient(
+        135deg,
+        rgba(251, 191, 36, 1) 0%,
+        rgba(186, 230, 253, 1) 30%,
+        rgba(224, 242, 254, 1) 50%,
+        rgba(186, 230, 253, 1) 70%,
+        rgba(236, 72, 153, 1) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8))
+        drop-shadow(0 0 8px rgba(186, 230, 253, 0.8));
+    }
+
+    .section-number {
+      position: absolute;
+      top: -12px;
+      left: 18px;
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(
+        135deg,
+        rgba(56, 189, 248, 1) 0%,
+        rgba(125, 211, 252, 1) 50%,
+        rgba(236, 72, 153, 0.95) 100%
+      );
+      color: white;
+      border-radius: 50%;
+      @include App.flex-box-center(row);
+      font-size: calc(0.85rem * var(--manual-user-font-scale));
+      font-weight: 600;
+      box-shadow: 0 1px 4px rgba(56, 189, 248, 0.5),
+        0 0 10px rgba(56, 189, 248, 0.2);
+      z-index: 1;
+    }
+
+    .section-content {
+      position: relative;
+      z-index: 0;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 1);
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      box-sizing: border-box;
+
+      p {
+        margin: 0.7rem 0;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5),
+          0 0 8px rgba(56, 189, 248, 0.4);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+
+        &:first-child {
+          margin-top: 0;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+
+      strong {
+        font-weight: 600;
+        color: rgba(251, 191, 36, 0.95);
+        text-shadow: 0 0 5px rgba(251, 191, 36, 0.3),
+          0 0 10px rgba(56, 189, 248, 0.4);
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        max-width: 100%;
+        display: inline-block;
+      }
+    }
+  }
+
+  .info-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(59, 130, 246, 0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(59, 130, 246, 0.1);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(59, 130, 246, 0.8) 0%,
+        rgba(37, 99, 235, 0.9) 50%,
+        rgba(59, 130, 246, 0.8) 100%
+      );
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+  }
+
+  .warning-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 15px rgba(239, 68, 68, 0.1);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(239, 68, 68, 0.8) 0%,
+        rgba(220, 38, 38, 0.9) 50%,
+        rgba(239, 68, 68, 0.8) 100%
+      );
+      box-shadow: 0 0 8px rgba(239, 68, 68, 0.4);
+    }
+  }
+
+  .mode-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(56, 189, 248, 0.7);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2), 0 0 10px rgba(56, 189, 248, 0.2);
+  }
+
+  .spread-card {
+    background: linear-gradient(
+      135deg,
+      rgba(30, 41, 59, 0.9) 0%,
+      rgba(15, 23, 42, 0.95) 100%
+    );
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3), 0 0 40px rgba(16, 185, 129, 0.15);
+
+    &::before {
+      background: linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.8) 0%,
+        rgba(5, 150, 105, 0.9) 50%,
+        rgba(16, 185, 129, 0.8) 100%
+      );
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.4);
+    }
+  }
+}
+
+.button-box {
+  width: 100%;
+  height: 15%;
+  @include App.flex-box-center(row);
+  justify-content: flex-end;
+  gap: 10px;
+  padding-top: 30px;
+  margin-top: 10px;
+  box-sizing: border-box;
+
+  @media (orientation: landscape) and (max-height: 600px) {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+}
+
+.button {
+  margin: 0;
+  min-width: unset;
+  // Make symbol-only buttons (+/-) match the close button height
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.scale-button {
+  width: 36px !important;
+  height: 36px !important;
+  min-width: 36px !important;
+  min-height: 36px !important;
+  max-width: 36px !important;
+  max-height: 36px !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+}
+
+// 스크롤바 스타일은 mixin 내부에 직접 정의됨
+
+// ===== 반응형 디자인 =====
+
+// 데스크톱 (1025px - 1366px)
+@media (min-width: 1025px) and (max-width: 1366px) {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 600px;
+  }
+}
+
+// 태블릿 (769px - 1024px)
+@media (min-width: 769px) and (max-width: 1024px) {
+  .modal {
+    width: 70%;
+    height: 70%;
+    max-height: 700px;
+  }
+}
+
+// 중형 태블릿 (481px - 768px)
+@media (min-width: 481px) and (max-width: 768px) {
+  .modal {
+    width: 90%;
+    max-width: 100%;
+    min-width: unset;
+    max-height: 700px;
+  }
+}
+
+// 모바일 (최대 480px)
+@media (max-width: 480px) {
+  .modal {
+    width: 100%;
+    min-width: 100px;
+    height: 70%;
+  }
+
+  // 비일본어(ko/en) - 일본어 렌더 크기에 맞춘 배율 적용
+  .modal-content {
+    padding: 15px;
+
+    .header {
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+
+      .title {
+        font-size: calc(
+          var(--manual-title-font-size-mobile) * var(--manual-font-scale)
+        );
+      }
+    }
+
+    .content {
+      padding: 0 8px;
+    }
+
+    .manual-sections {
+      gap: 15px;
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .section-card {
+      padding: 15px;
+      border-radius: 12px;
+
+      .section-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+
+      .section-icon {
+        font-size: calc(
+          var(--manual-section-icon-font-size-mobile) * var(--manual-font-scale)
+        );
+      }
+
+      .section-title {
+        font-size: calc(
+          var(--manual-section-title-font-size-mobile) *
+            var(--manual-font-scale)
+        );
+      }
+
+      .section-number {
+        width: 26px;
+        height: 26px;
+        font-size: calc(
+          var(--manual-section-number-font-size-mobile) *
+            var(--manual-font-scale)
+        );
+        top: -10px;
+        left: 15px;
+      }
+
+      .section-content {
+        font-size: calc(
+          var(--manual-section-content-font-size-mobile) *
+            var(--manual-font-scale)
+        );
+        line-height: 1.7;
+      }
+    }
+
+    .content {
+      height: 76%;
+      padding-bottom: 20px;
+    }
+  }
+
+  // 일본어(ja) - 기존 값 유지
+  .modal-content-japanese {
+    padding: 15px;
+
+    .header {
+      margin-bottom: 15px;
+      padding-bottom: 12px;
+
+      .title {
+        font-size: calc(1.7rem * var(--manual-user-font-scale));
+      }
+    }
+
+    .content {
+      padding: 0 8px;
+    }
+
+    .manual-sections {
+      gap: 15px;
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+
+    .section-card {
+      padding: 15px;
+      border-radius: 12px;
+
+      .section-header {
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+      }
+
+      .section-icon {
+        font-size: calc(1.5rem * var(--manual-user-font-scale));
+      }
+
+      .section-title {
+        font-size: calc(1.3rem * var(--manual-user-font-scale));
+      }
+
+      .section-number {
+        width: 26px;
+        height: 26px;
+        font-size: calc(0.8rem * var(--manual-user-font-scale));
+        top: -10px;
+        left: 15px;
+      }
+
+      .section-content {
+        font-size: calc(1.1rem * var(--manual-user-font-scale));
+        line-height: 1.7;
+      }
+    }
+
+    .content {
+      height: 76%;
+      padding-bottom: 20px;
+    }
+  }
+
+  .button-box {
+    padding-top: 15px;
+    margin-top: 8px;
+  }
+
+  @include button-mobile-style;
+}
+
+// 414px 이하 영역 (더 넓은 content)
+@media (max-width: 414px) {
+  .modal-content,
+  .modal-content-japanese {
+    .content {
+      padding: 0 5px;
+    }
+
+    .manual-sections {
+      width: 100%;
+      max-width: 100%;
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+}
+
+/* 세로 모드에서 잘림 방지 — 550px 이하 화면에 맞춤 */
+@media (orientation: portrait) and (max-width: 550px) {
+  .modal {
+    width: 100%;
+    min-width: unset;
+    max-width: 500px;
+  }
+}
+
+// ===== 가로 모드 (Landscape) =====
+// 두루마기 안쪽 비율 유지: 세로모드와 동일하게 modal-content 60%, content 78%로 제한
+
+// 데스크톱 가로 (1025px+)
+@media screen and (orientation: landscape) and (min-width: 1025px) and (max-height: 600px) {
+  .backdrop {
+    @include backdrop-base-style;
+    height: 100%;
+  }
+
+  .modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 100%;
+  }
+
+  .modal-content {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.dongle-font(var(--manual-base-font-size));
+    font-size: calc(var(--manual-base-font-size) * var(--manual-font-scale));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .modal-content-japanese {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.potta-font(calc(1.2rem * var(--manual-user-font-scale)));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .button-box {
+    width: 100%;
+    height: 15%;
+    @include App.flex-box-center(row);
+    justify-content: flex-end;
+    padding-top: 20px;
+    margin-top: 10px;
+    box-sizing: border-box;
+  }
+
+  @include button-mobile-style;
+}
+
+// 태블릿 가로 (769px - 1024px)
+@media screen and (orientation: landscape) and (min-width: 769px) and (max-width: 1024px) and (max-height: 600px) {
+  .backdrop {
+    @include backdrop-base-style;
+    height: 100%;
+  }
+
+  .modal {
+    max-width: 100%;
+    height: 95%;
+    max-height: 95vh;
+  }
+
+  .modal-content {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.dongle-font(var(--manual-base-font-size));
+    font-size: calc(var(--manual-base-font-size) * var(--manual-font-scale));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .modal-content-japanese {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.potta-font(calc(1.2rem * var(--manual-user-font-scale)));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .button-box {
+    padding-top: 20px;
+    margin-top: 10px;
+  }
+
+  @include button-mobile-style;
+}
+
+// 모바일 가로 (최대 768px)
+@media screen and (orientation: landscape) and (max-width: 768px) and (max-height: 600px) {
+  .backdrop {
+    @include backdrop-base-style;
+    height: 100%;
+  }
+
+  .modal {
+    width: 70%;
+    max-width: 500px;
+    height: 100%;
+    max-height: 500px;
+  }
+
+  .modal-content {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.dongle-font(var(--manual-base-font-size));
+    font-size: calc(var(--manual-base-font-size) * var(--manual-font-scale));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .modal-content-japanese {
+    @include modal-content-base($modal-content-width-landscape);
+    height: 60%;
+    @include App.potta-font(calc(1.2rem * var(--manual-user-font-scale)));
+
+    .content {
+      height: 78%;
+      padding-bottom: 25px;
+    }
+  }
+
+  .button-box {
+    padding-top: 20px;
+    margin-top: 10px;
+  }
+
+  @include button-mobile-style;
+}

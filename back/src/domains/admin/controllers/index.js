@@ -1,0 +1,1 @@
+exports.adminController = require("./adminController");

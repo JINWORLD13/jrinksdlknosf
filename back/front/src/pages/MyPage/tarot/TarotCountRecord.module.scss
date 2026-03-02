@@ -1,0 +1,74 @@
+@use '../../../styles/scss/App.module.scss';
+@use '../../../styles/scss/MyPage-CosmicTheme.module.scss' as Cosmic;
+
+// 유저 타로 상담 회수 정보
+.user-info2-body {
+  width: 80%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+  .user-info2-body-left {
+    width: auto;
+    max-width: 50%;
+    @include App.flex-box-center(column);
+    align-items: start;
+    @include App.dongle-font(1.2em);
+    line-height: 1.35;
+  }
+  .user-info2-body-right {
+    width: auto;
+    max-width: 40%;
+    @include App.flex-box-center(column);
+    align-items: start;
+    @include App.dongle-font(1.2em);
+    line-height: 1.35;
+  }
+}
+
+.user-info2-body-japanese {
+  width: 80%;
+  @include Cosmic.cosmic-text-color;
+  font-weight: 900;
+  @include App.flex-box-center(row);
+  .user-info2-body-left-japanese {
+    width: auto;
+    max-width: 50%;
+    @include App.flex-box-center(column);
+    align-items: start;
+    @include App.potta-font(1.5em);
+    line-height: 1.9;
+  }
+  .user-info2-body-right-japanese {
+    width: auto;
+    max-width: 40%;
+    @include App.flex-box-center(column);
+    align-items: start;
+    @include App.potta-font(1.5em);
+    line-height: 1.9;
+  }
+}
+
+//~ 갤럭시 폴드
+@media (max-width: 280px) {
+  // 유저 타로 상담 회수 정보
+  .user-info2-body {
+    width: 100%;
+    .user-info2-body-left {
+      @include App.dongle-font(1.2em);
+    }
+    .user-info2-body-right {
+      @include App.dongle-font(1.2em);
+    }
+  }
+
+  .user-info2-body-japanese {
+    width: 100%;
+    .user-info2-body-left-japanese {
+      @include App.potta-font(1.4em);
+    }
+    .user-info2-body-right-japanese {
+      @include App.potta-font(1.4em);
+    }
+  }
+}
+

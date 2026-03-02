@@ -1,0 +1,289 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+@use '../../styles/scss/TarotModal.module.scss';
+@use '../../styles/scss/CardDeckMixins.module.scss' as CardDeck;
+@use './TarotCardChoiceForm.variables.scss' as vars;
+
+//! ============================================
+//! 기본 스타일 (Default - Desktop)
+//! ============================================
+.choice-box {
+  @include App.no-select;
+  @include App.no-drag;
+  @include vars.choice-box-base(0px);
+  @include App.flex-box-center(column);
+  justify-content: space-between;
+  // Ensure it is above background but below modals if needed
+  z-index: 10;
+  position: relative;
+}
+
+.cards-container {
+  @include App.flex-box-center(column);
+  flex: 1;
+  justify-content: center;
+}
+
+.choice-spread {
+  @include App.flex-box-center(row);
+}
+
+.choice-spread:not(:first-child) {
+  margin-top: -170px;
+}
+
+.choice-card {
+  @include vars.choice-card(0.9);
+  cursor: pointer; // 명시적 커서 추가
+  // 모바일 긴 터치 메뉴 방지하면서 탭은 허용
+  -webkit-touch-callout: none; // iOS 컨텍스트 메뉴 방지
+  touch-action: manipulation; // 탭/클릭은 허용하되 더블탭 줌, 긴 터치 드래그 방지
+
+  // Landscape Mobile Responsive Scale Override
+  @media screen and (orientation: landscape) and (max-width: 1366px) and (max-height: 600px) {
+    transform: scale(0.6); // Tablet landscape
+    margin: 5px;
+
+    @media (max-width: 932px) {
+      transform: scale(0.5); // Mobile landscape
+      margin: 2px;
+    }
+  }
+}
+
+.choice-card:not(:first-child) {
+  margin-left: -120px;
+}
+
+@media (hover: hover) {
+  .choice-card:hover {
+    transform: translateY(-20px) scale(1.05);
+    z-index: 100;
+  }
+}
+
+.choice-card img {
+  @include App.no-select;
+  @include App.no-drag;
+  @include CardDeck.card-image(0);
+  // 이미지 긴 터치 메뉴/선택 완전 방지
+  -webkit-touch-callout: none; // iOS 긴 터치 메뉴 방지
+  pointer-events: none; // 이미지 직접 이벤트는 막되, 부모 div의 클릭은 허용
+}
+
+.invisible {
+  @include TarotModal.invisible();
+  pointer-events: none; // 클릭 방지
+  transition: none; // transition 즉시 완료 (깜빡임 방지)
+}
+
+// 추가질문에서 이미 사용된 카드는 선택 불가(제외/비활성)
+.disabled {
+  // ✅ "존재는 하되 보이지 않게": 레이아웃/인덱스(자리)는 유지하면서 화면에서는 완전히 숨김
+  opacity: 0;
+  pointer-events: none;
+  transition: none;
+}
+
+.flex-grow {
+  @include App.flex-grow(1);
+}
+
+.flex-grow2 {
+  @include App.flex-grow(2);
+}
+
+.flex-grow3 {
+  @include App.flex-grow(5);
+}
+
+.btn-box {
+  @include App.no-select;
+  @include App.no-drag;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+
+  .btn {
+    @include vars.btn-base;
+    @include FontExact.exact-korean-font('size-150');
+  }
+
+  .btn:hover {
+    @include vars.btn-hover;
+  }
+
+  .btn-japanese {
+    @include vars.btn-japanese-base(1rem);
+  }
+
+  .btn-japanese:hover {
+    @include vars.btn-japanese-hover;
+  }
+}
+
+//! ============================================
+//! 반응형 디바이스용 (min-width & max-width)
+//! ============================================
+
+//~ 디바이스 1023px ~ 1366px
+@media (min-width: 1023px) and (max-width: 1366px) {
+  @include vars.responsive-choice-layout(0.8, -140px, -65px, 3);
+}
+
+//~ 태블릿, 아이패드, 아이패드 프로 767px ~ 1023px
+@media (min-width: 767px) and (max-width: 1023px) {
+  @include vars.responsive-choice-layout(0.8, -150px, -85px, 3);
+}
+
+//~ 550px ~ 767px 및 태블릿
+@media (min-width: 550px) and (max-width: 767px) {
+  @include vars.responsive-choice-layout(0.6, -100px, -66px, 3);
+}
+
+//~ 480px ~ 550px
+@media (min-width: 480px) and (max-width: 550px) {
+  @include vars.responsive-choice-layout(0.6, -110px, -73px, 3);
+}
+
+//~ IPhone 14 Pro Max 415px ~ 480px
+@media only screen and (min-width: 415px) and (max-width: 480px) {
+  @include vars.responsive-choice-layout(0.6, -100px, -77px, 3);
+}
+
+//~ 아이폰XR 376px ~ 415px
+@media (min-width: 376px) and (max-width: 415px) {
+  @include vars.responsive-choice-layout(0.6, -120px, -81px, 4, 2.5);
+}
+
+//~ 아이폰 SE 373px ~ 376px
+@media (min-width: 373px) and (max-width: 376px) {
+  @include vars.responsive-choice-layout(0.5, -90px, -62px, 3);
+
+  .btn-box {
+    .btn-japanese {
+      @include FontExact.exact-korean-font('size-090');
+    }
+    .btn-japanese:hover {
+      @include FontExact.exact-korean-font('size-090');
+    }
+  }
+}
+
+//~ PE 353px ~ 372px
+@media (min-width: 353px) and (max-width: 372px) {
+  @include vars.responsive-choice-layout(0.5, -90px, -64px, 6, 2.5);
+
+  .btn-box {
+    .btn-japanese {
+      @include FontExact.exact-korean-font('size-090');
+    }
+    .btn-japanese:hover {
+      @include FontExact.exact-korean-font('size-090');
+    }
+  }
+}
+
+//~ Pixel4, Galaxy S8+ 311px ~ 352px
+@media (min-width: 311px) and (max-width: 352px) {
+  @include vars.responsive-choice-layout(0.5, -105px, -67px, 3, 1);
+
+  .btn-box {
+    .btn-japanese {
+      @include FontExact.exact-korean-font('size-090');
+    }
+    .btn-japanese:hover {
+      @include FontExact.exact-korean-font('size-090');
+    }
+  }
+}
+
+//~ Pixel4, Galaxy S8+ 281px ~ 310px
+@media (min-width: 281px) and (max-width: 310px) {
+  @include vars.responsive-choice-layout(0.5, -80px, -70px, 3);
+
+  .btn-box {
+    .btn-japanese {
+      @include FontExact.exact-korean-font('size-090');
+    }
+    .btn-japanese:hover {
+      @include FontExact.exact-korean-font('size-090');
+    }
+  }
+}
+
+//~ 갤럭시 폴드 <= 280px
+@media (max-width: 280px) {
+  @include vars.responsive-choice-layout(0.35, -40px, -43px, 3);
+
+  .btn-box {
+    .btn-japanese {
+      @include FontExact.exact-korean-font('size-080');
+    }
+    .btn-japanese:hover {
+      @include FontExact.exact-korean-font('size-080');
+    }
+  }
+}
+
+//! ============================================
+//! 가로모드 (Landscape Orientation)
+//! ============================================
+
+//~ 아이패드 미니 ~ 아이패드 프로 가로 1023px ~ 1366px (Standard)
+@media (min-width: 1023px) and (max-width: 1366px) and (orientation: landscape) {
+  @include vars.landscape-choice-layout(0.8, -140px, -105px, 3);
+}
+
+//~ 아이패드 미니 ~ 아이패드 프로 가로 1023px ~ 1366px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 1023px) and (max-width: 1366px) and (max-height: 600px) {
+  @include vars.landscape-choice-layout(0.65, -90px, -77px, 4);
+}
+
+//~ 태블릿 가로 767px ~ 1023px (Standard)
+@media (min-width: 767px) and (max-width: 1023px) and (orientation: landscape) {
+  @include vars.landscape-choice-layout(0.8, -150px, -115px, 3);
+}
+
+//~ IPhone 14 Pro Max 가로모드 929px ~ 932px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 929px) and (max-width: 932px) and (max-height: 600px) {
+   @include vars.landscape-choice-layout(0.8, -150px, -115px, 3);
+}
+
+//~ 아이폰12 pro ~ 아이폰XR 가로 896px ~ 929px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 896px) and (max-width: 929px) and (max-height: 600px) {
+   @include vars.landscape-choice-layout(0.8, -150px, -115px, 3);
+}
+
+//~ 아이폰XR 가로모드 894px ~ 896px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 894px) and (max-width: 896px) and (max-height: 600px) {
+  @include vars.landscape-choice-layout(0.4, -60px, -39px, 5, 2);
+}
+
+//~ 아이폰12 pro ~ 아이폰XR 가로 843px ~ 894px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 843px) and (max-width: 894px) and (max-height: 600px) {
+  @include vars.landscape-choice-layout(0.4, -60px, -41px, 5, 2);
+}
+
+//~ 태블릿 소형 가로 550px ~ 767px (Standard)
+@media (min-width: 550px) and (max-width: 767px) and (orientation: landscape) {
+  @include vars.landscape-choice-layout(0.6, -100px, -88px, 3);
+}
+
+//~ 아이폰SE ~ 아이폰12 pro 가로 667px ~ 843px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 667px) and (max-width: 843px) and (max-height: 600px) {
+  @include vars.landscape-choice-layout(0.4, -60px, -46px, 5, 2);
+}
+
+//~ 모바일 대형 가로 480px ~ 550px (Standard)
+@media (min-width: 480px) and (max-width: 550px) and (orientation: landscape) {
+  @include vars.landscape-choice-layout(0.6, -110px, -90px, 3);
+}
+
+//~ 아이폰SE 가로모드 665px ~ 667px (Specific: Height < 600px)
+@media screen and (orientation: landscape) and (min-width: 665px) and (max-width: 667px) and (max-height: 600px) {
+  @include vars.landscape-choice-layout(0.35, -50px, -39px, 4);
+}
+

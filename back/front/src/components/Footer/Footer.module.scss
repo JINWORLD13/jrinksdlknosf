@@ -1,0 +1,409 @@
+@use '../../styles/scss/App.module.scss';
+@use '../../styles/scss/Font-Exact.module.scss' as FontExact;
+
+.footer {
+  @include App.no-select;
+  width: 100%;
+  max-width: 100%;
+  height: 80px;
+  padding: 10px 0;
+  @include App.flex-box-center(column);
+
+  // 깊은 우주 배경
+  background: radial-gradient(
+      ellipse at top,
+      rgba(75, 0, 130, 0.3) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at bottom,
+      rgba(25, 25, 112, 0.25) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(5, 0, 25, 1) 0%,
+      rgba(15, 0, 40, 0.98) 50%,
+      rgba(25, 0, 50, 0.95) 100%
+    );
+  background-color: #0a0015;
+
+  color: rgba(255, 255, 255, 0.9);
+  position: relative;
+  z-index: 100000; // Navbar와 동일한 z-index
+
+  // 신비로운 테두리 장식
+  border-top: 2px solid transparent;
+  border-image: linear-gradient(
+      90deg,
+      rgba(218, 165, 32, 0) 0%,
+      rgba(218, 165, 32, 0.7) 20%,
+      rgba(255, 215, 0, 0.9) 50%,
+      rgba(218, 165, 32, 0.7) 80%,
+      rgba(218, 165, 32, 0) 100%
+    )
+    1;
+  box-shadow: 0 -2px 20px rgba(138, 43, 226, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+
+  // 반짝이는 별들
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    // 🔍 테스트: 이 배경색이 보이면 ::before가 렌더링되는 것입니다
+    // background: rgba(0, 255, 0, 0.1); // 디버깅용 - 초록색이 보이면 OK
+    background-image:
+      /* 💫 큰 별들 - footer 중앙 집중 (80px 높이) */ radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 20%,
+          rgba(255, 255, 255, 0.5) 40%,
+          transparent 60%
+        )
+        15% 50% / 14px 14px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.95) 20%,
+          rgba(255, 215, 0, 0.6) 40%,
+          transparent 60%
+        )
+        50% 50% / 16px 16px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.9) 20%,
+          rgba(255, 255, 255, 0.5) 40%,
+          transparent 60%
+        )
+        85% 50% / 14px 14px no-repeat,
+      /* ⭐ 중간 별들 - 중앙 근처 (35-65%) */
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 1) 0%,
+          rgba(255, 255, 255, 0.8) 30%,
+          transparent 60%
+        )
+        10% 45% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        25% 55% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        35% 40% / 7px 7px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        45% 60% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        65% 40% / 7px 7px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 215, 0, 1) 0%,
+          rgba(255, 215, 0, 0.8) 30%,
+          transparent 60%
+        )
+        75% 60% / 8px 8px no-repeat,
+      radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.95) 0%,
+          rgba(255, 255, 255, 0.75) 30%,
+          transparent 60%
+        )
+        90% 50% / 7px 7px no-repeat,
+      /* ✨ 작은 별들 - 중앙 집중 */
+        radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 50%) 8%
+        50% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, transparent 50%) 20%
+        48% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, transparent 50%) 32%
+        52% / 4px 4px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 50%) 42%
+        47% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.9) 0%, transparent 50%) 58%
+        53% / 4px 4px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, transparent 50%) 68%
+        48% / 5px 5px no-repeat,
+      radial-gradient(circle, rgba(255, 255, 255, 0.85) 0%, transparent 50%) 80%
+        52% / 4px 4px no-repeat,
+      radial-gradient(circle, rgba(255, 215, 0, 0.85) 0%, transparent 50%) 92%
+        50% / 5px 5px no-repeat;
+    animation: twinkleStars 10s ease-in-out infinite;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  // 은은한 성운 효과
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at 40% 50%,
+        rgba(138, 43, 226, 0.12) 0%,
+        transparent 35%
+      ),
+      radial-gradient(
+        ellipse at 70% 60%,
+        rgba(72, 61, 139, 0.1) 0%,
+        transparent 35%
+      );
+    animation: nebulaDrift 20s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+}
+
+// 별 반짝임 애니메이션
+@keyframes twinkleStars {
+  0%,
+  100% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+// 성운 움직임 애니메이션
+@keyframes nebulaDrift {
+  0% {
+    opacity: 0.2;
+    filter: blur(25px);
+  }
+  100% {
+    opacity: 0.4;
+    filter: blur(35px);
+  }
+}
+.email {
+  margin-right: 10px;
+  @include FontExact.exact-korean-font('size-120') /* was: 1.2rem */;
+}
+.quotation {
+  width: 100%;
+  text-align: center;
+  @include App.dongle-font(1.5rem);
+  line-height: 0.9;
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 215, 0, 0.95);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+  font-style: italic;
+  letter-spacing: 0.5px;
+}
+.quotation-japanese {
+  width: 90%;
+  text-align: center;
+  @include App.potta-font(0.9rem);
+  position: relative;
+  z-index: 2;
+  color: rgba(255, 215, 0, 0.95);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.4), 0 0 20px rgba(255, 215, 0, 0.2),
+    0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.share {
+  position: fixed;
+  right: 0;
+  bottom: var(--footer-height, 80px);
+  z-index: 11;
+
+  @include App.flex-box-center(column);
+  width: 70px;
+  height: 70px;
+  padding-top: 2.4rem;
+  border: 2px solid rgba(139, 92, 246, 0.8);
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    rgba(139, 92, 246, 0.9),
+    rgba(79, 70, 229, 0.8)
+  );
+  color: #ff8ba7;
+
+  @include App.dongle-font(1.5rem);
+  line-height: 0.7;
+  text-shadow: -1.1px -1.1px 0 #663399, 1.1px -1.1px 0 #663399,
+    -1.1px 1.1px 0 #663399, 1.1px 1.1px 0 #663399;
+
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(139, 92, 246, 0.3),
+    0 0 20px rgba(139, 92, 246, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+
+  cursor: grabbing;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  transition: all 0.3s ease;
+
+  &::before {
+    position: absolute;
+    top: 0.6rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 30px;
+    content: '🔗';
+    color: #e0e0ff;
+    @include App.dongle-font(1.6rem);
+  }
+}
+
+.inviteModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.inviteModal {
+  position: relative;
+  width: 92vw;
+  max-width: 380px;
+  padding: 16px 16px 56px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(15, 0, 40, 0.98),
+    rgba(25, 0, 50, 0.95)
+  );
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45),
+    0 0 24px rgba(139, 92, 246, 0.35) inset;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+// 일본어 전용: 컨테이너에서 폰트 강제 적용 (숫자/영문 포함)
+.inviteModalJa {
+  @include App.potta-font(0.95rem); // base size; children override
+}
+
+.inviteTitle {
+  text-align: center;
+  margin-bottom: 12px;
+  @include App.dongle-font(2.1rem);
+  color: rgba(255, 215, 0, 0.95);
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.35);
+}
+
+.inviteTitleJa {
+  @include App.potta-font(1.5rem);
+  letter-spacing: 0.5px;
+}
+
+.inviteDesc {
+  text-align: justify;
+  text-align-last: left; // 마지막 줄도 왼쪽 정렬
+  text-justify: inter-word; // 한글/영문은 단어 단위 정렬
+  word-break: keep-all; // 한글 단어 단위 유지
+  margin-bottom: 16px;
+  padding: 0 8px; // 좌우 여백 추가
+  line-height: 1.45; // 한/영은 조금 더 타이트하게
+  @include App.dongle-font(1.5rem);
+  color: rgba(255, 255, 255, 0.9);
+  opacity: 0.95;
+}
+
+// 영어 전용: 더 타이트한 줄간격
+.inviteDescEn {
+  line-height: 1.28;
+}
+
+.inviteDescJa {
+  @include App.potta-font(1rem);
+  line-height: 1.6; // 일본어는 여백을 더 넉넉하게
+  text-align: justify;
+  text-align-last: left; // 마지막 줄도 왼쪽 정렬
+  text-justify: inter-character; // 일본어는 문자 단위 정렬
+  word-break: normal;
+  margin-bottom: 18px; // 하단 여백 확대
+  padding: 0 12px; // 좌우 여백 확대
+}
+
+.inviteButtons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+
+  button {
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    @include App.dongle-font(1.5rem);
+    transition: transform 0.12s ease, background 0.12s ease;
+    &:active {
+      transform: scale(0.98);
+      background: rgba(255, 255, 255, 0.12);
+    }
+  }
+}
+
+.inviteButtonsJa {
+  button {
+    @include App.potta-font(1.05rem);
+    letter-spacing: 0.3px;
+  }
+}
+
+.inviteClose {
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  cursor: pointer;
+}
+a {
+  text-decoration: none;
+}
+a:visited {
+  color: white;
+}
+
+//* 932px 이하 가로모드이면서 터치 기기(pointer: coarse)인 경우에만 푸터를 숨김
+@media screen and (orientation: landscape) and (max-width: 932px) and (pointer: coarse) and (max-height: 600px) {
+  .footer {
+    display: none;
+  }
+}

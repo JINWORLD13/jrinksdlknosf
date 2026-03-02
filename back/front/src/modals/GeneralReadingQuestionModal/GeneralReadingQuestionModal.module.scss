@@ -1,0 +1,423 @@
+                                                                                              @use '../../styles/scss/App.module.scss' as App;
+
+/* outlet 영역(100dvh - 130px)에 딱 맞춤: navbar·footer 제외한 콘텐츠 영역 전체 사용 */
+/* z-index: Footer(100000)보다 높게 설정해 모달이 푸터 위에 표시됨 */
+.root {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 100001;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  padding: max(8px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(36px, calc(env(safe-area-inset-bottom) + 20px))
+    max(8px, env(safe-area-inset-left));
+}
+
+/* 가로 모드(landscape) 및 낮은 높이(max-height: 600px) 대응 */
+@media (orientation: landscape) and (max-height: 600px) {
+  .root {
+    padding: max(2px, env(safe-area-inset-top))
+      max(12px, env(safe-area-inset-right))
+      max(2px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  }
+
+  /* .root .modal 로 우선순위를 높여 뒤에 정의된 .modal(84행~)을 덮어씀 */
+  .root .modal {
+    height: 90vh;
+    max-height: 90vh;
+    padding: 0.6rem 1.25rem;
+  }
+
+  .title {
+    margin-bottom: 0.3rem;
+    font-size: 2.2rem; /* 세로 모드와 동일 — 첫 번째 모달 가로모드와 통일 */
+
+    [data-lang='ja'] & {
+      font-size: 1.46rem; /* 제목 살짝 축소 */
+      padding-top: 0.1rem;
+    }
+  }
+
+  .cardGrid {
+    gap: 0.4rem;
+    grid-auto-rows: minmax(110px, 1fr);
+    padding: 2px 8px;
+  }
+
+  .modal .cardGrid .card {
+    min-height: 110px;
+    padding: 0.4rem 0.5rem;
+  }
+
+  .cardLabel {
+    font-size: 2.2rem; /* 타이틀과 동일 */
+
+    [data-lang='ja'] & {
+      font-size: 1.2rem; /*  제목성 문구 살짝 축소 */
+    }
+  }
+
+  .close {
+    margin-top: 0.2rem;
+    padding: 0.25rem;
+    font-size: 1.7rem; /* 세로 모드와 동일 */
+
+    [data-lang='ko'] &,
+    [data-lang='en'] & {
+      font-size: 1.7rem;
+    }
+  }
+
+  :global(html[lang='ja']) .root .close {
+    font-size: 1.12rem; /*  취소 살짝 축소 */
+  }
+}
+
+/* 기본적인 orientation: landscape 대응 (높이가 충분할 때 포함) */
+@media (orientation: landscape) {
+  .modal {
+    max-width: 640px; // 가로폭 조금 더 넓게
+  }
+}
+
+.backdrop {
+  position: absolute;
+  inset: 0;
+  @include App.cosmic-glass-backdrop(16px);
+}
+
+.modal {
+  @include App.no-select;
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  /* outlet 영역에서 footer와 간격 두고 배치 */
+  height: calc(100dvh - 160px);
+  max-height: calc(100dvh - 160px);
+  overflow: hidden;
+  padding: 1.25rem;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  /* 코스모스 글래스모피즘: 반투명 유리 패널 */
+  background: radial-gradient(
+      ellipse at 30% 40%,
+      rgba(138, 43, 226, 0.18) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse at 70% 60%,
+      rgba(75, 0, 130, 0.12) 0%,
+      transparent 45%
+    ),
+    rgba(10, 8, 28, 0.88);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 30px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  color: #e9d5ff;
+
+  // 은은한 배경 장식
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(
+        1px 1px at 15% 20%,
+        #fff,
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(1px 1px at 85% 35%, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(
+        1.5px 1.5px at 50% 10%,
+        rgba(255, 255, 255, 0.8),
+        rgba(0, 0, 0, 0)
+      ),
+      radial-gradient(1px 1px at 25% 65%, #fff, rgba(0, 0, 0, 0)),
+      radial-gradient(
+        2px 2px at 75% 80%,
+        rgba(255, 255, 255, 0.6),
+        rgba(0, 0, 0, 0)
+      );
+    opacity: 0.12;
+    pointer-events: none;
+  }
+}
+
+/* 제목: 블록은 가운데, 블록 안에서는 왼쪽 정렬(줄맞춤·띄어쓰기 일정) */
+.title {
+  margin: 0 auto 0.9rem;
+  width: fit-content;
+  max-width: 100%;
+  @include App.dongle-font(2.2rem);
+  text-align: left;
+  line-height: 1.25;
+  flex-shrink: 0;
+  @include App.cosmic-gold-text;
+  letter-spacing: -0.01em;
+  padding-top: 0.2rem;
+
+  /* 일본어: 제목·취소 전반 살짝 축소 */
+  [data-lang='ja'] & {
+    @include App.potta-font(1.6rem);
+    line-height: 1.4;
+    padding-top: 0.4rem;
+    letter-spacing: 0.02em;
+  }
+}
+
+/* 2열 그리드 — outlet 높이에 맞춰 남은 공간 100% 채움, 내용 많으면 스크롤 */
+.cardGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(180px, 1fr);
+  gap: 0.6rem;
+  overflow-y: auto;
+  overflow-x: visible;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  align-content: start;
+  -webkit-overflow-scrolling: touch;
+  @include App.custom-scrollbar(4px);
+  padding: 8px 10px 8px 8px;
+}
+
+/* 좁은 구간 — 1열로 전환해 가로 스크롤 방지 (캐러셀 대안) */
+@media (max-width: 540px) {
+  .modal {
+    max-width: 100%;
+  }
+
+  .cardGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 둥근 직사각형 카드 — 그리드 셀에 맞춰 outlet 100% 활용 */
+.modal .cardGrid .card {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 변경: stretch -> center */
+  justify-content: center; /* 변경: flex-start -> center */
+  width: 100%;
+  min-width: 0;
+  min-height: 160px;
+  padding: 1.25rem 1rem; /* 여백 조정 */
+  box-sizing: border-box;
+  border-radius: 12px;
+  gap: 0;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  background-color: rgba(67, 56, 202, 0.3); /* 투명도 약간 조정 */
+  color: #e9d5ff;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center; /* 중앙 정렬 */
+  isolation: isolate;
+  box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.15);
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  overflow: hidden; /* 아이콘이 넘치지 않게 */
+}
+
+.modal .cardGrid .card:hover {
+  border-color: #e8d58a;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.4),
+    0 0 12px rgba(232, 213, 138, 0.2);
+}
+
+.modal .cardGrid .card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.05) 0%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+/* 아이콘 중앙 베치를 위한 컨테이너 */
+.iconWrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 0; /* 배경 레이어 */
+  opacity: 0.85; /* 은은하게 */
+}
+
+.cardIcon {
+  width: 90%; /* 가로 채우기 */
+  height: 90%; /* 세로 채우기 */
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.15));
+  opacity: 0.7; /* 배경 느낌을 위해 투명도 조정 */
+  transition: transform 0.5s ease;
+}
+
+.cardTitle {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.55rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+  flex-shrink: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
+  margin-bottom: 0.15rem;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+/* 하단 블록 — 질문(위) + 가격(아래), 가격 주변 여유미 */
+.cardBottom {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 중앙 정렬 */
+  gap: 0.5rem;
+  flex-shrink: 0;
+  width: 100%;
+  position: relative;
+  z-index: 1; /* 아이콘보다 위에 표시 */
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* 질문 텍스트(한/영) — 왼쪽 정렬, 줄간격·여백으로 읽기 좋게 */
+/* 질문 옵션 텍스트: 타이틀(리딩 방식을 선택하세요)과 동일 폰트 크기 */
+.cardLabel {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 2.2rem;
+  line-height: 1.25;
+  color: #fff;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  padding: 0;
+  box-sizing: border-box;
+  width: 100%;
+  text-align: center;
+  letter-spacing: -0.01em;
+}
+
+/* 가격 영역 — 여유미(위·아래 마진), 우측 정렬 */
+.cardPriceRow {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 0.4rem;
+  width: 100%;
+  min-width: 0;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+  margin-top: 0.3rem;
+  line-height: 1;
+}
+
+.originalPrice {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 2.1rem;
+  line-height: 1;
+  color: rgba(233, 213, 255, 0.7);
+  text-decoration: line-through;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.salePrice {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 2.2rem;
+  line-height: 1;
+  font-weight: 600;
+  color: #fef08a;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 이용권 구매 — 별 아이콘 적정 크기 */
+.priceStarIcon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex-shrink: 0;
+  color: #fef08a;
+}
+
+/* 이용권 2장 표기 */
+.priceTicketCount {
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.2rem;
+  color: rgba(233, 213, 255, 0.9);
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* 일본어: 제목성 문구 살짝 축소 */
+.modal[data-lang='ja'] .cardLabel {
+  @include App.potta-font(1.3rem);
+  line-height: 1.5;
+  padding: 0.2rem 0.25rem;
+  word-break: auto-phrase;
+  text-wrap: balance;
+  line-break: strict;
+}
+
+/* 가격 영역 — 일본어도 한국어와 동일 세팅 (크기·line-height) */
+.modal[data-lang='ja'] .originalPrice {
+  font-size: 2.1rem;
+  line-height: 1;
+}
+
+.modal[data-lang='ja'] .salePrice {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.modal[data-lang='ja'] .priceTicketCount {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+/* 취소 버튼: 첫 번째 모달(리딩 방식) 취소와 동일 폰트 크기 */
+.close {
+  display: block;
+  width: 100%;
+  margin-top: 0.75rem;
+  padding: 0.5rem;
+  flex-shrink: 0;
+  font-family: 'Dongle', 'Kosugi Maru', sans-serif;
+  font-size: 1.3rem;
+  background: transparent;
+  border: none;
+  color: rgba(233, 213, 255, 0.8);
+  cursor: pointer;
+  flex-shrink: 0;
+
+  /* 한/영: 첫 번째 모달 취소와 동일 */
+  [data-lang='ko'] &,
+  [data-lang='en'] & {
+    font-size: 1.7rem;
+  }
+}
+
+/* : 취소 버튼 폰트 크기 살짝 축소 */
+:global(html[lang='ja']) .root .close {
+  font-size: 1.12rem;
+}
+
+.close:hover {
+  color: #e9d5ff;
+}
